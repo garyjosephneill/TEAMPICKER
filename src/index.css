@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+@theme {
+  --font-mono: "Courier New", Courier, monospace;
+  --font-title: "OCR A Std", "OCR A Extended", "OCR A", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --color-ceefax-red: #ff0000;
+  --color-ceefax-green: #00ff00;
+  --color-ceefax-yellow: #ffff00;
+  --color-ceefax-blue: #0000ff;
+  --color-ceefax-cyan: #00ffff;
+  --color-ceefax-white: #ffffff;
+}
+
+body {
+  background-color: black;
+  color: white;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-mono);
+  font-weight: 400;
+}
+
+.input-field {
+  @apply w-full bg-black border-2 border-white p-2 text-ceefax-white outline-none focus:border-ceefax-yellow transition-colors;
+}
+
+/* Custom range slider styling */
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: #ffff00;
+  cursor: pointer;
+  border-radius: 0;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: #ffff00;
+  cursor: pointer;
+  border-radius: 0;
+}

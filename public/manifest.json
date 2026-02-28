@@ -1,0 +1,22 @@
+{
+  "short_name": "GAFFER 2.0",
+  "name": "GAFFER 2.0",
+  "icons": [
+    {
+      "src": "https://picsum.photos/192",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "https://picsum.photos/512",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#000000",
+  "display": "standalone",
+  "scope": "/",
+  "theme_color": "#000000",
+  "description": "Retro Ceefax themed football squad balancer and team generator."
+}
