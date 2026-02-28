@@ -179,8 +179,8 @@ export default function App() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen max-w-5xl mx-auto overflow-x-hidden bg-black text-white font-mono uppercase">
-      <header className="p-4 pt-8">
+    <div className="flex flex-col h-[100dvh] max-w-5xl mx-auto overflow-hidden bg-black text-white font-mono uppercase">
+      <header className="p-4 pt-8 shrink-0">
         <div className="flex justify-between items-baseline mb-4">
           <div className="text-ceefax-yellow font-title font-medium text-6xl tracking-normal">GAFFER 2.0</div>
         </div>
@@ -189,7 +189,7 @@ export default function App() {
         </div>
       </header>
 
-      <main className="flex-grow p-4 space-y-6 overflow-y-auto pb-48">
+      <main className="flex-grow p-4 space-y-6 overflow-y-auto">
         {view === 'squad' && (
           <div className="space-y-6">
             <div className="flex gap-2">
@@ -342,25 +342,25 @@ export default function App() {
         )}
       </main>
 
-      <div className="fixed bottom-0 left-0 right-0 max-w-5xl mx-auto z-50 bg-black pt-2">
-        {(!squadStatus || squadStatus.is_licensed === 0) && (
-          <button onClick={() => setView('payment')} className="w-full bg-ceefax-yellow text-black py-2 font-bold text-sm uppercase">&gt; 3-DAY TRIAL OR BUY-IT-NOW FOR £1.99 &lt;</button>
-        )}
-        <nav className="flex w-full font-bold text-sm">
+      <div className="shrink-0 bg-black p-4 flex flex-col gap-4">
+        <nav className="flex w-full font-bold text-sm gap-4">
           <button 
             onClick={() => setView('squad')} 
-            className={`flex-1 py-2 transition-all bg-ceefax-cyan border-r-4 border-black ${view === 'squad' ? 'text-white' : 'text-black'}`}
+            className={`flex-1 py-2 transition-all border-4 border-ceefax-cyan ${view === 'squad' ? 'bg-ceefax-cyan text-black' : 'bg-black text-ceefax-cyan'}`}
           >
             PLAYERS
           </button>
           <button 
             onClick={() => setView('selection')} 
-            className={`flex-1 py-2 transition-all bg-ceefax-red ${view === 'selection' ? 'text-white' : 'text-black'}`}
+            className={`flex-1 py-2 transition-all border-4 border-ceefax-red ${view === 'selection' ? 'bg-ceefax-red text-black' : 'bg-black text-ceefax-red'}`}
           >
             PICK
           </button>
         </nav>
-        <div className="text-center py-2 text-xs font-normal text-white bg-black normal-case">
+        {(!squadStatus || squadStatus.is_licensed === 0) && (
+          <button onClick={() => setView('payment')} className="w-full bg-ceefax-yellow text-black py-2 font-bold text-sm uppercase border-4 border-ceefax-yellow">&gt; 3-DAY TRIAL OR BUY-IT-NOW FOR £1.99 &lt;</button>
+        )}
+        <div className="text-center text-xs font-normal text-white bg-black normal-case">
           Copyright - Gary Neill Limited
         </div>
       </div>
