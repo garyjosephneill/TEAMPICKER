@@ -30,7 +30,6 @@ const BALLON_DOR_WINNERS = [
   { name: 'RUUD GULLIT', rating: 9, position: Position.MIDFIELD },
   { name: 'MICHEL PLATINI', rating: 10, position: Position.MIDFIELD },
   { name: 'PAOLO ROSSI', rating: 9, position: Position.ATTACK },
-  { name: 'KARL-HEINZ RUMMENIGGE', rating: 9, position: Position.ATTACK },
   { name: 'KEVIN KEEGAN', rating: 9, position: Position.ATTACK },
   { name: 'ALLAN SIMONSEN', rating: 8, position: Position.ATTACK },
   { name: 'FRANZ BECKENBAUER', rating: 10, position: Position.DEFENCE },
@@ -101,6 +100,7 @@ export default function App() {
     const t1: Player[] = [], t2: Player[] = [];
     
     const positions = [Position.DEFENCE, Position.MIDFIELD, Position.ATTACK];
+    const leftovers: Player[] = [];
     
     positions.forEach(pos => {
       const posPlayers = selected.filter(p => p.position === pos).sort((a, b) => b.rating - a.rating);
@@ -108,25 +108,46 @@ export default function App() {
         const p1 = posPlayers[i];
         const p2 = posPlayers[i + 1];
         
-        const t1Rating = t1.reduce((sum, p) => sum + p.rating, 0);
-        const t2Rating = t2.reduce((sum, p) => sum + p.rating, 0);
-
         if (p2) {
-          if (t1Rating < t2Rating - 2) {
+          const t1Rating = t1.reduce((sum, p) => sum + p.rating, 0);
+          const t2Rating = t2.reduce((sum, p) => sum + p.rating, 0);
+
+          if (t1.length < t2.length) {
             t1.push(p1); t2.push(p2);
-          } else if (t2Rating < t1Rating - 2) {
+          } else if (t2.length < t1.length) {
             t2.push(p1); t1.push(p2);
           } else {
-            if (Math.random() > 0.5) {
+            if (t1Rating < t2Rating) {
               t1.push(p1); t2.push(p2);
+            } else if (t2Rating < t1Rating) {
+              t2.push(p1); t1.push(p2);
             } else {
-              t1.push(p2); t2.push(p1);
+              if (Math.random() > 0.5) {
+                t1.push(p1); t2.push(p2);
+              } else {
+                t1.push(p2); t2.push(p1);
+              }
             }
           }
         } else {
-          if (t1Rating <= t2Rating) t1.push(p1);
-          else t2.push(p1);
+          leftovers.push(p1);
         }
+      }
+    });
+
+    leftovers.sort((a, b) => b.rating - a.rating);
+    leftovers.forEach(p => {
+      const t1Rating = t1.reduce((sum, player) => sum + player.rating, 0);
+      const t2Rating = t2.reduce((sum, player) => sum + player.rating, 0);
+      
+      if (t1.length < t2.length) {
+        t1.push(p);
+      } else if (t2.length < t1.length) {
+        t2.push(p);
+      } else if (t1Rating <= t2Rating) {
+        t1.push(p);
+      } else {
+        t2.push(p);
       }
     });
 
