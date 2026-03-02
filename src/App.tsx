@@ -182,7 +182,7 @@ export default function App() {
     <div className="flex flex-col h-[100dvh] max-w-5xl mx-auto overflow-hidden bg-black text-white font-mono uppercase">
       <header className="p-4 pt-8 shrink-0">
         <div className="flex justify-between items-baseline mb-4">
-          <div className="text-ceefax-yellow font-title font-medium text-6xl tracking-normal">GAFFER 2.0</div>
+          <div className="text-ceefax-yellow font-title font-medium text-2xl tracking-normal">GAFFER 2.0</div>
         </div>
         <div className="flex justify-between text-sm font-bold border-b-4 border-ceefax-cyan pb-2">
           <span className="text-ceefax-white">PLAYERS: {players.length}/99</span>
@@ -230,7 +230,7 @@ export default function App() {
                       />
                     ) : (
                       <div 
-                        onDoubleClick={() => setEditingPlayerId(p.id)} 
+                        onClick={() => setEditingPlayerId(p.id)} 
                         className="border-2 border-ceefax-cyan p-2 flex-grow text-sm text-ceefax-white truncate uppercase cursor-text font-normal"
                       >
                         {p.name}
@@ -254,9 +254,8 @@ export default function App() {
 
         {view === 'selection' && (
           <div className="space-y-6">
-            <div className="flex justify-between items-center border-b-2 border-ceefax-green pb-2">
-              <h2 className="text-2xl text-ceefax-green">SELECT PLAYERS</h2>
-              <span className="text-xl text-ceefax-green">{players.filter(x => x.isSelected).length} SELECTED</span>
+            <div className="flex items-center border-b-2 border-ceefax-green pb-2">
+              <h2 className="text-sm font-bold text-ceefax-green">SELECT PLAYERS: {players.filter(x => x.isSelected).length}</h2>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
               {players.map(p => (
@@ -367,3 +366,4 @@ export default function App() {
     </div>
   );
 }
+
