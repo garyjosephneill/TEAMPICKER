@@ -46,8 +46,18 @@ const BALLON_DOR_WINNERS = [
 
 const GET_RANDOM_12 = (): Player[] => {
   const shuffled = [...BALLON_DOR_WINNERS].sort(() => 0.5 - Math.random());
-  return shuffled.slice(0, 12).map(p => ({
+  
+  // Ensure at least 2 defenders and 2 midfielders
+  const defenders = shuffled.filter(p => p.position === Position.DEFENCE).slice(0, 2);
+  const midfielders = shuffled.filter(p => p.position === Position.MIDFIELD).slice(0, 2);
+  
+  // Fill the rest up to 14 players
+  const remaining = shuffled.filter(p => !defenders.includes(p) && !midfielders.includes(p));
+  const selected14 = [...defenders, ...midfielders, ...remaining.slice(0, 10)].sort(() => 0.5 - Math.random());
+
+  return selected14.map(p => ({
     ...p,
+    rating: Math.floor(Math.random() * 5) + 6, // Random rating between 6 and 10
     id: crypto.randomUUID(),
     isSelected: false
   }));
@@ -182,10 +192,14 @@ export default function App() {
     <div className="flex flex-col h-[100dvh] max-w-5xl mx-auto overflow-hidden bg-black text-white font-mono uppercase">
       <header className="p-4 pt-8 shrink-0">
         <div className="flex justify-between items-baseline mb-4">
-          <div className="text-ceefax-yellow font-['Courier'] font-bold text-[31px] tracking-normal">GAFFER 2.0</div>
+          <div className="text-ceefax-yellow font-['Courier'] font-normal text-[38px] tracking-normal">GAFFER 2.0</div>
         </div>
         <div className="flex justify-between text-sm font-bold border-b-4 border-ceefax-cyan pb-2">
-          <span className="text-ceefax-white">PLAYERS: {players.length}/99</span>
+          {view === 'selection' ? (
+            <span className="text-ceefax-white">SELECT PLAYERS: {players.filter(x => x.isSelected).length}</span>
+          ) : (
+            <span className="text-ceefax-white">PLAYERS: {players.length}/99</span>
+          )}
         </div>
       </header>
 
@@ -254,9 +268,6 @@ export default function App() {
 
         {view === 'selection' && (
           <div className="space-y-6">
-            <div className="flex items-center border-b-2 border-ceefax-green pb-2">
-              <h2 className="text-sm font-bold text-ceefax-green">SELECT PLAYERS: {players.filter(x => x.isSelected).length}</h2>
-            </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
               {players.map(p => (
                 <button key={p.id} onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, isSelected: !x.isSelected } : x))} className={`p-2 border-2 text-left text-sm transition-all font-bold ${p.isSelected ? 'bg-ceefax-yellow text-black border-ceefax-yellow' : 'bg-black text-ceefax-white border-white/20'}`}>{p.name}</button>
