@@ -182,7 +182,7 @@ export default function App() {
     <div className="flex flex-col h-[100dvh] max-w-5xl mx-auto overflow-hidden bg-black text-white font-mono uppercase">
       <header className="p-4 pt-8 shrink-0">
         <div className="flex justify-between items-baseline mb-4">
-          <div className="text-ceefax-yellow font-title font-medium text-2xl tracking-normal">GAFFER 2.0</div>
+          <div className="text-ceefax-yellow font-['Courier'] font-bold text-[31px] tracking-normal">GAFFER 2.0</div>
         </div>
         <div className="flex justify-between text-sm font-bold border-b-4 border-ceefax-cyan pb-2">
           <span className="text-ceefax-white">PLAYERS: {players.length}/99</span>
@@ -366,4 +366,3 @@ export default function App() {
     </div>
   );
 }
-
