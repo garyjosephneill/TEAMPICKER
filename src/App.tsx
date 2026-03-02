@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
-enum Position { DEFENCE = 'DEFENCE', MIDFIELD = 'MIDFIELD', ATTACK = 'ATTACK' }
+enum Position { GKP = 'GKP', DEFENCE = 'DEFENCE', MIDFIELD = 'MIDFIELD', ATTACK = 'ATTACK' }
 interface Player { id: string; name: string; rating: number; position: Position; isSelected: boolean; }
 interface Team { name: string; players: Player[]; totalRating: number; positions: Record<Position, number>; }
 
@@ -41,7 +41,7 @@ const BALLON_DOR_WINNERS = [
   { name: 'BOBBY CHARLTON', rating: 9, position: Position.MIDFIELD },
   { name: 'EUSEBIO', rating: 10, position: Position.ATTACK },
   { name: 'DENIS LAW', rating: 9, position: Position.ATTACK },
-  { name: 'LEV YASHIN', rating: 10, position: Position.DEFENCE },
+  { name: 'LEV YASHIN', rating: 10, position: Position.GKP },
 ];
 
 const GET_RANDOM_12 = (): Player[] => {
@@ -110,7 +110,7 @@ export default function App() {
     
     const t1: Player[] = [], t2: Player[] = [];
     
-    const positions = [Position.DEFENCE, Position.MIDFIELD, Position.ATTACK];
+    const positions = [Position.GKP, Position.DEFENCE, Position.MIDFIELD, Position.ATTACK];
     const leftovers: Player[] = [];
     
     positions.forEach(pos => {
@@ -162,7 +162,7 @@ export default function App() {
       }
     });
 
-    const sortOrder = { [Position.DEFENCE]: 1, [Position.MIDFIELD]: 2, [Position.ATTACK]: 3 };
+    const sortOrder = { [Position.GKP]: 0, [Position.DEFENCE]: 1, [Position.MIDFIELD]: 2, [Position.ATTACK]: 3 };
     const sortPlayers = (ps: Player[]) => [...ps].sort((a, b) => sortOrder[a.position] - sortOrder[b.position] || b.rating - a.rating);
 
     const shuffledNames = [...TEAM_NAMES].sort(() => 0.5 - Math.random());
@@ -172,6 +172,7 @@ export default function App() {
       players: sortPlayers(ps),
       totalRating: ps.reduce((s, p) => s + p.rating, 0),
       positions: {
+        [Position.GKP]: ps.filter(x => x.position === Position.GKP).length,
         [Position.DEFENCE]: ps.filter(x => x.position === Position.DEFENCE).length,
         [Position.MIDFIELD]: ps.filter(x => x.position === Position.MIDFIELD).length,
         [Position.ATTACK]: ps.filter(x => x.position === Position.ATTACK).length
@@ -252,6 +253,7 @@ export default function App() {
                       </div>
                     )}
                     <div className="flex border-2 border-ceefax-white overflow-hidden">
+                      <button onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: Position.GKP } : x))} className={`px-2 py-2 text-xs font-bold ${p.position === Position.GKP ? 'bg-ceefax-green text-black' : 'bg-black text-gray-500'}`}>GKP</button>
                       <button onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: Position.DEFENCE } : x))} className={`px-2 py-2 text-xs font-bold ${p.position === Position.DEFENCE ? 'bg-ceefax-cyan text-black' : 'bg-black text-gray-500'}`}>DEF</button>
                       <button onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: Position.MIDFIELD } : x))} className={`px-2 py-2 text-xs font-bold ${p.position === Position.MIDFIELD ? 'bg-ceefax-white text-black' : 'bg-black text-gray-500'}`}>MID</button>
                       <button onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: Position.ATTACK } : x))} className={`px-2 py-2 text-xs font-bold ${p.position === Position.ATTACK ? 'bg-ceefax-yellow text-black' : 'bg-black text-gray-500'}`}>ATT</button>
