@@ -78,6 +78,7 @@ export default function App() {
   const [newPlayerName, setNewPlayerName] = useState('');
   const [editingPlayerId, setEditingPlayerId] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [showPlayerDetails, setShowPlayerDetails] = useState(true);
 
   useEffect(() => {
     if (!squadId) return;
@@ -276,13 +277,31 @@ export default function App() {
             <div className="flex justify-center">
               <button 
                 onClick={balanceTeams} 
-                className={`w-auto px-8 border-4 border-ceefax-yellow p-2 text-lg font-bold transition-all ${isGenerating ? 'bg-ceefax-yellow text-black' : 'text-ceefax-yellow bg-black'}`}
+                className={`w-[300px] border-4 border-ceefax-yellow p-2 text-lg font-bold transition-all ${isGenerating ? 'bg-ceefax-yellow text-black' : 'text-ceefax-yellow bg-black'}`}
               >
                 GENERATE TEAMS
               </button>
             </div>
             {teams && (
-              <div className="space-y-8 pt-8">
+              <div className="flex justify-center mt-4">
+                <div className="flex w-[300px] border-4 border-ceefax-white text-lg font-bold">
+                  <button 
+                    onClick={() => setShowPlayerDetails(false)}
+                    className={`flex-1 p-2 transition-all ${!showPlayerDetails ? 'bg-ceefax-white text-black' : 'bg-black text-ceefax-white'}`}
+                  >
+                    HIDE INFO
+                  </button>
+                  <button 
+                    onClick={() => setShowPlayerDetails(true)}
+                    className={`flex-1 p-2 transition-all ${showPlayerDetails ? 'bg-ceefax-white text-black' : 'bg-black text-ceefax-white'}`}
+                  >
+                    SHOW INFO
+                  </button>
+                </div>
+              </div>
+            )}
+            {teams && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
                 {[
                   { data: teams.team1, color: 'text-ceefax-cyan', border: 'border-ceefax-cyan' },
                   { data: teams.team2, color: 'text-ceefax-red', border: 'border-ceefax-red' }
@@ -290,14 +309,22 @@ export default function App() {
                   <div key={t.data.name} className={`border-4 ${t.border} p-4`}>
                     <div className="flex items-end border-b-2 border-white mb-4 pb-2 text-left">
                       <h3 className={`flex-1 text-2xl font-bold truncate pr-2 ${t.color}`}>{t.data.name}</h3>
-                      <span className="w-12 md:w-16 text-white text-sm md:text-xl font-bold">RTG</span>
-                      <span className="w-8 md:w-10 text-ceefax-yellow text-sm md:text-xl font-bold">{t.data.totalRating}</span>
+                      {showPlayerDetails && (
+                        <>
+                          <span className="w-12 md:w-16 text-white text-sm md:text-xl font-bold">RTG</span>
+                          <span className="w-8 md:w-10 text-ceefax-yellow text-sm md:text-xl font-bold">{t.data.totalRating}</span>
+                        </>
+                      )}
                     </div>
                     {t.data.players.map(p => (
                       <div key={p.id} className="flex text-sm md:text-xl text-left">
                         <span className="flex-1 truncate pr-2">{p.name}</span>
-                        <span className="w-12 md:w-16 text-white">{p.position.substring(0, 3)}</span>
-                        <span className="w-8 md:w-10 text-ceefax-yellow">{p.rating}</span>
+                        {showPlayerDetails && (
+                          <>
+                            <span className="w-12 md:w-16 text-white">{p.position.substring(0, 3)}</span>
+                            <span className="w-8 md:w-10 text-ceefax-yellow">{p.rating}</span>
+                          </>
+                        )}
                       </div>
                     ))}
                   </div>
