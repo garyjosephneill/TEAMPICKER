@@ -194,7 +194,7 @@ export default function App() {
     <div className="flex flex-col h-[100dvh] max-w-5xl mx-auto overflow-hidden bg-black text-white font-mono uppercase">
       <header className="p-4 pt-8 shrink-0">
         <div className="flex justify-between items-baseline mb-4">
-          <div className="text-ceefax-yellow font-['Courier'] font-normal text-[65px] tracking-normal">
+          <div className="text-ceefax-yellow font-['Courier'] font-normal text-[50px] tracking-normal">
             GAFFER <span className="tracking-[-0.15em]">2.0</span>
           </div>
         </div>
@@ -395,7 +395,7 @@ export default function App() {
             onClick={() => setView('selection')} 
             className={`flex-1 py-2 transition-all border-4 border-ceefax-red ${view === 'selection' ? 'bg-ceefax-red text-black' : 'bg-black text-ceefax-red'}`}
           >
-            PICK
+            GAFFER
           </button>
         </nav>
         {(!squadStatus || squadStatus.is_licensed === 0) && (
@@ -408,3 +408,4 @@ export default function App() {
     </div>
   );
 }
+
