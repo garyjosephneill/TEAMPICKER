@@ -194,7 +194,9 @@ export default function App() {
     <div className="flex flex-col h-[100dvh] max-w-5xl mx-auto overflow-hidden bg-black text-white font-mono uppercase">
       <header className="p-4 pt-8 shrink-0">
         <div className="flex justify-between items-baseline mb-4">
-          <div className="text-ceefax-yellow font-['Courier'] font-normal text-[38px] tracking-normal">GAFFER 2.0</div>
+          <div className="text-ceefax-yellow font-['Courier'] font-normal text-[65px] tracking-normal">
+            GAFFER <span className="tracking-[-0.15em]">2.0</span>
+          </div>
         </div>
         <div className="flex justify-between text-sm font-bold border-b-4 border-ceefax-cyan pb-2">
           {view === 'selection' ? (
