@@ -12,40 +12,41 @@ const TEAM_NAMES = [
   'BOROUGH', 'ACADEMICAL', 'FOREST', 'WEDNESDAY', 'PARK', 'VALE'
 ];
 
-const BALLON_DOR_WINNERS = [
-  { name: 'LIONEL MESSI', rating: 10, position: Position.ATTACK },
-  { name: 'CRISTIANO RONALDO', rating: 10, position: Position.ATTACK },
-  { name: 'LUKA MODRIC', rating: 9, position: Position.MIDFIELD },
-  { name: 'KAKA', rating: 9, position: Position.MIDFIELD },
-  { name: 'FABIO CANNAVARO', rating: 9, position: Position.DEFENCE },
-  { name: 'RONALDINHO', rating: 10, position: Position.ATTACK },
-  { name: 'ANDRIY SHEVCHENKO', rating: 9, position: Position.ATTACK },
-  { name: 'PAVEL NEDVED', rating: 9, position: Position.MIDFIELD },
+const FAMOUS_PLAYERS = [
+  { name: 'BUFFON', rating: 9, position: Position.GKP },
+  { name: 'CASILLAS', rating: 9, position: Position.GKP },
+  { name: 'NEUER', rating: 9, position: Position.GKP },
+  { name: 'CECH', rating: 8, position: Position.GKP },
+  { name: 'ALISSON', rating: 8, position: Position.GKP },
+  { name: 'EDERSON', rating: 8, position: Position.GKP },
+  { name: 'MALDINI', rating: 10, position: Position.DEFENCE },
+  { name: 'RAMOS', rating: 9, position: Position.DEFENCE },
+  { name: 'PUYOL', rating: 9, position: Position.DEFENCE },
+  { name: 'TERRY', rating: 9, position: Position.DEFENCE },
+  { name: 'VIDIC', rating: 9, position: Position.DEFENCE },
+  { name: 'PIQUE', rating: 8, position: Position.DEFENCE },
+  { name: 'CHIELLINI', rating: 8, position: Position.DEFENCE },
+  { name: 'SILVA', rating: 8, position: Position.DEFENCE },
+  { name: 'XAVI', rating: 10, position: Position.MIDFIELD },
+  { name: 'INIESTA', rating: 10, position: Position.MIDFIELD },
+  { name: 'ZIDANE', rating: 10, position: Position.MIDFIELD },
+  { name: 'PIRLO', rating: 9, position: Position.MIDFIELD },
+  { name: 'SCHOLES', rating: 9, position: Position.MIDFIELD },
+  { name: 'GERRARD', rating: 9, position: Position.MIDFIELD },
+  { name: 'LAMPARD', rating: 9, position: Position.MIDFIELD },
+  { name: 'MODRIC', rating: 9, position: Position.MIDFIELD },
+  { name: 'MESSI', rating: 10, position: Position.ATTACK },
   { name: 'RONALDO', rating: 10, position: Position.ATTACK },
-  { name: 'MICHAEL OWEN', rating: 9, position: Position.ATTACK },
-  { name: 'LUIS FIGO', rating: 9, position: Position.MIDFIELD },
-  { name: 'RIVALDO', rating: 9, position: Position.ATTACK },
-  { name: 'ZINEDINE ZIDANE', rating: 10, position: Position.MIDFIELD },
-  { name: 'MARCO VAN BASTEN', rating: 10, position: Position.ATTACK },
-  { name: 'RUUD GULLIT', rating: 9, position: Position.MIDFIELD },
-  { name: 'MICHEL PLATINI', rating: 10, position: Position.MIDFIELD },
-  { name: 'PAOLO ROSSI', rating: 9, position: Position.ATTACK },
-  { name: 'KEVIN KEEGAN', rating: 9, position: Position.ATTACK },
-  { name: 'ALLAN SIMONSEN', rating: 8, position: Position.ATTACK },
-  { name: 'FRANZ BECKENBAUER', rating: 10, position: Position.DEFENCE },
-  { name: 'OLEG BLOKHIN', rating: 9, position: Position.ATTACK },
-  { name: 'JOHAN CRUYFF', rating: 10, position: Position.ATTACK },
-  { name: 'GERD MULLER', rating: 10, position: Position.ATTACK },
-  { name: 'GIANNI RIVERA', rating: 9, position: Position.MIDFIELD },
-  { name: 'GEORGE BEST', rating: 10, position: Position.ATTACK },
-  { name: 'BOBBY CHARLTON', rating: 9, position: Position.MIDFIELD },
-  { name: 'EUSEBIO', rating: 10, position: Position.ATTACK },
-  { name: 'DENIS LAW', rating: 9, position: Position.ATTACK },
-  { name: 'LEV YASHIN', rating: 10, position: Position.GKP },
+  { name: 'ROONEY', rating: 9, position: Position.ATTACK },
+  { name: 'HENRY', rating: 10, position: Position.ATTACK },
+  { name: 'SUAREZ', rating: 9, position: Position.ATTACK },
+  { name: 'AGUERO', rating: 9, position: Position.ATTACK },
+  { name: 'NEYMAR', rating: 9, position: Position.ATTACK },
+  { name: 'MBAPPE', rating: 9, position: Position.ATTACK },
 ];
 
 const GET_RANDOM_12 = (): Player[] => {
-  const shuffled = [...BALLON_DOR_WINNERS].sort(() => 0.5 - Math.random());
+  const shuffled = [...FAMOUS_PLAYERS].sort(() => 0.5 - Math.random());
   
   // Ensure at least 2 defenders and 2 midfielders
   const defenders = shuffled.filter(p => p.position === Position.DEFENCE).slice(0, 2);
@@ -194,7 +195,7 @@ export default function App() {
     <div className="flex flex-col h-[100dvh] max-w-5xl mx-auto overflow-hidden bg-black text-white font-mono uppercase">
       <header className="p-4 pt-8 shrink-0">
         <div className="flex justify-between items-baseline mb-4">
-          <div className="text-ceefax-yellow font-['Courier'] font-normal text-[50px] tracking-normal normal-case">
+          <div className="text-ceefax-yellow font-['Bebas_Neue'] font-normal text-[50px] tracking-normal">
             Lazy Gaffer
           </div>
         </div>
@@ -408,3 +409,4 @@ export default function App() {
     </div>
   );
 }
+
