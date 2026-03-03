@@ -217,7 +217,7 @@ export default function App() {
           {view === 'selection' ? (
             <span className="text-ceefax-white">SELECT PLAYERS: {players.filter(x => x.isSelected).length}</span>
           ) : (
-            <span className="text-ceefax-white">PLAYERS: {players.length}/16</span>
+            <span className="text-ceefax-white">PLAYERS: {players.length}</span>
           )}
         </div>
       </header>
@@ -229,15 +229,13 @@ export default function App() {
               <input 
                 value={newPlayerName} 
                 onChange={e => setNewPlayerName(e.target.value.toUpperCase())} 
-                placeholder={players.length >= 16 ? "SQUAD FULL" : "NAME..."} 
+                placeholder="NAME..." 
                 className="input-field text-xl uppercase" 
-                disabled={players.length >= 16}
-                onKeyDown={e => e.key === 'Enter' && newPlayerName && players.length < 16 && (setPlayers([...players, { id: crypto.randomUUID(), name: newPlayerName, rating: 5, position: Position.MIDFIELD, isSelected: true }]), setNewPlayerName(''))}
+                onKeyDown={e => e.key === 'Enter' && newPlayerName && (setPlayers([...players, { id: crypto.randomUUID(), name: newPlayerName, rating: 5, position: Position.MIDFIELD, isSelected: true }]), setNewPlayerName(''))}
               />
               <button 
-                onClick={() => { if (newPlayerName && players.length < 16) { setPlayers([...players, { id: crypto.randomUUID(), name: newPlayerName, rating: 5, position: Position.MIDFIELD, isSelected: true }]); setNewPlayerName(''); } }} 
-                disabled={players.length >= 16}
-                className={`px-6 text-xl font-bold border-2 transition-all ${players.length >= 16 ? 'bg-gray-800 text-gray-500 border-gray-800 cursor-not-allowed' : 'bg-ceefax-green text-black border-ceefax-green hover:bg-black hover:text-ceefax-green'}`}
+                onClick={() => { if (newPlayerName) { setPlayers([...players, { id: crypto.randomUUID(), name: newPlayerName, rating: 5, position: Position.MIDFIELD, isSelected: true }]); setNewPlayerName(''); } }} 
+                className="px-6 text-xl font-bold border-2 transition-all bg-ceefax-green text-black border-ceefax-green hover:bg-black hover:text-ceefax-green"
               >
                 ADD
               </button>
