@@ -13,36 +13,24 @@ const TEAM_NAMES = [
 ];
 
 const FAMOUS_PLAYERS = [
-  { name: 'BUFFON', rating: 9, position: Position.GKP },
-  { name: 'CASILLAS', rating: 9, position: Position.GKP },
-  { name: 'NEUER', rating: 9, position: Position.GKP },
-  { name: 'CECH', rating: 8, position: Position.GKP },
-  { name: 'ALISSON', rating: 8, position: Position.GKP },
-  { name: 'EDERSON', rating: 8, position: Position.GKP },
-  { name: 'MALDINI', rating: 10, position: Position.DEFENCE },
-  { name: 'RAMOS', rating: 9, position: Position.DEFENCE },
-  { name: 'PUYOL', rating: 9, position: Position.DEFENCE },
-  { name: 'TERRY', rating: 9, position: Position.DEFENCE },
-  { name: 'VIDIC', rating: 9, position: Position.DEFENCE },
-  { name: 'PIQUE', rating: 8, position: Position.DEFENCE },
-  { name: 'CHIELLINI', rating: 8, position: Position.DEFENCE },
-  { name: 'SILVA', rating: 8, position: Position.DEFENCE },
-  { name: 'XAVI', rating: 10, position: Position.MIDFIELD },
-  { name: 'INIESTA', rating: 10, position: Position.MIDFIELD },
-  { name: 'ZIDANE', rating: 10, position: Position.MIDFIELD },
-  { name: 'PIRLO', rating: 9, position: Position.MIDFIELD },
-  { name: 'SCHOLES', rating: 9, position: Position.MIDFIELD },
-  { name: 'GERRARD', rating: 9, position: Position.MIDFIELD },
-  { name: 'LAMPARD', rating: 9, position: Position.MIDFIELD },
-  { name: 'MODRIC', rating: 9, position: Position.MIDFIELD },
-  { name: 'MESSI', rating: 10, position: Position.ATTACK },
-  { name: 'RONALDO', rating: 10, position: Position.ATTACK },
-  { name: 'ROONEY', rating: 9, position: Position.ATTACK },
-  { name: 'HENRY', rating: 10, position: Position.ATTACK },
-  { name: 'SUAREZ', rating: 9, position: Position.ATTACK },
-  { name: 'AGUERO', rating: 9, position: Position.ATTACK },
-  { name: 'NEYMAR', rating: 9, position: Position.ATTACK },
-  { name: 'MBAPPE', rating: 9, position: Position.ATTACK },
+  { name: 'THE CAT', rating: 9, position: Position.GKP },
+  { name: 'SIMMO', rating: 8, position: Position.GKP },
+  { name: 'CHOPPER LARRY', rating: 10, position: Position.DEFENCE },
+  { name: 'BIG JOHN', rating: 9, position: Position.DEFENCE },
+  { name: 'FRANCO', rating: 9, position: Position.DEFENCE },
+  { name: 'BARRY THE FRIDGE', rating: 8, position: Position.DEFENCE },
+  { name: 'BONES', rating: 8, position: Position.DEFENCE },
+  { name: 'LUNGS', rating: 10, position: Position.MIDFIELD },
+  { name: 'TRICKY PETE', rating: 9, position: Position.MIDFIELD },
+  { name: 'WOR DAVE', rating: 9, position: Position.MIDFIELD },
+  { name: 'GADGET', rating: 8, position: Position.MIDFIELD },
+  { name: 'SWEATY', rating: 8, position: Position.MIDFIELD },
+  { name: 'BOBBY SCORE', rating: 10, position: Position.ATTACK },
+  { name: 'GAZADONNA', rating: 10, position: Position.ATTACK },
+  { name: 'THE POSTMAN', rating: 9, position: Position.ATTACK },
+  { name: 'SNIFFER', rating: 9, position: Position.ATTACK },
+  { name: 'LITTLE JOHN', rating: 8, position: Position.ATTACK },
+  { name: 'GAV', rating: 8, position: Position.ATTACK },
 ];
 
 const GET_RANDOM_16 = (): Player[] => {
@@ -58,7 +46,6 @@ const GET_RANDOM_16 = (): Player[] => {
 
   return selected16.map(p => ({
     ...p,
-    rating: Math.floor(Math.random() * 5) + 6, // Random rating between 6 and 10
     id: crypto.randomUUID(),
     isSelected: true
   }));
