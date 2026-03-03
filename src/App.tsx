@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
@@ -45,22 +45,22 @@ const FAMOUS_PLAYERS = [
   { name: 'MBAPPE', rating: 9, position: Position.ATTACK },
 ];
 
-const GET_RANDOM_12 = (): Player[] => {
+const GET_RANDOM_16 = (): Player[] => {
   const shuffled = [...FAMOUS_PLAYERS].sort(() => 0.5 - Math.random());
   
   // Ensure at least 2 defenders and 2 midfielders
   const defenders = shuffled.filter(p => p.position === Position.DEFENCE).slice(0, 2);
   const midfielders = shuffled.filter(p => p.position === Position.MIDFIELD).slice(0, 2);
   
-  // Fill the rest up to 14 players
+  // Fill the rest up to 16 players
   const remaining = shuffled.filter(p => !defenders.includes(p) && !midfielders.includes(p));
-  const selected14 = [...defenders, ...midfielders, ...remaining.slice(0, 10)].sort(() => 0.5 - Math.random());
+  const selected16 = [...defenders, ...midfielders, ...remaining.slice(0, 12)].sort(() => 0.5 - Math.random());
 
-  return selected14.map(p => ({
+  return selected16.map(p => ({
     ...p,
     rating: Math.floor(Math.random() * 5) + 6, // Random rating between 6 and 10
     id: crypto.randomUUID(),
-    isSelected: false
+    isSelected: true
   }));
 };
 
@@ -80,13 +80,14 @@ export default function App() {
   const [editingPlayerId, setEditingPlayerId] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [showPlayerDetails, setShowPlayerDetails] = useState(true);
+  const teamsContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!squadId) return;
     fetch(`/api/squad-status/${squadId}`).then(r => r.json()).then(setSquadStatus);
     fetch(`/api/players/${squadId}`).then(r => r.json()).then(data => {
       if (data.length > 0) setPlayers(data);
-      else setPlayers(GET_RANDOM_12());
+      else setPlayers(GET_RANDOM_16());
     });
   }, [squadId]);
 
@@ -181,6 +182,11 @@ export default function App() {
     });
 
     setTeams({ team1: createTeam(shuffledNames[0], t1), team2: createTeam(shuffledNames[1], t2) });
+    
+    // Auto-scroll to teams after a brief delay to allow rendering
+    setTimeout(() => {
+      teamsContainerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
   };
 
   const handlePurchase = async () => {
@@ -188,6 +194,14 @@ export default function App() {
     await fetch(`/api/purchase/${squadId}`, { method: 'POST' });
     const status = await fetch(`/api/squad-status/${squadId}`).then(r => r.json());
     setSquadStatus(status);
+    setView('squad');
+  };
+
+  const resetSquad = () => {
+    const newId = Math.floor(100 + Math.random() * 900).toString();
+    localStorage.setItem('ceefax_squad_id', newId);
+    setSquadId(newId);
+    setTeams(null);
     setView('squad');
   };
 
@@ -203,7 +217,7 @@ export default function App() {
           {view === 'selection' ? (
             <span className="text-ceefax-white">SELECT PLAYERS: {players.filter(x => x.isSelected).length}</span>
           ) : (
-            <span className="text-ceefax-white">PLAYERS: {players.length}/99</span>
+            <span className="text-ceefax-white">PLAYERS: {players.length}/16</span>
           )}
         </div>
       </header>
@@ -215,13 +229,15 @@ export default function App() {
               <input 
                 value={newPlayerName} 
                 onChange={e => setNewPlayerName(e.target.value.toUpperCase())} 
-                placeholder="NAME..." 
+                placeholder={players.length >= 16 ? "SQUAD FULL" : "NAME..."} 
                 className="input-field text-xl uppercase" 
-                onKeyDown={e => e.key === 'Enter' && newPlayerName && (setPlayers([...players, { id: crypto.randomUUID(), name: newPlayerName, rating: 5, position: Position.MIDFIELD, isSelected: false }]), setNewPlayerName(''))}
+                disabled={players.length >= 16}
+                onKeyDown={e => e.key === 'Enter' && newPlayerName && players.length < 16 && (setPlayers([...players, { id: crypto.randomUUID(), name: newPlayerName, rating: 5, position: Position.MIDFIELD, isSelected: true }]), setNewPlayerName(''))}
               />
               <button 
-                onClick={() => { if (newPlayerName) setPlayers([...players, { id: crypto.randomUUID(), name: newPlayerName, rating: 5, position: Position.MIDFIELD, isSelected: false }]); setNewPlayerName(''); }} 
-                className="bg-ceefax-green text-black px-6 text-xl font-bold border-2 border-ceefax-green hover:bg-black hover:text-ceefax-green transition-all"
+                onClick={() => { if (newPlayerName && players.length < 16) { setPlayers([...players, { id: crypto.randomUUID(), name: newPlayerName, rating: 5, position: Position.MIDFIELD, isSelected: true }]); setNewPlayerName(''); } }} 
+                disabled={players.length >= 16}
+                className={`px-6 text-xl font-bold border-2 transition-all ${players.length >= 16 ? 'bg-gray-800 text-gray-500 border-gray-800 cursor-not-allowed' : 'bg-ceefax-green text-black border-ceefax-green hover:bg-black hover:text-ceefax-green'}`}
               >
                 ADD
               </button>
@@ -288,7 +304,7 @@ export default function App() {
               </button>
             </div>
             {teams && (
-              <div className="flex justify-center mt-4">
+              <div ref={teamsContainerRef} className="flex justify-center mt-4">
                 <div className="flex w-[300px] border-4 border-ceefax-white text-lg font-bold">
                   <button 
                     onClick={() => setShowPlayerDetails(false)}
