@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
 enum Position { GKP = 'GKP', DEFENCE = 'DEFENCE', MIDFIELD = 'MIDFIELD', ATTACK = 'ATTACK' }
-interface Player { id: string; name: string; rating: number; position: Position; isSelected: boolean; }
+interface Player { id: string; name: string; ratings: Record<Position, number>; position: Position; isSelected: boolean; }
 interface Team { name: string; players: Player[]; totalRating: number; positions: Record<Position, number>; }
 
 const TEAM_NAMES = [
@@ -13,24 +13,24 @@ const TEAM_NAMES = [
 ];
 
 const FAMOUS_PLAYERS = [
-  { name: 'THE CAT', rating: 9, position: Position.GKP },
-  { name: 'SIMMO', rating: 8, position: Position.GKP },
-  { name: 'CHOPPER LARRY', rating: 10, position: Position.DEFENCE },
-  { name: 'BIG JOHN', rating: 9, position: Position.DEFENCE },
-  { name: 'FRANCO', rating: 9, position: Position.DEFENCE },
-  { name: 'BARRY THE FRIDGE', rating: 8, position: Position.DEFENCE },
-  { name: 'BONES', rating: 8, position: Position.DEFENCE },
-  { name: 'LUNGS', rating: 10, position: Position.MIDFIELD },
-  { name: 'TRICKY PETE', rating: 9, position: Position.MIDFIELD },
-  { name: 'WOR DAVE', rating: 9, position: Position.MIDFIELD },
-  { name: 'GADGET', rating: 8, position: Position.MIDFIELD },
-  { name: 'SWEATY', rating: 8, position: Position.MIDFIELD },
-  { name: 'BOBBY SCORE', rating: 10, position: Position.ATTACK },
-  { name: 'GAZADONNA', rating: 10, position: Position.ATTACK },
-  { name: 'THE POSTMAN', rating: 9, position: Position.ATTACK },
-  { name: 'SNIFFER', rating: 9, position: Position.ATTACK },
-  { name: 'LITTLE JOHN', rating: 8, position: Position.ATTACK },
-  { name: 'GAV', rating: 8, position: Position.ATTACK },
+  { name: 'THE CAT', ratings: { [Position.GKP]: 9, [Position.DEFENCE]: 4, [Position.MIDFIELD]: 3, [Position.ATTACK]: 2 }, position: Position.GKP },
+  { name: 'SIMMO', ratings: { [Position.GKP]: 8, [Position.DEFENCE]: 5, [Position.MIDFIELD]: 4, [Position.ATTACK]: 3 }, position: Position.GKP },
+  { name: 'CHOPPER LARRY', ratings: { [Position.GKP]: 3, [Position.DEFENCE]: 10, [Position.MIDFIELD]: 6, [Position.ATTACK]: 4 }, position: Position.DEFENCE },
+  { name: 'BIG JOHN', ratings: { [Position.GKP]: 4, [Position.DEFENCE]: 9, [Position.MIDFIELD]: 5, [Position.ATTACK]: 5 }, position: Position.DEFENCE },
+  { name: 'FRANCO', ratings: { [Position.GKP]: 2, [Position.DEFENCE]: 9, [Position.MIDFIELD]: 7, [Position.ATTACK]: 4 }, position: Position.DEFENCE },
+  { name: 'BARRY THE FRIDGE', ratings: { [Position.GKP]: 5, [Position.DEFENCE]: 8, [Position.MIDFIELD]: 4, [Position.ATTACK]: 3 }, position: Position.DEFENCE },
+  { name: 'BONES', ratings: { [Position.GKP]: 1, [Position.DEFENCE]: 8, [Position.MIDFIELD]: 6, [Position.ATTACK]: 2 }, position: Position.DEFENCE },
+  { name: 'LUNGS', ratings: { [Position.GKP]: 2, [Position.DEFENCE]: 7, [Position.MIDFIELD]: 10, [Position.ATTACK]: 7 }, position: Position.MIDFIELD },
+  { name: 'TRICKY PETE', ratings: { [Position.GKP]: 1, [Position.DEFENCE]: 4, [Position.MIDFIELD]: 9, [Position.ATTACK]: 8 }, position: Position.MIDFIELD },
+  { name: 'WOR DAVE', ratings: { [Position.GKP]: 3, [Position.DEFENCE]: 6, [Position.MIDFIELD]: 9, [Position.ATTACK]: 6 }, position: Position.MIDFIELD },
+  { name: 'GADGET', ratings: { [Position.GKP]: 4, [Position.DEFENCE]: 5, [Position.MIDFIELD]: 8, [Position.ATTACK]: 7 }, position: Position.MIDFIELD },
+  { name: 'SWEATY', ratings: { [Position.GKP]: 2, [Position.DEFENCE]: 8, [Position.MIDFIELD]: 8, [Position.ATTACK]: 5 }, position: Position.MIDFIELD },
+  { name: 'BOBBY SCORE', ratings: { [Position.GKP]: 1, [Position.DEFENCE]: 3, [Position.MIDFIELD]: 7, [Position.ATTACK]: 10 }, position: Position.ATTACK },
+  { name: 'GAZADONNA', ratings: { [Position.GKP]: 1, [Position.DEFENCE]: 2, [Position.MIDFIELD]: 8, [Position.ATTACK]: 10 }, position: Position.ATTACK },
+  { name: 'THE POSTMAN', ratings: { [Position.GKP]: 2, [Position.DEFENCE]: 4, [Position.MIDFIELD]: 6, [Position.ATTACK]: 9 }, position: Position.ATTACK },
+  { name: 'SNIFFER', ratings: { [Position.GKP]: 1, [Position.DEFENCE]: 3, [Position.MIDFIELD]: 5, [Position.ATTACK]: 9 }, position: Position.ATTACK },
+  { name: 'LITTLE JOHN', ratings: { [Position.GKP]: 1, [Position.DEFENCE]: 5, [Position.MIDFIELD]: 6, [Position.ATTACK]: 8 }, position: Position.ATTACK },
+  { name: 'GAV', ratings: { [Position.GKP]: 3, [Position.DEFENCE]: 4, [Position.MIDFIELD]: 7, [Position.ATTACK]: 8 }, position: Position.ATTACK },
 ];
 
 const GET_RANDOM_16 = (): Player[] => {
@@ -54,6 +54,7 @@ const GET_RANDOM_16 = (): Player[] => {
 export default function App() {
   const [players, setPlayers] = useState<Player[]>([]);
   const [view, setView] = useState<'selection' | 'squad' | 'payment'>('squad');
+  const [appMode, setAppMode] = useState<'LZY' | 'BRD'>('LZY');
   const [teams, setTeams] = useState<{ team1: Team; team2: Team } | null>(null);
   const [squadId, setSquadId] = useState<string | null>(() => {
     const id = localStorage.getItem('ceefax_squad_id');
@@ -90,27 +91,48 @@ export default function App() {
     return () => clearTimeout(timer);
   }, [players, squadId]);
 
+  const getEffectivePosition = (p: Player) => {
+    if (appMode === 'BRD' && p.ratings) {
+      let maxPos = Position.GKP;
+      let maxVal = p.ratings[Position.GKP];
+      if (p.ratings[Position.DEFENCE] >= maxVal) { maxPos = Position.DEFENCE; maxVal = p.ratings[Position.DEFENCE]; }
+      if (p.ratings[Position.MIDFIELD] >= maxVal) { maxPos = Position.MIDFIELD; maxVal = p.ratings[Position.MIDFIELD]; }
+      if (p.ratings[Position.ATTACK] >= maxVal) { maxPos = Position.ATTACK; maxVal = p.ratings[Position.ATTACK]; }
+      return maxPos;
+    }
+    return p.position;
+  };
+
+  const getEffectiveRating = (p: Player) => {
+    if (appMode === 'BRD' && p.ratings) {
+      return (p.ratings[Position.GKP] + p.ratings[Position.DEFENCE] + p.ratings[Position.MIDFIELD] + p.ratings[Position.ATTACK]) / 4;
+    }
+    return p.ratings ? p.ratings[p.position] : ((p as any).rating || 5);
+  };
+
   const balanceTeams = () => {
     setIsGenerating(true);
     setTimeout(() => setIsGenerating(false), 1000);
 
     const selected = players.filter(p => p.isSelected);
     if (selected.length < 2) return;
-    
+
     const t1: Player[] = [], t2: Player[] = [];
     
     const positions = [Position.GKP, Position.DEFENCE, Position.MIDFIELD, Position.ATTACK];
     const leftovers: Player[] = [];
     
     positions.forEach(pos => {
-      const posPlayers = selected.filter(p => p.position === pos).sort((a, b) => b.rating - a.rating);
+      const posPlayers = selected.filter(p => getEffectivePosition(p) === pos).sort((a, b) => {
+        return getEffectiveRating(b) - getEffectiveRating(a);
+      });
       for (let i = 0; i < posPlayers.length; i += 2) {
         const p1 = posPlayers[i];
         const p2 = posPlayers[i + 1];
         
         if (p2) {
-          const t1Rating = t1.reduce((sum, p) => sum + p.rating, 0);
-          const t2Rating = t2.reduce((sum, p) => sum + p.rating, 0);
+          const t1Rating = t1.reduce((sum, p) => sum + getEffectiveRating(p), 0);
+          const t2Rating = t2.reduce((sum, p) => sum + getEffectiveRating(p), 0);
 
           if (t1.length < t2.length) {
             t1.push(p1); t2.push(p2);
@@ -135,10 +157,12 @@ export default function App() {
       }
     });
 
-    leftovers.sort((a, b) => b.rating - a.rating);
+    leftovers.sort((a, b) => {
+      return getEffectiveRating(b) - getEffectiveRating(a);
+    });
     leftovers.forEach(p => {
-      const t1Rating = t1.reduce((sum, player) => sum + player.rating, 0);
-      const t2Rating = t2.reduce((sum, player) => sum + player.rating, 0);
+      const t1Rating = t1.reduce((sum, player) => sum + getEffectiveRating(player), 0);
+      const t2Rating = t2.reduce((sum, player) => sum + getEffectiveRating(player), 0);
       
       if (t1.length < t2.length) {
         t1.push(p);
@@ -152,19 +176,21 @@ export default function App() {
     });
 
     const sortOrder = { [Position.GKP]: 0, [Position.DEFENCE]: 1, [Position.MIDFIELD]: 2, [Position.ATTACK]: 3 };
-    const sortPlayers = (ps: Player[]) => [...ps].sort((a, b) => sortOrder[a.position] - sortOrder[b.position] || b.rating - a.rating);
+    const sortPlayers = (ps: Player[]) => [...ps].sort((a, b) => {
+      return sortOrder[getEffectivePosition(a)] - sortOrder[getEffectivePosition(b)] || getEffectiveRating(b) - getEffectiveRating(a);
+    });
 
     const shuffledNames = [...TEAM_NAMES].sort(() => 0.5 - Math.random());
 
     const createTeam = (name: string, ps: Player[]): Team => ({
       name,
       players: sortPlayers(ps),
-      totalRating: ps.reduce((s, p) => s + p.rating, 0),
+      totalRating: ps.reduce((s, p) => s + getEffectiveRating(p), 0),
       positions: {
-        [Position.GKP]: ps.filter(x => x.position === Position.GKP).length,
-        [Position.DEFENCE]: ps.filter(x => x.position === Position.DEFENCE).length,
-        [Position.MIDFIELD]: ps.filter(x => x.position === Position.MIDFIELD).length,
-        [Position.ATTACK]: ps.filter(x => x.position === Position.ATTACK).length
+        [Position.GKP]: ps.filter(x => getEffectivePosition(x) === Position.GKP).length,
+        [Position.DEFENCE]: ps.filter(x => getEffectivePosition(x) === Position.DEFENCE).length,
+        [Position.MIDFIELD]: ps.filter(x => getEffectivePosition(x) === Position.MIDFIELD).length,
+        [Position.ATTACK]: ps.filter(x => getEffectivePosition(x) === Position.ATTACK).length
       }
     });
 
@@ -197,7 +223,21 @@ export default function App() {
       <header className="p-4 pt-8 shrink-0">
         <div className="flex justify-between items-baseline mb-4">
           <div className="text-ceefax-yellow font-title font-normal text-[50px] tracking-normal">
-            Lazy Gaffer
+            {appMode === 'LZY' ? 'Lazy Gaffer' : 'Bored Gaffer'}
+          </div>
+          <div className="flex border-2 border-ceefax-white text-sm font-bold">
+            <button 
+              onClick={() => setAppMode('LZY')} 
+              className={`px-3 py-1 ${appMode === 'LZY' ? 'bg-ceefax-white text-black' : 'bg-black text-ceefax-white'}`}
+            >
+              LZY
+            </button>
+            <button 
+              onClick={() => setAppMode('BRD')} 
+              className={`px-3 py-1 border-l-2 border-ceefax-white ${appMode === 'BRD' ? 'bg-ceefax-white text-black' : 'bg-black text-ceefax-white'}`}
+            >
+              BRD
+            </button>
           </div>
         </div>
         <div className="flex justify-between text-sm font-bold border-b-4 border-ceefax-cyan pb-2">
@@ -218,57 +258,103 @@ export default function App() {
                 onChange={e => setNewPlayerName(e.target.value.toUpperCase())} 
                 placeholder="NAME..." 
                 className="input-field text-xl uppercase" 
-                onKeyDown={e => e.key === 'Enter' && newPlayerName && (setPlayers([...players, { id: crypto.randomUUID(), name: newPlayerName, rating: 5, position: Position.MIDFIELD, isSelected: true }]), setNewPlayerName(''))}
+                onKeyDown={e => e.key === 'Enter' && newPlayerName && (setPlayers([...players, { id: crypto.randomUUID(), name: newPlayerName, ratings: { [Position.GKP]: 5, [Position.DEFENCE]: 5, [Position.MIDFIELD]: 5, [Position.ATTACK]: 5 }, position: Position.MIDFIELD, isSelected: true }]), setNewPlayerName(''))}
               />
               <button 
-                onClick={() => { if (newPlayerName) { setPlayers([...players, { id: crypto.randomUUID(), name: newPlayerName, rating: 5, position: Position.MIDFIELD, isSelected: true }]); setNewPlayerName(''); } }} 
+                onClick={() => { if (newPlayerName) { setPlayers([...players, { id: crypto.randomUUID(), name: newPlayerName, ratings: { [Position.GKP]: 5, [Position.DEFENCE]: 5, [Position.MIDFIELD]: 5, [Position.ATTACK]: 5 }, position: Position.MIDFIELD, isSelected: true }]); setNewPlayerName(''); } }} 
                 className="px-6 text-xl font-bold border-2 transition-all bg-ceefax-green text-black border-ceefax-green hover:bg-black hover:text-ceefax-green"
               >
                 ADD
               </button>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-              {players.map((p, i) => (
+              {players.map((p, i) => {
+                const rGKP = p.ratings ? p.ratings[Position.GKP] : ((p as any).rating || 5);
+                const rDEF = p.ratings ? p.ratings[Position.DEFENCE] : ((p as any).rating || 5);
+                const rMID = p.ratings ? p.ratings[Position.MIDFIELD] : ((p as any).rating || 5);
+                const rATT = p.ratings ? p.ratings[Position.ATTACK] : ((p as any).rating || 5);
+
+                let maxPos = Position.GKP;
+                let maxVal = rGKP;
+                if (rDEF >= maxVal) { maxPos = Position.DEFENCE; maxVal = rDEF; }
+                if (rMID >= maxVal) { maxPos = Position.MIDFIELD; maxVal = rMID; }
+                if (rATT >= maxVal) { maxPos = Position.ATTACK; maxVal = rATT; }
+
+                return (
                 <section key={p.id} className="space-y-2 border-b border-gray-800 pb-4">
                   <div className="flex justify-between items-center">
                     <h2 className="text-ceefax-cyan font-bold uppercase">PLAYER {i + 1}</h2>
-                    <div className="flex gap-0.5 text-ceefax-yellow">
-                      {Array.from({ length: 10 }).map((_, starI) => (
-                        <span key={starI} className={starI < p.rating ? 'text-ceefax-yellow' : 'text-gray-700'}>★</span>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="flex gap-2">
-                    {editingPlayerId === p.id ? (
-                      <input 
-                        autoFocus 
-                        value={p.name} 
-                        onBlur={() => setEditingPlayerId(null)} 
-                        onKeyDown={e => e.key === 'Enter' && setEditingPlayerId(null)}
-                        onChange={e => setPlayers(players.map(x => x.id === p.id ? { ...x, name: e.target.value.toUpperCase() } : x))} 
-                        className="border-2 border-ceefax-yellow p-2 flex-grow text-sm bg-black text-ceefax-white uppercase outline-none font-normal" 
-                      />
-                    ) : (
-                      <div 
-                        onClick={() => setEditingPlayerId(p.id)} 
-                        className="border-2 border-ceefax-cyan p-2 flex-grow text-sm text-ceefax-white truncate uppercase cursor-text font-normal"
-                      >
-                        {p.name}
+                    {appMode === 'LZY' && (
+                      <div className="flex gap-0.5 text-ceefax-yellow">
+                        {Array.from({ length: 10 }).map((_, idx) => (
+                          <span key={idx} className={idx < (p.ratings ? p.ratings[p.position] : ((p as any).rating || 5)) ? "text-ceefax-yellow" : "text-gray-500"}>★</span>
+                        ))}
                       </div>
                     )}
-                    <div className="flex border-2 border-ceefax-white overflow-hidden">
-                      <button onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: Position.GKP } : x))} className={`px-2 py-2 text-xs font-bold ${p.position === Position.GKP ? 'bg-ceefax-green text-black' : 'bg-black text-gray-500'}`}>GKP</button>
-                      <button onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: Position.DEFENCE } : x))} className={`px-2 py-2 text-xs font-bold ${p.position === Position.DEFENCE ? 'bg-ceefax-cyan text-black' : 'bg-black text-gray-500'}`}>DEF</button>
-                      <button onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: Position.MIDFIELD } : x))} className={`px-2 py-2 text-xs font-bold ${p.position === Position.MIDFIELD ? 'bg-ceefax-white text-black' : 'bg-black text-gray-500'}`}>MID</button>
-                      <button onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: Position.ATTACK } : x))} className={`px-2 py-2 text-xs font-bold ${p.position === Position.ATTACK ? 'bg-ceefax-yellow text-black' : 'bg-black text-gray-500'}`}>ATT</button>
-                    </div>
                   </div>
-                  <div className="flex gap-4 mt-2 items-center">
-                    <input type="range" min="1" max="10" value={p.rating} onChange={e => setPlayers(players.map(x => x.id === p.id ? { ...x, rating: parseInt(e.target.value) } : x))} className="w-full accent-ceefax-yellow h-1 bg-ceefax-yellow/50 appearance-none cursor-pointer" />
-                    <button onClick={() => setPlayers(players.filter(x => x.id !== p.id))} className="bg-ceefax-red text-white px-4 py-1 text-xs font-bold">DELETE</button>
+                  <div className="flex flex-col gap-2">
+                    <div className="flex gap-2 items-start">
+                      {editingPlayerId === p.id ? (
+                        <input 
+                          autoFocus 
+                          value={p.name} 
+                          onBlur={() => setEditingPlayerId(null)} 
+                          onKeyDown={e => e.key === 'Enter' && setEditingPlayerId(null)}
+                          onChange={e => setPlayers(players.map(x => x.id === p.id ? { ...x, name: e.target.value.toUpperCase() } : x))} 
+                          className="border-2 border-ceefax-yellow p-2 flex-grow text-sm bg-black text-ceefax-white uppercase outline-none font-normal h-[38px]" 
+                        />
+                      ) : (
+                        <div 
+                          onClick={() => setEditingPlayerId(p.id)} 
+                          className="border-2 border-ceefax-cyan p-2 flex-grow text-sm text-ceefax-white truncate uppercase cursor-text font-normal flex items-center h-[38px]"
+                        >
+                          {p.name}
+                        </div>
+                      )}
+                      
+                      {appMode === 'LZY' ? (
+                        <div className="flex border-2 border-ceefax-white overflow-hidden h-[38px] flex-shrink-0 w-40 md:w-48">
+                          <button onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: Position.GKP } : x))} className={`flex-1 px-1 py-1 text-[10px] md:text-xs font-bold ${p.position === Position.GKP || p.position === Position.DEFENCE ? 'border-r-2 border-ceefax-white' : ''} ${p.position === Position.GKP ? 'bg-ceefax-green text-black' : 'bg-black text-gray-500'}`}>GKP</button>
+                          <button onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: Position.DEFENCE } : x))} className={`flex-1 px-1 py-1 text-[10px] md:text-xs font-bold ${p.position === Position.DEFENCE || p.position === Position.MIDFIELD ? 'border-r-2 border-ceefax-white' : ''} ${p.position === Position.DEFENCE ? 'bg-ceefax-cyan text-black' : 'bg-black text-gray-500'}`}>DEF</button>
+                          <button onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: Position.MIDFIELD } : x))} className={`flex-1 px-1 py-1 text-[10px] md:text-xs font-bold ${p.position === Position.MIDFIELD || p.position === Position.ATTACK ? 'border-r-2 border-ceefax-white' : ''} ${p.position === Position.MIDFIELD ? 'bg-ceefax-red text-black' : 'bg-black text-gray-500'}`}>MID</button>
+                          <button onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: Position.ATTACK } : x))} className={`flex-1 px-1 py-1 text-[10px] md:text-xs font-bold ${p.position === Position.ATTACK ? 'bg-ceefax-yellow text-black' : 'bg-black text-gray-500'}`}>ATT</button>
+                        </div>
+                      ) : (
+                        <div className="flex flex-col border-2 border-ceefax-white overflow-hidden flex-shrink-0 w-40 md:w-48">
+                          <div className="flex h-[34px] border-b-2 border-ceefax-white">
+                            <button onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: Position.GKP } : x))} className={`flex-1 px-1 py-1 text-[10px] md:text-xs font-bold ${maxPos === Position.GKP || maxPos === Position.DEFENCE ? 'border-r-2 border-ceefax-white' : ''} ${maxPos === Position.GKP ? 'bg-ceefax-green text-black' : 'bg-black text-gray-500'}`}>GKP</button>
+                            <button onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: Position.DEFENCE } : x))} className={`flex-1 px-1 py-1 text-[10px] md:text-xs font-bold ${maxPos === Position.DEFENCE || maxPos === Position.MIDFIELD ? 'border-r-2 border-ceefax-white' : ''} ${maxPos === Position.DEFENCE ? 'bg-ceefax-cyan text-black' : 'bg-black text-gray-500'}`}>DEF</button>
+                            <button onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: Position.MIDFIELD } : x))} className={`flex-1 px-1 py-1 text-[10px] md:text-xs font-bold ${maxPos === Position.MIDFIELD || maxPos === Position.ATTACK ? 'border-r-2 border-ceefax-white' : ''} ${maxPos === Position.MIDFIELD ? 'bg-ceefax-red text-black' : 'bg-black text-gray-500'}`}>MID</button>
+                            <button onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: Position.ATTACK } : x))} className={`flex-1 px-1 py-1 text-[10px] md:text-xs font-bold ${maxPos === Position.ATTACK ? 'bg-ceefax-yellow text-black' : 'bg-black text-gray-500'}`}>ATT</button>
+                          </div>
+                          <div className="flex h-[36px]">
+                            <input type="number" min="1" max="10" onFocus={e => e.target.select()} value={p.ratings ? p.ratings[Position.GKP] : ((p as any).rating || 5)} onChange={e => { const rawVal = parseInt(e.target.value); const val = isNaN(rawVal) ? '' : Math.max(1, Math.min(10, rawVal)); setPlayers(players.map(x => x.id === p.id ? { ...x, ratings: { ...(x.ratings || { [Position.GKP]: 5, [Position.DEFENCE]: 5, [Position.MIDFIELD]: 5, [Position.ATTACK]: 5 }), [Position.GKP]: val as number } } : x)); }} className={`flex-1 w-0 text-center font-bold text-sm outline-none hide-spinners ${maxPos === Position.GKP || maxPos === Position.DEFENCE ? 'border-r-2 border-ceefax-white' : ''} ${maxPos === Position.GKP ? 'bg-ceefax-green text-black' : 'bg-black text-gray-500'}`} />
+                            <input type="number" min="1" max="10" onFocus={e => e.target.select()} value={p.ratings ? p.ratings[Position.DEFENCE] : ((p as any).rating || 5)} onChange={e => { const rawVal = parseInt(e.target.value); const val = isNaN(rawVal) ? '' : Math.max(1, Math.min(10, rawVal)); setPlayers(players.map(x => x.id === p.id ? { ...x, ratings: { ...(x.ratings || { [Position.GKP]: 5, [Position.DEFENCE]: 5, [Position.MIDFIELD]: 5, [Position.ATTACK]: 5 }), [Position.DEFENCE]: val as number } } : x)); }} className={`flex-1 w-0 text-center font-bold text-sm outline-none hide-spinners ${maxPos === Position.DEFENCE || maxPos === Position.MIDFIELD ? 'border-r-2 border-ceefax-white' : ''} ${maxPos === Position.DEFENCE ? 'bg-ceefax-cyan text-black' : 'bg-black text-gray-500'}`} />
+                            <input type="number" min="1" max="10" onFocus={e => e.target.select()} value={p.ratings ? p.ratings[Position.MIDFIELD] : ((p as any).rating || 5)} onChange={e => { const rawVal = parseInt(e.target.value); const val = isNaN(rawVal) ? '' : Math.max(1, Math.min(10, rawVal)); setPlayers(players.map(x => x.id === p.id ? { ...x, ratings: { ...(x.ratings || { [Position.GKP]: 5, [Position.DEFENCE]: 5, [Position.MIDFIELD]: 5, [Position.ATTACK]: 5 }), [Position.MIDFIELD]: val as number } } : x)); }} className={`flex-1 w-0 text-center font-bold text-sm outline-none hide-spinners ${maxPos === Position.MIDFIELD || maxPos === Position.ATTACK ? 'border-r-2 border-ceefax-white' : ''} ${maxPos === Position.MIDFIELD ? 'bg-ceefax-red text-black' : 'bg-black text-gray-500'}`} />
+                            <input type="number" min="1" max="10" onFocus={e => e.target.select()} value={p.ratings ? p.ratings[Position.ATTACK] : ((p as any).rating || 5)} onChange={e => { const rawVal = parseInt(e.target.value); const val = isNaN(rawVal) ? '' : Math.max(1, Math.min(10, rawVal)); setPlayers(players.map(x => x.id === p.id ? { ...x, ratings: { ...(x.ratings || { [Position.GKP]: 5, [Position.DEFENCE]: 5, [Position.MIDFIELD]: 5, [Position.ATTACK]: 5 }), [Position.ATTACK]: val as number } } : x)); }} className={`flex-1 w-0 text-center font-bold text-sm outline-none hide-spinners ${maxPos === Position.ATTACK ? 'bg-ceefax-yellow text-black' : 'bg-black text-gray-500'}`} />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    
+                    {appMode === 'LZY' && (
+                      <div className="flex mt-2 items-center">
+                        <input 
+                          type="range" 
+                          min="1" max="10" 
+                          value={p.ratings ? p.ratings[p.position] : ((p as any).rating || 5)} 
+                          onChange={e => {
+                            const val = parseInt(e.target.value);
+                            setPlayers(players.map(x => x.id === p.id ? { ...x, ratings: { [Position.GKP]: val, [Position.DEFENCE]: val, [Position.MIDFIELD]: val, [Position.ATTACK]: val } } : x));
+                          }}
+                          className="w-full accent-ceefax-yellow h-1 bg-ceefax-yellow/50 appearance-none cursor-pointer"
+                        />
+                      </div>
+                    )}
                   </div>
                 </section>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}
@@ -318,7 +404,7 @@ export default function App() {
                       {showPlayerDetails && (
                         <>
                           <span className="w-12 md:w-16 text-white text-sm md:text-xl font-bold">RTG</span>
-                          <span className="w-8 md:w-10 text-ceefax-yellow text-sm md:text-xl font-bold">{t.data.totalRating}</span>
+                          <span className="w-8 md:w-10 text-ceefax-yellow text-sm md:text-xl font-bold">{t.data.totalRating % 1 === 0 ? t.data.totalRating : t.data.totalRating.toFixed(1)}</span>
                         </>
                       )}
                     </div>
@@ -327,8 +413,8 @@ export default function App() {
                         <span className="flex-1 truncate pr-2">{p.name}</span>
                         {showPlayerDetails && (
                           <>
-                            <span className="w-12 md:w-16 text-white">{p.position.substring(0, 3)}</span>
-                            <span className="w-8 md:w-10 text-ceefax-yellow">{p.rating}</span>
+                            <span className="w-12 md:w-16 text-white">{getEffectivePosition(p).substring(0, 3)}</span>
+                            <span className="w-8 md:w-10 text-ceefax-yellow">{getEffectiveRating(p) % 1 === 0 ? getEffectiveRating(p) : getEffectiveRating(p).toFixed(1)}</span>
                           </>
                         )}
                       </div>
@@ -401,7 +487,14 @@ export default function App() {
           </button>
         </nav>
         {(!squadStatus || squadStatus.is_licensed === 0) && (
-          <button onClick={() => setView('payment')} className="w-full bg-ceefax-yellow text-black py-2 font-bold text-sm uppercase border-4 border-ceefax-yellow">&gt; 3-DAY TRIAL OR BUY-IT-NOW FOR £1.99 &lt;</button>
+          <button 
+            onClick={() => setView('payment')} 
+            className="w-full bg-ceefax-yellow text-black py-2 font-bold text-sm uppercase border-4 border-ceefax-yellow overflow-hidden relative block text-left"
+          >
+            <span className="animate-marquee">
+              &gt; 10-DAY FREE TRIAL &lt; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &gt; LAZY GAFFER YEAR LICENCE £1.99 &lt; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &gt; BORED GAFFER YEAR LICENCE £3.99 &lt;
+            </span>
+          </button>
         )}
         <div className="text-center text-xs font-normal text-white bg-black normal-case">
           Copyright - Gary Neill Limited
