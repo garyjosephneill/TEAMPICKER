@@ -43,3 +43,26 @@ input[type="range"]::-moz-range-thumb {
   cursor: pointer;
   border-radius: 0;
 }
+
+@layer utilities {
+  .hide-spinners::-webkit-inner-spin-button,
+  .hide-spinners::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  .hide-spinners {
+    -moz-appearance: textfield;
+  }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+
+.animate-marquee {
+  display: inline-block;
+  white-space: nowrap;
+  padding-left: 100%;
+  animation: marquee 12s linear infinite;
+}
