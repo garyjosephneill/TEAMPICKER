@@ -195,7 +195,7 @@ export default function App() {
     <div className="flex flex-col h-[100dvh] max-w-5xl mx-auto overflow-hidden bg-black text-white font-mono uppercase">
       <header className="p-4 pt-8 shrink-0">
         <div className="flex justify-between items-baseline mb-4">
-          <div className="text-ceefax-yellow font-['Bebas_Neue'] font-normal text-[50px] tracking-normal">
+          <div className="text-ceefax-yellow font-normal text-[50px] tracking-normal" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
             Lazy Gaffer
           </div>
         </div>
@@ -409,4 +409,3 @@ export default function App() {
     </div>
   );
 }
-
