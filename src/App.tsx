@@ -15,10 +15,10 @@ const TEAM_NAMES = [
 const FAMOUS_PLAYERS = [
   { name: 'THE CAT', ratings: { [Position.GKP]: 9, [Position.DEFENCE]: 4, [Position.MIDFIELD]: 3, [Position.ATTACK]: 2 }, position: Position.GKP },
   { name: 'SIMMO', ratings: { [Position.GKP]: 8, [Position.DEFENCE]: 5, [Position.MIDFIELD]: 4, [Position.ATTACK]: 3 }, position: Position.GKP },
-  { name: 'CHOPPER LARRY', ratings: { [Position.GKP]: 3, [Position.DEFENCE]: 10, [Position.MIDFIELD]: 6, [Position.ATTACK]: 4 }, position: Position.DEFENCE },
+  { name: 'CHOPPER', ratings: { [Position.GKP]: 3, [Position.DEFENCE]: 10, [Position.MIDFIELD]: 6, [Position.ATTACK]: 4 }, position: Position.DEFENCE },
   { name: 'BIG JOHN', ratings: { [Position.GKP]: 4, [Position.DEFENCE]: 9, [Position.MIDFIELD]: 5, [Position.ATTACK]: 5 }, position: Position.DEFENCE },
   { name: 'FRANCO', ratings: { [Position.GKP]: 2, [Position.DEFENCE]: 9, [Position.MIDFIELD]: 7, [Position.ATTACK]: 4 }, position: Position.DEFENCE },
-  { name: 'BARRY THE FRIDGE', ratings: { [Position.GKP]: 5, [Position.DEFENCE]: 8, [Position.MIDFIELD]: 4, [Position.ATTACK]: 3 }, position: Position.DEFENCE },
+  { name: 'BARRY', ratings: { [Position.GKP]: 5, [Position.DEFENCE]: 8, [Position.MIDFIELD]: 4, [Position.ATTACK]: 3 }, position: Position.DEFENCE },
   { name: 'BONES', ratings: { [Position.GKP]: 1, [Position.DEFENCE]: 8, [Position.MIDFIELD]: 6, [Position.ATTACK]: 2 }, position: Position.DEFENCE },
   { name: 'LUNGS', ratings: { [Position.GKP]: 2, [Position.DEFENCE]: 7, [Position.MIDFIELD]: 10, [Position.ATTACK]: 7 }, position: Position.MIDFIELD },
   { name: 'TRICKY PETE', ratings: { [Position.GKP]: 1, [Position.DEFENCE]: 4, [Position.MIDFIELD]: 9, [Position.ATTACK]: 8 }, position: Position.MIDFIELD },
@@ -69,6 +69,13 @@ export default function App() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [showPlayerDetails, setShowPlayerDetails] = useState(true);
   const teamsContainerRef = useRef<HTMLDivElement>(null);
+  const mainRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (mainRef.current) {
+      mainRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [appMode]);
 
   useEffect(() => {
     if (!squadId) return;
@@ -249,7 +256,7 @@ export default function App() {
         </div>
       </header>
 
-      <main className="flex-grow p-4 space-y-6 overflow-y-auto">
+      <main ref={mainRef} className="flex-grow p-4 space-y-6 overflow-y-auto">
         {view === 'squad' && (
           <div className="space-y-6">
             <div className="flex gap-2">
