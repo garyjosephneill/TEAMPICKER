@@ -49,8 +49,8 @@ const GET_RANDOM_16 = (): Player[] => {
 
 // Tap Zone component for MM2
 function TapZone({ value, onChange, color }: { value: number; onChange: (v: number) => void; color: string }) {
-  const SIZE = 14; // px — 40% of original ~34px height
-  const GAP = 3;   // px between segments
+  const SIZE = 14;
+  const GAP = 3;
   return (
     <div className="flex items-center flex-1" style={{ gap: `${GAP}px` }}>
       {Array.from({ length: 10 }).map((_, i) => (
@@ -61,7 +61,6 @@ function TapZone({ value, onChange, color }: { value: number; onChange: (v: numb
           style={{ width: SIZE, height: SIZE, WebkitTapHighlightColor: 'transparent', border: 'none', padding: 0 }}
         />
       ))}
-      {/* invisible spacer pushes segments left */}
       <div className="flex-1" />
     </div>
   );
@@ -272,12 +271,12 @@ export default function App() {
 
   // MM2 stat definitions with tap zone colours
   const MM2_STATS: { key: StatKey; label: string; textColor: string; fillColor: string }[] = [
-    { key: 'NRG',            label: 'NRG', textColor: 'text-white',        fillColor: 'bg-white/60' },
-    { key: 'SPD',            label: 'SPD', textColor: 'text-[#f7941d]',    fillColor: 'bg-[#f7941d]' },
     { key: Position.GKP,     label: 'GKP', textColor: 'text-ceefax-green', fillColor: 'bg-ceefax-green' },
     { key: Position.DEFENCE, label: 'DEF', textColor: 'text-ceefax-cyan',  fillColor: 'bg-ceefax-cyan' },
     { key: Position.MIDFIELD,label: 'MID', textColor: 'text-ceefax-red',   fillColor: 'bg-ceefax-red' },
     { key: Position.ATTACK,  label: 'ATT', textColor: 'text-ceefax-yellow',fillColor: 'bg-ceefax-yellow' },
+    { key: 'SPD',            label: 'SPD', textColor: 'text-[#f7941d]',    fillColor: 'bg-[#f7941d]' },
+    { key: 'NRG',            label: 'NRG', textColor: 'text-white',        fillColor: 'bg-white/60' },
   ];
 
   return (
@@ -330,7 +329,7 @@ export default function App() {
                       {/* MM1 stars */}
                       {appMode === 'MM1' && (
                         <div className="flex justify-end mb-1">
-                          <div className="flex text-[20px] leading-none gap-[1px]">
+                          <div className="flex justify-between text-[20px] leading-none w-[148px]">
                             {Array.from({ length: 10 }).map((_, idx) => (
                               <span key={idx} className={idx < p.ratings[p.position] ? 'text-ceefax-yellow' : 'text-white/20'}>★</span>
                             ))}
@@ -392,7 +391,7 @@ export default function App() {
 
                       {/* MM1: slider */}
                       {appMode === 'MM1' && (
-                        <div className="flex items-center" style={{ marginTop: '10px' }}>
+                        <div className="flex items-center" style={{ marginTop: '18px' }}>
                           <input
                             type="range" min="1" max="10"
                             value={p.ratings[p.position]}
@@ -416,7 +415,7 @@ export default function App() {
                                 onChange={v => updateStat(p.id, stat.key, v)}
                                 color={stat.fillColor}
                               />
-                              <span className="text-ceefax-yellow font-bold text-sm w-4 text-right flex-shrink-0">{p.ratings[stat.key]}</span>
+                              <span className="text-ceefax-yellow font-bold text-sm w-5 text-left flex-shrink-0">{p.ratings[stat.key]}</span>
                             </div>
                           ))}
                         </div>
