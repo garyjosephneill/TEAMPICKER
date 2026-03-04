@@ -67,6 +67,7 @@ export default function App() {
   const [newPlayerName, setNewPlayerName] = useState('');
   const [editingPlayerId, setEditingPlayerId] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isSharing, setIsSharing] = useState(false);
   const [showPlayerDetails, setShowPlayerDetails] = useState(true);
   const headerRef = useRef<HTMLElement>(null);
   const lastScrollY = useRef(0);
@@ -253,6 +254,38 @@ export default function App() {
     setView('squad');
   };
 
+  const handleShareTeams = () => {
+    if (!teams) return;
+    
+    setIsSharing(true);
+    setTimeout(() => setIsSharing(false), 1000);
+
+    const formatTeam = (team: Team) => {
+      let text = `${team.name}\n`;
+      text += `------------------------\n`;
+      team.players.forEach(p => {
+        if (showPlayerDetails) {
+          const pos = getEffectivePosition(p).substring(0, 3);
+          const rtg = getEffectiveRating(p) % 1 === 0 ? getEffectiveRating(p) : getEffectiveRating(p).toFixed(1);
+          text += `${p.name} - ${pos} - ${rtg}\n`;
+        } else {
+          text += `${p.name}\n`;
+        }
+      });
+      if (showPlayerDetails) {
+        text += `------------------------\n`;
+        const totalRtg = team.totalRating % 1 === 0 ? team.totalRating : team.totalRating.toFixed(1);
+        text += `TOTAL RTG: ${totalRtg}\n`;
+      }
+      return text;
+    };
+
+    const body = `${formatTeam(teams.team1)}\n\n${formatTeam(teams.team2)}`;
+    const subject = `Teams for ${new Date().toLocaleDateString()}`;
+    
+    window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  };
+
   return (
     <div className="flex flex-col h-[100dvh] max-w-5xl mx-auto overflow-hidden bg-black text-white font-mono uppercase">
       <main ref={mainRef} className="flex-grow overflow-y-auto relative" onScroll={handleScroll}>
@@ -323,7 +356,7 @@ export default function App() {
                     {appMode === 'MM1' && (
                       <div className="flex gap-0.5 text-ceefax-yellow">
                         {Array.from({ length: 10 }).map((_, idx) => (
-                          <span key={idx} className={idx < (p.ratings ? p.ratings[p.position] : ((p as any).rating || 5)) ? "text-ceefax-yellow" : "text-gray-500"}>★</span>
+                          <span key={idx} className={idx < (p.ratings ? p.ratings[p.position] : ((p as any).rating || 5)) ? "text-ceefax-yellow" : "text-white/75"}>★</span>
                         ))}
                       </div>
                     )}
@@ -368,24 +401,24 @@ export default function App() {
                       
                       {appMode === 'MM1' ? (
                         <div className="flex border-2 border-ceefax-white overflow-hidden h-[38px] flex-shrink-0 w-40 md:w-48">
-                          <button onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: Position.GKP } : x))} className={`flex-1 px-1 py-1 text-[10px] md:text-xs font-bold ${p.position === Position.GKP || p.position === Position.DEFENCE ? 'border-r-2 border-ceefax-white' : ''} ${p.position === Position.GKP ? 'bg-ceefax-green text-black' : 'bg-black text-gray-500'}`}>GKP</button>
-                          <button onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: Position.DEFENCE } : x))} className={`flex-1 px-1 py-1 text-[10px] md:text-xs font-bold ${p.position === Position.DEFENCE || p.position === Position.MIDFIELD ? 'border-r-2 border-ceefax-white' : ''} ${p.position === Position.DEFENCE ? 'bg-ceefax-cyan text-black' : 'bg-black text-gray-500'}`}>DEF</button>
-                          <button onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: Position.MIDFIELD } : x))} className={`flex-1 px-1 py-1 text-[10px] md:text-xs font-bold ${p.position === Position.MIDFIELD || p.position === Position.ATTACK ? 'border-r-2 border-ceefax-white' : ''} ${p.position === Position.MIDFIELD ? 'bg-ceefax-red text-black' : 'bg-black text-gray-500'}`}>MID</button>
-                          <button onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: Position.ATTACK } : x))} className={`flex-1 px-1 py-1 text-[10px] md:text-xs font-bold ${p.position === Position.ATTACK ? 'bg-ceefax-yellow text-black' : 'bg-black text-gray-500'}`}>ATT</button>
+                          <button onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: Position.GKP } : x))} className={`flex-1 px-1 py-1 text-[10px] md:text-xs font-bold ${p.position === Position.GKP || p.position === Position.DEFENCE ? 'border-r-2 border-ceefax-white' : ''} ${p.position === Position.GKP ? 'bg-ceefax-green text-black' : 'bg-black text-white/75'}`}>GKP</button>
+                          <button onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: Position.DEFENCE } : x))} className={`flex-1 px-1 py-1 text-[10px] md:text-xs font-bold ${p.position === Position.DEFENCE || p.position === Position.MIDFIELD ? 'border-r-2 border-ceefax-white' : ''} ${p.position === Position.DEFENCE ? 'bg-ceefax-cyan text-black' : 'bg-black text-white/75'}`}>DEF</button>
+                          <button onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: Position.MIDFIELD } : x))} className={`flex-1 px-1 py-1 text-[10px] md:text-xs font-bold ${p.position === Position.MIDFIELD || p.position === Position.ATTACK ? 'border-r-2 border-ceefax-white' : ''} ${p.position === Position.MIDFIELD ? 'bg-ceefax-red text-black' : 'bg-black text-white/75'}`}>MID</button>
+                          <button onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: Position.ATTACK } : x))} className={`flex-1 px-1 py-1 text-[10px] md:text-xs font-bold ${p.position === Position.ATTACK ? 'bg-ceefax-yellow text-black' : 'bg-black text-white/75'}`}>ATT</button>
                         </div>
                       ) : (
                         <div className="flex flex-col border-2 border-ceefax-white overflow-hidden flex-shrink-0 w-40 md:w-48">
                           <div className="flex h-[34px] border-b-2 border-ceefax-white">
-                            <button onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: Position.GKP } : x))} className={`flex-1 px-1 py-1 text-[10px] md:text-xs font-bold ${maxPos === Position.GKP || maxPos === Position.DEFENCE ? 'border-r-2 border-ceefax-white' : ''} ${maxPos === Position.GKP ? 'bg-ceefax-green text-black' : 'bg-black text-gray-500'}`}>GKP</button>
-                            <button onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: Position.DEFENCE } : x))} className={`flex-1 px-1 py-1 text-[10px] md:text-xs font-bold ${maxPos === Position.DEFENCE || maxPos === Position.MIDFIELD ? 'border-r-2 border-ceefax-white' : ''} ${maxPos === Position.DEFENCE ? 'bg-ceefax-cyan text-black' : 'bg-black text-gray-500'}`}>DEF</button>
-                            <button onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: Position.MIDFIELD } : x))} className={`flex-1 px-1 py-1 text-[10px] md:text-xs font-bold ${maxPos === Position.MIDFIELD || maxPos === Position.ATTACK ? 'border-r-2 border-ceefax-white' : ''} ${maxPos === Position.MIDFIELD ? 'bg-ceefax-red text-black' : 'bg-black text-gray-500'}`}>MID</button>
-                            <button onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: Position.ATTACK } : x))} className={`flex-1 px-1 py-1 text-[10px] md:text-xs font-bold ${maxPos === Position.ATTACK ? 'bg-ceefax-yellow text-black' : 'bg-black text-gray-500'}`}>ATT</button>
+                            <button onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: Position.GKP } : x))} className={`flex-1 px-1 py-1 text-[10px] md:text-xs font-bold ${maxPos === Position.GKP || maxPos === Position.DEFENCE ? 'border-r-2 border-ceefax-white' : ''} ${maxPos === Position.GKP ? 'bg-ceefax-green text-black' : 'bg-black text-white/75'}`}>GKP</button>
+                            <button onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: Position.DEFENCE } : x))} className={`flex-1 px-1 py-1 text-[10px] md:text-xs font-bold ${maxPos === Position.DEFENCE || maxPos === Position.MIDFIELD ? 'border-r-2 border-ceefax-white' : ''} ${maxPos === Position.DEFENCE ? 'bg-ceefax-cyan text-black' : 'bg-black text-white/75'}`}>DEF</button>
+                            <button onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: Position.MIDFIELD } : x))} className={`flex-1 px-1 py-1 text-[10px] md:text-xs font-bold ${maxPos === Position.MIDFIELD || maxPos === Position.ATTACK ? 'border-r-2 border-ceefax-white' : ''} ${maxPos === Position.MIDFIELD ? 'bg-ceefax-red text-black' : 'bg-black text-white/75'}`}>MID</button>
+                            <button onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: Position.ATTACK } : x))} className={`flex-1 px-1 py-1 text-[10px] md:text-xs font-bold ${maxPos === Position.ATTACK ? 'bg-ceefax-yellow text-black' : 'bg-black text-white/75'}`}>ATT</button>
                           </div>
                           <div className="flex h-[36px]">
-                            <input type="number" min="1" max="10" onFocus={e => e.target.select()} value={p.ratings ? p.ratings[Position.GKP] : ((p as any).rating || 5)} onChange={e => { const rawVal = parseInt(e.target.value); const val = isNaN(rawVal) ? '' : Math.max(1, Math.min(10, rawVal)); setPlayers(players.map(x => x.id === p.id ? { ...x, ratings: { ...(x.ratings || { [Position.GKP]: 5, [Position.DEFENCE]: 5, [Position.MIDFIELD]: 5, [Position.ATTACK]: 5 }), [Position.GKP]: val as number } } : x)); }} className={`flex-1 w-0 text-center font-bold text-sm outline-none hide-spinners ${maxPos === Position.GKP || maxPos === Position.DEFENCE ? 'border-r-2 border-ceefax-white' : ''} ${maxPos === Position.GKP ? 'bg-ceefax-green text-black' : 'bg-black text-gray-500'}`} />
-                            <input type="number" min="1" max="10" onFocus={e => e.target.select()} value={p.ratings ? p.ratings[Position.DEFENCE] : ((p as any).rating || 5)} onChange={e => { const rawVal = parseInt(e.target.value); const val = isNaN(rawVal) ? '' : Math.max(1, Math.min(10, rawVal)); setPlayers(players.map(x => x.id === p.id ? { ...x, ratings: { ...(x.ratings || { [Position.GKP]: 5, [Position.DEFENCE]: 5, [Position.MIDFIELD]: 5, [Position.ATTACK]: 5 }), [Position.DEFENCE]: val as number } } : x)); }} className={`flex-1 w-0 text-center font-bold text-sm outline-none hide-spinners ${maxPos === Position.DEFENCE || maxPos === Position.MIDFIELD ? 'border-r-2 border-ceefax-white' : ''} ${maxPos === Position.DEFENCE ? 'bg-ceefax-cyan text-black' : 'bg-black text-gray-500'}`} />
-                            <input type="number" min="1" max="10" onFocus={e => e.target.select()} value={p.ratings ? p.ratings[Position.MIDFIELD] : ((p as any).rating || 5)} onChange={e => { const rawVal = parseInt(e.target.value); const val = isNaN(rawVal) ? '' : Math.max(1, Math.min(10, rawVal)); setPlayers(players.map(x => x.id === p.id ? { ...x, ratings: { ...(x.ratings || { [Position.GKP]: 5, [Position.DEFENCE]: 5, [Position.MIDFIELD]: 5, [Position.ATTACK]: 5 }), [Position.MIDFIELD]: val as number } } : x)); }} className={`flex-1 w-0 text-center font-bold text-sm outline-none hide-spinners ${maxPos === Position.MIDFIELD || maxPos === Position.ATTACK ? 'border-r-2 border-ceefax-white' : ''} ${maxPos === Position.MIDFIELD ? 'bg-ceefax-red text-black' : 'bg-black text-gray-500'}`} />
-                            <input type="number" min="1" max="10" onFocus={e => e.target.select()} value={p.ratings ? p.ratings[Position.ATTACK] : ((p as any).rating || 5)} onChange={e => { const rawVal = parseInt(e.target.value); const val = isNaN(rawVal) ? '' : Math.max(1, Math.min(10, rawVal)); setPlayers(players.map(x => x.id === p.id ? { ...x, ratings: { ...(x.ratings || { [Position.GKP]: 5, [Position.DEFENCE]: 5, [Position.MIDFIELD]: 5, [Position.ATTACK]: 5 }), [Position.ATTACK]: val as number } } : x)); }} className={`flex-1 w-0 text-center font-bold text-sm outline-none hide-spinners ${maxPos === Position.ATTACK ? 'bg-ceefax-yellow text-black' : 'bg-black text-gray-500'}`} />
+                            <input type="number" min="1" max="10" onFocus={e => e.target.select()} value={p.ratings ? p.ratings[Position.GKP] : ((p as any).rating || 5)} onChange={e => { const rawVal = parseInt(e.target.value); const val = isNaN(rawVal) ? '' : Math.max(1, Math.min(10, rawVal)); setPlayers(players.map(x => x.id === p.id ? { ...x, ratings: { ...(x.ratings || { [Position.GKP]: 5, [Position.DEFENCE]: 5, [Position.MIDFIELD]: 5, [Position.ATTACK]: 5 }), [Position.GKP]: val as number } } : x)); }} className={`flex-1 w-0 text-center font-bold text-sm outline-none hide-spinners ${maxPos === Position.GKP || maxPos === Position.DEFENCE ? 'border-r-2 border-ceefax-white' : ''} ${maxPos === Position.GKP ? 'bg-ceefax-green text-black' : 'bg-black text-white/75'}`} />
+                            <input type="number" min="1" max="10" onFocus={e => e.target.select()} value={p.ratings ? p.ratings[Position.DEFENCE] : ((p as any).rating || 5)} onChange={e => { const rawVal = parseInt(e.target.value); const val = isNaN(rawVal) ? '' : Math.max(1, Math.min(10, rawVal)); setPlayers(players.map(x => x.id === p.id ? { ...x, ratings: { ...(x.ratings || { [Position.GKP]: 5, [Position.DEFENCE]: 5, [Position.MIDFIELD]: 5, [Position.ATTACK]: 5 }), [Position.DEFENCE]: val as number } } : x)); }} className={`flex-1 w-0 text-center font-bold text-sm outline-none hide-spinners ${maxPos === Position.DEFENCE || maxPos === Position.MIDFIELD ? 'border-r-2 border-ceefax-white' : ''} ${maxPos === Position.DEFENCE ? 'bg-ceefax-cyan text-black' : 'bg-black text-white/75'}`} />
+                            <input type="number" min="1" max="10" onFocus={e => e.target.select()} value={p.ratings ? p.ratings[Position.MIDFIELD] : ((p as any).rating || 5)} onChange={e => { const rawVal = parseInt(e.target.value); const val = isNaN(rawVal) ? '' : Math.max(1, Math.min(10, rawVal)); setPlayers(players.map(x => x.id === p.id ? { ...x, ratings: { ...(x.ratings || { [Position.GKP]: 5, [Position.DEFENCE]: 5, [Position.MIDFIELD]: 5, [Position.ATTACK]: 5 }), [Position.MIDFIELD]: val as number } } : x)); }} className={`flex-1 w-0 text-center font-bold text-sm outline-none hide-spinners ${maxPos === Position.MIDFIELD || maxPos === Position.ATTACK ? 'border-r-2 border-ceefax-white' : ''} ${maxPos === Position.MIDFIELD ? 'bg-ceefax-red text-black' : 'bg-black text-white/75'}`} />
+                            <input type="number" min="1" max="10" onFocus={e => e.target.select()} value={p.ratings ? p.ratings[Position.ATTACK] : ((p as any).rating || 5)} onChange={e => { const rawVal = parseInt(e.target.value); const val = isNaN(rawVal) ? '' : Math.max(1, Math.min(10, rawVal)); setPlayers(players.map(x => x.id === p.id ? { ...x, ratings: { ...(x.ratings || { [Position.GKP]: 5, [Position.DEFENCE]: 5, [Position.MIDFIELD]: 5, [Position.ATTACK]: 5 }), [Position.ATTACK]: val as number } } : x)); }} className={`flex-1 w-0 text-center font-bold text-sm outline-none hide-spinners ${maxPos === Position.ATTACK ? 'bg-ceefax-yellow text-black' : 'bg-black text-white/75'}`} />
                           </div>
                         </div>
                       )}
@@ -475,6 +508,17 @@ export default function App() {
                     ))}
                   </div>
                 ))}
+              </div>
+            )}
+            
+            {teams && (
+              <div className="flex justify-center mt-8 pb-4">
+                <button
+                  onClick={handleShareTeams}
+                  className={`w-[300px] border-4 border-ceefax-white p-2 text-lg font-bold transition-all ${isSharing ? 'bg-ceefax-white text-black' : 'text-ceefax-white bg-black'}`}
+                >
+                  SHARE TEAMS
+                </button>
               </div>
             )}
           </div>
