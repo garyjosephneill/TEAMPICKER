@@ -64,5 +64,5 @@ input[type="range"]::-moz-range-thumb {
   display: inline-block;
   white-space: nowrap;
   padding-left: 100%;
-  animation: marquee 12s linear infinite;
+  animation: marquee 13.8s linear infinite;
 }
