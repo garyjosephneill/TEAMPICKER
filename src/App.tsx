@@ -242,7 +242,7 @@ export default function App() {
             </button>
           </div>
           {view === 'selection' ? (
-            <span className="text-ceefax-white">SELECT PLAYERS: {players.filter(x => x.isSelected).length}</span>
+            <span className="text-ceefax-white">SELECTED {players.filter(x => x.isSelected).length}/{players.length}</span>
           ) : (
             <span className="text-ceefax-white">PLAYERS: {players.length}</span>
           )}
