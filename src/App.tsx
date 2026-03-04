@@ -68,8 +68,20 @@ export default function App() {
   const [editingPlayerId, setEditingPlayerId] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [showPlayerDetails, setShowPlayerDetails] = useState(true);
+  const [isHeaderVisible, setIsHeaderVisible] = useState(true);
+  const lastScrollY = useRef(0);
   const teamsContainerRef = useRef<HTMLDivElement>(null);
   const mainRef = useRef<HTMLDivElement>(null);
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const currentScrollY = e.currentTarget.scrollTop;
+    if (currentScrollY > lastScrollY.current + 10) {
+      setIsHeaderVisible(false);
+    } else if (currentScrollY < lastScrollY.current - 10) {
+      setIsHeaderVisible(true);
+    }
+    lastScrollY.current = currentScrollY;
+  };
 
   useEffect(() => {
     if (mainRef.current) {
@@ -227,37 +239,38 @@ export default function App() {
 
   return (
     <div className="flex flex-col h-[100dvh] max-w-5xl mx-auto overflow-hidden bg-black text-white font-mono uppercase">
-      <header className="p-4 pt-8 shrink-0">
-        <div className="mb-[11px]">
-          <div className="text-ceefax-yellow font-title font-normal text-[50px] tracking-normal uppercase">
-            {appMode === 'MM1' ? 'MAN MANAGER' : 'MICRO MANAGER'}
+      <main ref={mainRef} className="flex-grow overflow-y-auto relative" onScroll={handleScroll}>
+        <header className={`sticky top-0 z-10 bg-black p-4 pt-8 shrink-0 transition-transform duration-300 ease-in-out ${isHeaderVisible ? 'translate-y-0' : '-translate-y-full'}`}>
+          <div className="mb-[11px]">
+            <div className="text-ceefax-yellow font-title font-normal text-[50px] tracking-normal uppercase">
+              {appMode === 'MM1' ? 'MAN MARKER' : 'MICRO MANAGER'}
+            </div>
           </div>
-        </div>
-        <div className="flex justify-between items-center text-sm font-bold border-b-4 border-ceefax-cyan pb-2">
-          <div className="flex border-2 border-ceefax-white text-sm font-bold">
-            <button 
-              onClick={() => setAppMode('MM1')} 
-              className={`px-3 py-1 tracking-[0.2em] ${appMode === 'MM1' ? 'bg-ceefax-white text-black' : 'bg-black text-ceefax-white'}`}
-            >
-              MM1
-            </button>
-            <button 
-              onClick={() => setAppMode('MM2')} 
-              className={`px-3 py-1 border-l-2 border-ceefax-white tracking-[0.2em] ${appMode === 'MM2' ? 'bg-ceefax-white text-black' : 'bg-black text-ceefax-white'}`}
-            >
-              MM2
-            </button>
+          <div className="flex justify-between items-center text-sm font-bold border-b-4 border-ceefax-cyan pb-2">
+            <div className="flex border-2 border-ceefax-white text-sm font-bold">
+              <button 
+                onClick={() => setAppMode('MM1')} 
+                className={`px-3 py-1 tracking-[0.2em] ${appMode === 'MM1' ? 'bg-ceefax-white text-black' : 'bg-black text-ceefax-white'}`}
+              >
+                MM1
+              </button>
+              <button 
+                onClick={() => setAppMode('MM2')} 
+                className={`px-3 py-1 border-l-2 border-ceefax-white tracking-[0.2em] ${appMode === 'MM2' ? 'bg-ceefax-white text-black' : 'bg-black text-ceefax-white'}`}
+              >
+                MM2
+              </button>
+            </div>
+            {view === 'selection' ? (
+              <span className="text-ceefax-white">SELECTED {players.filter(x => x.isSelected).length}/{players.length}</span>
+            ) : (
+              <span className="text-ceefax-white">PLAYERS: {players.length}</span>
+            )}
           </div>
-          {view === 'selection' ? (
-            <span className="text-ceefax-white">SELECTED {players.filter(x => x.isSelected).length}/{players.length}</span>
-          ) : (
-            <span className="text-ceefax-white">PLAYERS: {players.length}</span>
-          )}
-        </div>
-      </header>
+        </header>
 
-      <main ref={mainRef} className="flex-grow p-4 space-y-6 overflow-y-auto">
-        {view === 'squad' && (
+        <div className="p-4 space-y-6">
+          {view === 'squad' && (
           <div className="space-y-6">
             <div className="flex gap-2">
               <input 
@@ -382,7 +395,7 @@ export default function App() {
               })}
             </div>
           </div>
-        )}
+          )}
 
         {view === 'selection' && (
           <div className="space-y-6">
@@ -494,6 +507,7 @@ export default function App() {
             <button onClick={() => setView('squad')} className="w-full text-ceefax-red text-center underline pt-4">CANCEL</button>
           </div>
         )}
+        </div>
       </main>
 
       <div className="shrink-0 bg-black p-4 flex flex-col gap-4">
