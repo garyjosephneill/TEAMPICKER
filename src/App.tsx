@@ -221,10 +221,12 @@ export default function App() {
   return (
     <div className="flex flex-col h-[100dvh] max-w-5xl mx-auto overflow-hidden bg-black text-white font-mono uppercase">
       <header className="p-4 pt-8 shrink-0">
-        <div className="flex justify-between items-baseline mb-4">
+        <div className="mb-4">
           <div className="text-ceefax-yellow font-title font-normal text-[50px] tracking-normal">
             {appMode === 'LZY' ? 'Lazy Gaffer' : 'Bored Gaffer'}
           </div>
+        </div>
+        <div className="flex justify-between items-center text-sm font-bold border-b-4 border-ceefax-cyan pb-2">
           <div className="flex border-2 border-ceefax-white text-sm font-bold">
             <button 
               onClick={() => setAppMode('LZY')} 
@@ -239,8 +241,6 @@ export default function App() {
               BRD
             </button>
           </div>
-        </div>
-        <div className="flex justify-between text-sm font-bold border-b-4 border-ceefax-cyan pb-2">
           {view === 'selection' ? (
             <span className="text-ceefax-white">SELECT PLAYERS: {players.filter(x => x.isSelected).length}</span>
           ) : (
@@ -477,7 +477,7 @@ export default function App() {
             onClick={() => setView('squad')} 
             className={`flex-1 py-2 transition-all border-4 border-ceefax-cyan ${view === 'squad' ? 'bg-ceefax-cyan text-black' : 'bg-black text-ceefax-cyan'}`}
           >
-            PLAYERS
+            SQUAD
           </button>
           <button 
             onClick={() => setView('selection')} 
