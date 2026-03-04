@@ -371,7 +371,7 @@ export default function App() {
                           {i + 1}
                         </div>
                       )}
-                      <div className="flex flex-col flex-grow justify-between self-stretch">
+                      <div className="flex flex-col flex-grow justify-between self-stretch min-w-0">
                         {editingPlayerId === p.id ? (
                           <input 
                             autoFocus 
@@ -390,7 +390,7 @@ export default function App() {
                           </div>
                         )}
                         {appMode === 'MM2' && (
-                          <div className="flex justify-between text-ceefax-yellow text-[20px] leading-none pr-2 pb-1">
+                          <div className="flex justify-between text-ceefax-yellow text-[11px] min-[375px]:text-[13px] sm:text-[16px] md:text-[20px] leading-none pr-2 pb-1">
                             {Array.from({ length: 10 }).map((_, idx) => (
                               <span key={idx} className={idx < (p.nrg || 5) ? "text-ceefax-yellow" : "text-white/75"}>★</span>
                             ))}
