@@ -75,7 +75,10 @@ export default function App() {
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const currentScrollY = e.currentTarget.scrollTop;
-    if (currentScrollY > lastScrollY.current + 10) {
+    
+    if (currentScrollY <= 60) {
+      setIsHeaderVisible(true);
+    } else if (currentScrollY > lastScrollY.current + 10) {
       setIsHeaderVisible(false);
     } else if (currentScrollY < lastScrollY.current - 10) {
       setIsHeaderVisible(true);
@@ -87,7 +90,8 @@ export default function App() {
     if (mainRef.current) {
       mainRef.current.scrollTo({ top: 0, behavior: 'smooth' });
     }
-  }, [appMode]);
+    setIsHeaderVisible(true);
+  }, [appMode, view]);
 
   useEffect(() => {
     if (!squadId) return;
