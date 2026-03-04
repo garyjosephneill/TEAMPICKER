@@ -54,7 +54,7 @@ const GET_RANDOM_16 = (): Player[] => {
 export default function App() {
   const [players, setPlayers] = useState<Player[]>([]);
   const [view, setView] = useState<'selection' | 'squad' | 'payment'>('squad');
-  const [appMode, setAppMode] = useState<'LZY' | 'BRD'>('LZY');
+  const [appMode, setAppMode] = useState<'MM1' | 'MM2'>('MM1');
   const [teams, setTeams] = useState<{ team1: Team; team2: Team } | null>(null);
   const [squadId, setSquadId] = useState<string | null>(() => {
     const id = localStorage.getItem('ceefax_squad_id');
@@ -99,7 +99,7 @@ export default function App() {
   }, [players, squadId]);
 
   const getEffectivePosition = (p: Player) => {
-    if (appMode === 'BRD' && p.ratings) {
+    if (appMode === 'MM2' && p.ratings) {
       let maxPos = Position.GKP;
       let maxVal = p.ratings[Position.GKP];
       if (p.ratings[Position.DEFENCE] >= maxVal) { maxPos = Position.DEFENCE; maxVal = p.ratings[Position.DEFENCE]; }
@@ -111,7 +111,7 @@ export default function App() {
   };
 
   const getEffectiveRating = (p: Player) => {
-    if (appMode === 'BRD' && p.ratings) {
+    if (appMode === 'MM2' && p.ratings) {
       return (p.ratings[Position.GKP] + p.ratings[Position.DEFENCE] + p.ratings[Position.MIDFIELD] + p.ratings[Position.ATTACK]) / 4;
     }
     return p.ratings ? p.ratings[p.position] : ((p as any).rating || 5);
@@ -230,22 +230,22 @@ export default function App() {
       <header className="p-4 pt-8 shrink-0">
         <div className="mb-[11px]">
           <div className="text-ceefax-yellow font-title font-normal text-[50px] tracking-normal">
-            {appMode === 'LZY' ? 'Lazy Gaffer' : 'Bored Gaffer'}
+            {appMode === 'MM1' ? 'Man Marker' : 'Micro Manager'}
           </div>
         </div>
         <div className="flex justify-between items-center text-sm font-bold border-b-4 border-ceefax-cyan pb-2">
           <div className="flex border-2 border-ceefax-white text-sm font-bold">
             <button 
-              onClick={() => setAppMode('LZY')} 
-              className={`px-3 py-1 ${appMode === 'LZY' ? 'bg-ceefax-white text-black' : 'bg-black text-ceefax-white'}`}
+              onClick={() => setAppMode('MM1')} 
+              className={`px-3 py-1 ${appMode === 'MM1' ? 'bg-ceefax-white text-black' : 'bg-black text-ceefax-white'}`}
             >
-              LZY
+              MM1
             </button>
             <button 
-              onClick={() => setAppMode('BRD')} 
-              className={`px-3 py-1 border-l-2 border-ceefax-white ${appMode === 'BRD' ? 'bg-ceefax-white text-black' : 'bg-black text-ceefax-white'}`}
+              onClick={() => setAppMode('MM2')} 
+              className={`px-3 py-1 border-l-2 border-ceefax-white ${appMode === 'MM2' ? 'bg-ceefax-white text-black' : 'bg-black text-ceefax-white'}`}
             >
-              BRD
+              MM2
             </button>
           </div>
           {view === 'selection' ? (
@@ -291,7 +291,7 @@ export default function App() {
                 <section key={p.id} className="space-y-2 border-b border-gray-800 pb-4">
                   <div className="flex justify-between items-center">
                     <h2 className="text-ceefax-cyan font-bold uppercase">PLAYER {i + 1}</h2>
-                    {appMode === 'LZY' && (
+                    {appMode === 'MM1' && (
                       <div className="flex gap-0.5 text-ceefax-yellow">
                         {Array.from({ length: 10 }).map((_, idx) => (
                           <span key={idx} className={idx < (p.ratings ? p.ratings[p.position] : ((p as any).rating || 5)) ? "text-ceefax-yellow" : "text-gray-500"}>★</span>
@@ -319,7 +319,7 @@ export default function App() {
                         </div>
                       )}
                       
-                      {appMode === 'LZY' ? (
+                      {appMode === 'MM1' ? (
                         <div className="flex border-2 border-ceefax-white overflow-hidden h-[38px] flex-shrink-0 w-40 md:w-48">
                           <button onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: Position.GKP } : x))} className={`flex-1 px-1 py-1 text-[10px] md:text-xs font-bold ${p.position === Position.GKP || p.position === Position.DEFENCE ? 'border-r-2 border-ceefax-white' : ''} ${p.position === Position.GKP ? 'bg-ceefax-green text-black' : 'bg-black text-gray-500'}`}>GKP</button>
                           <button onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: Position.DEFENCE } : x))} className={`flex-1 px-1 py-1 text-[10px] md:text-xs font-bold ${p.position === Position.DEFENCE || p.position === Position.MIDFIELD ? 'border-r-2 border-ceefax-white' : ''} ${p.position === Position.DEFENCE ? 'bg-ceefax-cyan text-black' : 'bg-black text-gray-500'}`}>DEF</button>
@@ -344,7 +344,7 @@ export default function App() {
                       )}
                     </div>
                     
-                    {appMode === 'LZY' && (
+                    {appMode === 'MM1' && (
                       <div className="flex mt-2 items-center">
                         <input 
                           type="range" 
