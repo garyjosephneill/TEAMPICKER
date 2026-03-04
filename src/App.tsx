@@ -351,18 +351,26 @@ export default function App() {
 
                 return (
                 <section key={p.id} className="space-y-2 border-b border-gray-800 pb-4">
-                  <div className="flex justify-between items-center">
-                    <h2 className="text-ceefax-cyan font-bold uppercase">PLAYER {i + 1}</h2>
-                    {appMode === 'MM1' && (
-                      <div className="flex gap-0.5 text-ceefax-yellow">
-                        {Array.from({ length: 10 }).map((_, idx) => (
-                          <span key={idx} className={idx < (p.ratings ? p.ratings[p.position] : ((p as any).rating || 5)) ? "text-ceefax-yellow" : "text-white/75"}>★</span>
-                        ))}
+                  {appMode === 'MM1' && (
+                    <div className="flex justify-between items-center">
+                      <h2 className="text-ceefax-cyan font-bold uppercase">PLAYER {i + 1}</h2>
+                      <div className="flex justify-between text-ceefax-yellow w-40 md:w-48 text-[20px] leading-none">
+                        {Array.from({ length: 10 }).map((_, idx) => {
+                          const rating = p.ratings ? p.ratings[p.position] : ((p as any).rating || 5);
+                          return (
+                            <span key={idx} className={idx < rating ? "text-ceefax-yellow" : "text-white/75"}>★</span>
+                          );
+                        })}
                       </div>
-                    )}
-                  </div>
+                    </div>
+                  )}
                   <div className="flex flex-col gap-2">
                     <div className="flex gap-2 items-start">
+                      {appMode === 'MM2' && (
+                        <div className="flex items-center justify-center text-ceefax-cyan font-bold text-xl h-[38px] w-6 shrink-0">
+                          {i + 1}
+                        </div>
+                      )}
                       <div className="flex flex-col flex-grow justify-between self-stretch">
                         {editingPlayerId === p.id ? (
                           <input 
@@ -381,20 +389,11 @@ export default function App() {
                             {p.name}
                           </div>
                         )}
-                        
                         {appMode === 'MM2' && (
-                          <div className="flex items-center gap-3 h-[28px] px-1">
-                            <span className="text-ceefax-white font-normal text-sm leading-none">NRG</span>
-                            <input 
-                              type="range" 
-                              min="1" max="10" 
-                              value={p.nrg || 5} 
-                              onChange={e => {
-                                const val = parseInt(e.target.value);
-                                setPlayers(players.map(x => x.id === p.id ? { ...x, nrg: val } : x));
-                              }}
-                              className="w-full accent-ceefax-yellow h-1 bg-ceefax-yellow/50 appearance-none cursor-pointer"
-                            />
+                          <div className="flex justify-between text-ceefax-yellow text-[20px] leading-none pr-2 pb-1">
+                            {Array.from({ length: 10 }).map((_, idx) => (
+                              <span key={idx} className={idx < (p.nrg || 5) ? "text-ceefax-yellow" : "text-white/75"}>★</span>
+                            ))}
                           </div>
                         )}
                       </div>
@@ -424,7 +423,7 @@ export default function App() {
                       )}
                     </div>
                     
-                    {appMode === 'MM1' && (
+                    {appMode === 'MM1' ? (
                       <div className="flex mt-2 items-center">
                         <input 
                           type="range" 
@@ -435,6 +434,20 @@ export default function App() {
                             setPlayers(players.map(x => x.id === p.id ? { ...x, ratings: { [Position.GKP]: val, [Position.DEFENCE]: val, [Position.MIDFIELD]: val, [Position.ATTACK]: val } } : x));
                           }}
                           className="w-full accent-ceefax-yellow h-1 bg-ceefax-yellow/50 appearance-none cursor-pointer"
+                        />
+                      </div>
+                    ) : (
+                      <div className="flex mt-2 items-center gap-3">
+                        <span className="text-ceefax-white font-normal text-sm leading-none">NRG</span>
+                        <input 
+                          type="range" 
+                          min="1" max="10" 
+                          value={p.nrg || 5} 
+                          onChange={e => {
+                            const val = parseInt(e.target.value);
+                            setPlayers(players.map(x => x.id === p.id ? { ...x, nrg: val } : x));
+                          }}
+                          className="flex-grow accent-ceefax-yellow h-1 bg-ceefax-yellow/50 appearance-none cursor-pointer"
                         />
                       </div>
                     )}
