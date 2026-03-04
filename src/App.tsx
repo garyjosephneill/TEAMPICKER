@@ -409,7 +409,7 @@ export default function App() {
                         />
                       </div>
                     ) : (
-                      <div className="flex justify-end mt-4 px-2">
+                      <div className="flex justify-end mt-3 px-2">
                         <div className="grid grid-cols-2 gap-x-6 gap-y-3 w-fit">
                           {[
                             { label: 'GKP', color: 'text-ceefax-green', val: p.ratings ? p.ratings[Position.GKP] : 5, setter: (v: number) => setPlayers(players.map(x => x.id === p.id ? { ...x, ratings: { ...(x.ratings || { [Position.GKP]: 5, [Position.DEFENCE]: 5, [Position.MIDFIELD]: 5, [Position.ATTACK]: 5 }), [Position.GKP]: v } } : x)) },
@@ -582,16 +582,6 @@ export default function App() {
             GAFFER
           </button>
         </nav>
-        {(!squadStatus || squadStatus.is_licensed === 0) && (
-          <button 
-            onClick={() => setView('payment')} 
-            className="w-full bg-ceefax-yellow text-black py-2 font-bold text-sm uppercase border-4 border-ceefax-yellow overflow-hidden relative block text-left"
-          >
-            <span className="animate-marquee whitespace-nowrap">
-              &gt; 10 DAY TRIAL &lt; &nbsp;&nbsp;&nbsp;&nbsp; &gt; MAN MARKER - ANNUAL LICENCE - £1.99 &lt; &nbsp;&nbsp;&nbsp;&nbsp; &gt; MICRO MANAGER - ANNUAL LICENCE - £3.99 &lt;
-            </span>
-          </button>
-        )}
         <div className="text-center text-xs font-normal text-white bg-black normal-case">
           Copyright - Gary Neill Limited
         </div>
