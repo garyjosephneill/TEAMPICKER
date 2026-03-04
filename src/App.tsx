@@ -68,21 +68,30 @@ export default function App() {
   const [editingPlayerId, setEditingPlayerId] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [showPlayerDetails, setShowPlayerDetails] = useState(true);
-  const [isHeaderVisible, setIsHeaderVisible] = useState(true);
+  const headerRef = useRef<HTMLElement>(null);
   const lastScrollY = useRef(0);
+  const translateY = useRef(0);
   const teamsContainerRef = useRef<HTMLDivElement>(null);
   const mainRef = useRef<HTMLDivElement>(null);
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const currentScrollY = e.currentTarget.scrollTop;
+    const scrollDelta = currentScrollY - lastScrollY.current;
     
-    if (currentScrollY <= 60) {
-      setIsHeaderVisible(true);
-    } else if (currentScrollY > lastScrollY.current + 10) {
-      setIsHeaderVisible(false);
-    } else if (currentScrollY < lastScrollY.current - 10) {
-      setIsHeaderVisible(true);
+    if (headerRef.current) {
+      const headerHeight = headerRef.current.offsetHeight;
+      let newTranslateY = translateY.current - scrollDelta;
+      
+      if (currentScrollY <= 0) {
+        newTranslateY = 0;
+      } else {
+        newTranslateY = Math.max(-headerHeight, Math.min(0, newTranslateY));
+      }
+      
+      translateY.current = newTranslateY;
+      headerRef.current.style.transform = `translateY(${newTranslateY}px)`;
     }
+    
     lastScrollY.current = currentScrollY;
   };
 
@@ -90,7 +99,10 @@ export default function App() {
     if (mainRef.current) {
       mainRef.current.scrollTo({ top: 0, behavior: 'smooth' });
     }
-    setIsHeaderVisible(true);
+    if (headerRef.current) {
+      translateY.current = 0;
+      headerRef.current.style.transform = `translateY(0px)`;
+    }
   }, [appMode, view]);
 
   useEffect(() => {
@@ -244,7 +256,7 @@ export default function App() {
   return (
     <div className="flex flex-col h-[100dvh] max-w-5xl mx-auto overflow-hidden bg-black text-white font-mono uppercase">
       <main ref={mainRef} className="flex-grow overflow-y-auto relative" onScroll={handleScroll}>
-        <header className={`sticky top-0 z-10 bg-black p-4 pt-8 shrink-0 transition-transform duration-300 ease-in-out ${isHeaderVisible ? 'translate-y-0' : '-translate-y-full'}`}>
+        <header ref={headerRef} className="sticky top-0 z-10 bg-black p-4 pt-8 shrink-0">
           <div className="mb-[11px]">
             <div className="text-ceefax-yellow font-title font-normal text-[50px] tracking-normal uppercase">
               {appMode === 'MM1' ? 'MAN MARKER' : 'MICRO MANAGER'}
