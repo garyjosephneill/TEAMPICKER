@@ -221,7 +221,7 @@ export default function App() {
   return (
     <div className="flex flex-col h-[100dvh] max-w-5xl mx-auto overflow-hidden bg-black text-white font-mono uppercase">
       <header className="p-4 pt-8 shrink-0">
-        <div className="mb-4">
+        <div className="mb-[11px]">
           <div className="text-ceefax-yellow font-title font-normal text-[50px] tracking-normal">
             {appMode === 'LZY' ? 'Lazy Gaffer' : 'Bored Gaffer'}
           </div>
