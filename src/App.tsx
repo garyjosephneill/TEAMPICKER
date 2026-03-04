@@ -379,18 +379,18 @@ export default function App() {
                             onBlur={() => setEditingPlayerId(null)} 
                             onKeyDown={e => e.key === 'Enter' && setEditingPlayerId(null)}
                             onChange={e => setPlayers(players.map(x => x.id === p.id ? { ...x, name: e.target.value.toUpperCase() } : x))} 
-                            className="border-2 border-ceefax-yellow p-2 w-full text-sm bg-black text-ceefax-white uppercase outline-none font-bold h-[38px]" 
+                            className="border-2 border-ceefax-yellow p-2 w-full text-sm bg-black text-ceefax-white uppercase outline-none font-bold h-[38px] min-w-0" 
                           />
                         ) : (
                           <div 
                             onClick={() => setEditingPlayerId(p.id)} 
-                            className="border-2 border-ceefax-cyan p-2 w-full text-sm text-ceefax-white truncate uppercase cursor-text font-bold flex items-center h-[38px]"
+                            className="border-2 border-ceefax-cyan p-2 w-full text-sm text-ceefax-white truncate uppercase cursor-text font-bold flex items-center h-[38px] min-w-0"
                           >
                             {p.name}
                           </div>
                         )}
                         {appMode === 'MM2' && (
-                          <div className="flex justify-between text-ceefax-yellow text-[11px] min-[375px]:text-[13px] sm:text-[16px] md:text-[20px] leading-none pr-2 pb-1">
+                          <div className="flex justify-between text-ceefax-yellow text-[8px] min-[375px]:text-[10px] sm:text-[14px] md:text-[18px] leading-none pr-1 pb-1 w-full min-w-0">
                             {Array.from({ length: 10 }).map((_, idx) => (
                               <span key={idx} className={idx < (p.nrg || 5) ? "text-ceefax-yellow" : "text-white/75"}>★</span>
                             ))}
@@ -399,14 +399,14 @@ export default function App() {
                       </div>
                       
                       {appMode === 'MM1' ? (
-                        <div className="flex border-2 border-ceefax-white overflow-hidden h-[38px] flex-shrink-0 w-40 md:w-48">
+                        <div className="flex border-2 border-ceefax-white overflow-hidden h-[38px] flex-shrink-0 w-[140px] min-[375px]:w-40 md:w-48">
                           <button onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: Position.GKP } : x))} className={`flex-1 px-1 py-1 text-[10px] md:text-xs font-bold ${p.position === Position.GKP || p.position === Position.DEFENCE ? 'border-r-2 border-ceefax-white' : ''} ${p.position === Position.GKP ? 'bg-ceefax-green text-black' : 'bg-black text-white/75'}`}>GKP</button>
                           <button onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: Position.DEFENCE } : x))} className={`flex-1 px-1 py-1 text-[10px] md:text-xs font-bold ${p.position === Position.DEFENCE || p.position === Position.MIDFIELD ? 'border-r-2 border-ceefax-white' : ''} ${p.position === Position.DEFENCE ? 'bg-ceefax-cyan text-black' : 'bg-black text-white/75'}`}>DEF</button>
                           <button onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: Position.MIDFIELD } : x))} className={`flex-1 px-1 py-1 text-[10px] md:text-xs font-bold ${p.position === Position.MIDFIELD || p.position === Position.ATTACK ? 'border-r-2 border-ceefax-white' : ''} ${p.position === Position.MIDFIELD ? 'bg-ceefax-red text-black' : 'bg-black text-white/75'}`}>MID</button>
                           <button onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: Position.ATTACK } : x))} className={`flex-1 px-1 py-1 text-[10px] md:text-xs font-bold ${p.position === Position.ATTACK ? 'bg-ceefax-yellow text-black' : 'bg-black text-white/75'}`}>ATT</button>
                         </div>
                       ) : (
-                        <div className="flex flex-col border-2 border-ceefax-white overflow-hidden flex-shrink-0 w-40 md:w-48">
+                        <div className="flex flex-col border-2 border-ceefax-white overflow-hidden flex-shrink-0 w-[140px] min-[375px]:w-40 md:w-48">
                           <div className="flex h-[34px] border-b-2 border-ceefax-white">
                             <button onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: Position.GKP } : x))} className={`flex-1 px-1 py-1 text-[10px] md:text-xs font-bold ${maxPos === Position.GKP || maxPos === Position.DEFENCE ? 'border-r-2 border-ceefax-white' : ''} ${maxPos === Position.GKP ? 'bg-ceefax-green text-black' : 'bg-black text-white/75'}`}>GKP</button>
                             <button onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: Position.DEFENCE } : x))} className={`flex-1 px-1 py-1 text-[10px] md:text-xs font-bold ${maxPos === Position.DEFENCE || maxPos === Position.MIDFIELD ? 'border-r-2 border-ceefax-white' : ''} ${maxPos === Position.DEFENCE ? 'bg-ceefax-cyan text-black' : 'bg-black text-white/75'}`}>DEF</button>
@@ -437,8 +437,8 @@ export default function App() {
                         />
                       </div>
                     ) : (
-                      <div className="flex mt-2 items-center gap-3">
-                        <span className="text-ceefax-white font-normal text-sm leading-none">NRG</span>
+                      <div className="flex mt-2 items-center gap-3 w-full">
+                        <span className="text-ceefax-white font-normal text-sm leading-none shrink-0">NRG</span>
                         <input 
                           type="range" 
                           min="1" max="10" 
@@ -447,7 +447,7 @@ export default function App() {
                             const val = parseInt(e.target.value);
                             setPlayers(players.map(x => x.id === p.id ? { ...x, nrg: val } : x));
                           }}
-                          className="flex-grow accent-ceefax-yellow h-1 bg-ceefax-yellow/50 appearance-none cursor-pointer"
+                          className="flex-grow w-full min-w-0 accent-ceefax-yellow h-1 bg-ceefax-yellow/50 appearance-none cursor-pointer"
                         />
                       </div>
                     )}
