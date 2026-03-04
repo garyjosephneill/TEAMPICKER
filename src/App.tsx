@@ -409,13 +409,13 @@ export default function App() {
                         />
                       </div>
                     ) : (
-                      <div className="grid grid-cols-3 gap-2 mt-2">
+                      <div className="grid grid-cols-2 gap-2 mt-2">
                         {[
                           { label: 'GKP', color: 'text-ceefax-green', val: p.ratings ? p.ratings[Position.GKP] : 5, setter: (v: number) => setPlayers(players.map(x => x.id === p.id ? { ...x, ratings: { ...(x.ratings || { [Position.GKP]: 5, [Position.DEFENCE]: 5, [Position.MIDFIELD]: 5, [Position.ATTACK]: 5 }), [Position.GKP]: v } } : x)) },
-                          { label: 'MID', color: 'text-ceefax-red', val: p.ratings ? p.ratings[Position.MIDFIELD] : 5, setter: (v: number) => setPlayers(players.map(x => x.id === p.id ? { ...x, ratings: { ...(x.ratings || { [Position.GKP]: 5, [Position.DEFENCE]: 5, [Position.MIDFIELD]: 5, [Position.ATTACK]: 5 }), [Position.MIDFIELD]: v } } : x)) },
-                          { label: 'NRG', color: 'text-ceefax-white', val: p.nrg || 5, setter: (v: number) => setPlayers(players.map(x => x.id === p.id ? { ...x, nrg: v } : x)) },
-                          { label: 'DEF', color: 'text-ceefax-cyan', val: p.ratings ? p.ratings[Position.DEFENCE] : 5, setter: (v: number) => setPlayers(players.map(x => x.id === p.id ? { ...x, ratings: { ...(x.ratings || { [Position.GKP]: 5, [Position.DEFENCE]: 5, [Position.MIDFIELD]: 5, [Position.ATTACK]: 5 }), [Position.DEFENCE]: v } } : x)) },
                           { label: 'ATT', color: 'text-ceefax-yellow', val: p.ratings ? p.ratings[Position.ATTACK] : 5, setter: (v: number) => setPlayers(players.map(x => x.id === p.id ? { ...x, ratings: { ...(x.ratings || { [Position.GKP]: 5, [Position.DEFENCE]: 5, [Position.MIDFIELD]: 5, [Position.ATTACK]: 5 }), [Position.ATTACK]: v } } : x)) },
+                          { label: 'DEF', color: 'text-ceefax-cyan', val: p.ratings ? p.ratings[Position.DEFENCE] : 5, setter: (v: number) => setPlayers(players.map(x => x.id === p.id ? { ...x, ratings: { ...(x.ratings || { [Position.GKP]: 5, [Position.DEFENCE]: 5, [Position.MIDFIELD]: 5, [Position.ATTACK]: 5 }), [Position.DEFENCE]: v } } : x)) },
+                          { label: 'NRG', color: 'text-ceefax-white', val: p.nrg || 5, setter: (v: number) => setPlayers(players.map(x => x.id === p.id ? { ...x, nrg: v } : x)) },
+                          { label: 'MID', color: 'text-ceefax-red', val: p.ratings ? p.ratings[Position.MIDFIELD] : 5, setter: (v: number) => setPlayers(players.map(x => x.id === p.id ? { ...x, ratings: { ...(x.ratings || { [Position.GKP]: 5, [Position.DEFENCE]: 5, [Position.MIDFIELD]: 5, [Position.ATTACK]: 5 }), [Position.MIDFIELD]: v } } : x)) },
                           { label: 'SPD', color: 'text-ceefax-blue', val: p.spd || 5, setter: (v: number) => setPlayers(players.map(x => x.id === p.id ? { ...x, spd: v } : x)) }
                         ].map((stat) => (
                           <div key={stat.label} className="grid grid-cols-4 border-2 border-gray-500 aspect-[4/1]">
