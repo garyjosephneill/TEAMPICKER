@@ -409,40 +409,27 @@ export default function App() {
                         />
                       </div>
                     ) : (
-                      <div className="flex flex-wrap gap-2 md:gap-4 mt-0">
-                        <div className="flex flex-col bg-white gap-[2px] border-x-2 border-b-2 border-white w-fit">
+                      <div className="flex justify-end mt-4 px-2">
+                        <div className="grid grid-cols-2 gap-x-6 gap-y-3 w-fit">
                           {[
-                            { label: 'GKP', bg: 'bg-ceefax-green', val: p.ratings ? p.ratings[Position.GKP] : 5, setter: (v: number) => setPlayers(players.map(x => x.id === p.id ? { ...x, ratings: { ...(x.ratings || { [Position.GKP]: 5, [Position.DEFENCE]: 5, [Position.MIDFIELD]: 5, [Position.ATTACK]: 5 }), [Position.GKP]: v } } : x)) },
-                            { label: 'DEF', bg: 'bg-ceefax-cyan', val: p.ratings ? p.ratings[Position.DEFENCE] : 5, setter: (v: number) => setPlayers(players.map(x => x.id === p.id ? { ...x, ratings: { ...(x.ratings || { [Position.GKP]: 5, [Position.DEFENCE]: 5, [Position.MIDFIELD]: 5, [Position.ATTACK]: 5 }), [Position.DEFENCE]: v } } : x)) },
-                            { label: 'MID', bg: 'bg-ceefax-red', val: p.ratings ? p.ratings[Position.MIDFIELD] : 5, setter: (v: number) => setPlayers(players.map(x => x.id === p.id ? { ...x, ratings: { ...(x.ratings || { [Position.GKP]: 5, [Position.DEFENCE]: 5, [Position.MIDFIELD]: 5, [Position.ATTACK]: 5 }), [Position.MIDFIELD]: v } } : x)) }
+                            { label: 'GKP', color: 'text-ceefax-green', val: p.ratings ? p.ratings[Position.GKP] : 5, setter: (v: number) => setPlayers(players.map(x => x.id === p.id ? { ...x, ratings: { ...(x.ratings || { [Position.GKP]: 5, [Position.DEFENCE]: 5, [Position.MIDFIELD]: 5, [Position.ATTACK]: 5 }), [Position.GKP]: v } } : x)) },
+                            { label: 'ATT', color: 'text-ceefax-yellow', val: p.ratings ? p.ratings[Position.ATTACK] : 5, setter: (v: number) => setPlayers(players.map(x => x.id === p.id ? { ...x, ratings: { ...(x.ratings || { [Position.GKP]: 5, [Position.DEFENCE]: 5, [Position.MIDFIELD]: 5, [Position.ATTACK]: 5 }), [Position.ATTACK]: v } } : x)) },
+                            { label: 'DEF', color: 'text-ceefax-cyan', val: p.ratings ? p.ratings[Position.DEFENCE] : 5, setter: (v: number) => setPlayers(players.map(x => x.id === p.id ? { ...x, ratings: { ...(x.ratings || { [Position.GKP]: 5, [Position.DEFENCE]: 5, [Position.MIDFIELD]: 5, [Position.ATTACK]: 5 }), [Position.DEFENCE]: v } } : x)) },
+                            { label: 'NRG', color: 'text-ceefax-white', val: p.nrg || 5, setter: (v: number) => setPlayers(players.map(x => x.id === p.id ? { ...x, nrg: v } : x)) },
+                            { label: 'MID', color: 'text-ceefax-red', val: p.ratings ? p.ratings[Position.MIDFIELD] : 5, setter: (v: number) => setPlayers(players.map(x => x.id === p.id ? { ...x, ratings: { ...(x.ratings || { [Position.GKP]: 5, [Position.DEFENCE]: 5, [Position.MIDFIELD]: 5, [Position.ATTACK]: 5 }), [Position.MIDFIELD]: v } } : x)) },
+                            { label: 'SPD', color: 'text-ceefax-blue', val: p.spd || 5, setter: (v: number) => setPlayers(players.map(x => x.id === p.id ? { ...x, spd: v } : x)) }
                           ].map((stat) => (
-                            <div key={stat.label} className="flex bg-white gap-[2px]">
-                              <div className={`w-8 h-8 md:w-10 md:h-10 shrink-0 flex items-center justify-center text-[10px] md:text-xs font-bold ${stat.bg} text-black`}>
+                            <div key={stat.label} className="flex items-center gap-2 md:gap-3">
+                              <div className={`w-8 font-bold text-sm md:text-base ${stat.color}`}>
                                 {stat.label}
                               </div>
-                              <button onClick={() => stat.setter(Math.max(1, stat.val - 1))} className="w-8 h-8 md:w-10 md:h-10 shrink-0 flex items-center justify-center text-white bg-black font-bold text-lg leading-none pb-1">-</button>
-                              <div className="w-8 h-8 md:w-10 md:h-10 shrink-0 flex items-center justify-center text-ceefax-yellow font-bold text-sm bg-black">
-                                {stat.val}
+                              <div className="flex items-center gap-1 md:gap-2">
+                                <button onClick={() => stat.setter(Math.max(1, stat.val - 1))} className="w-7 h-7 md:w-8 md:h-8 border-2 border-white flex items-center justify-center text-white font-bold text-lg leading-none pb-1">-</button>
+                                <div className="w-6 text-center text-ceefax-yellow font-bold text-sm md:text-base">
+                                  {stat.val}
+                                </div>
+                                <button onClick={() => stat.setter(Math.min(10, stat.val + 1))} className="w-7 h-7 md:w-8 md:h-8 border-2 border-white flex items-center justify-center text-white font-bold text-lg leading-none pb-1">+</button>
                               </div>
-                              <button onClick={() => stat.setter(Math.min(10, stat.val + 1))} className="w-8 h-8 md:w-10 md:h-10 shrink-0 flex items-center justify-center text-white bg-black font-bold text-lg leading-none pb-1">+</button>
-                            </div>
-                          ))}
-                        </div>
-                        <div className="flex flex-col bg-white gap-[2px] border-x-2 border-b-2 border-white w-fit">
-                          {[
-                            { label: 'ATT', bg: 'bg-ceefax-yellow', val: p.ratings ? p.ratings[Position.ATTACK] : 5, setter: (v: number) => setPlayers(players.map(x => x.id === p.id ? { ...x, ratings: { ...(x.ratings || { [Position.GKP]: 5, [Position.DEFENCE]: 5, [Position.MIDFIELD]: 5, [Position.ATTACK]: 5 }), [Position.ATTACK]: v } } : x)) },
-                            { label: 'NRG', bg: 'bg-ceefax-white', val: p.nrg || 5, setter: (v: number) => setPlayers(players.map(x => x.id === p.id ? { ...x, nrg: v } : x)) },
-                            { label: 'SPD', bg: 'bg-ceefax-blue', val: p.spd || 5, setter: (v: number) => setPlayers(players.map(x => x.id === p.id ? { ...x, spd: v } : x)) }
-                          ].map((stat) => (
-                            <div key={stat.label} className="flex bg-white gap-[2px]">
-                              <div className={`w-8 h-8 md:w-10 md:h-10 shrink-0 flex items-center justify-center text-[10px] md:text-xs font-bold ${stat.bg} text-black`}>
-                                {stat.label}
-                              </div>
-                              <button onClick={() => stat.setter(Math.max(1, stat.val - 1))} className="w-8 h-8 md:w-10 md:h-10 shrink-0 flex items-center justify-center text-white bg-black font-bold text-lg leading-none pb-1">-</button>
-                              <div className="w-8 h-8 md:w-10 md:h-10 shrink-0 flex items-center justify-center text-ceefax-yellow font-bold text-sm bg-black">
-                                {stat.val}
-                              </div>
-                              <button onClick={() => stat.setter(Math.min(10, stat.val + 1))} className="w-8 h-8 md:w-10 md:h-10 shrink-0 flex items-center justify-center text-white bg-black font-bold text-lg leading-none pb-1">+</button>
                             </div>
                           ))}
                         </div>
