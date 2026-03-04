@@ -405,41 +405,30 @@ export default function App() {
                             const val = parseInt(e.target.value);
                             setPlayers(players.map(x => x.id === p.id ? { ...x, ratings: { [Position.GKP]: val, [Position.DEFENCE]: val, [Position.MIDFIELD]: val, [Position.ATTACK]: val } } : x));
                           }}
-                          className="w-full accent-ceefax-yellow h-1 bg-ceefax-yellow/50 appearance-none cursor-pointer"
+                          className="w-full h-1 bg-white/75 appearance-none cursor-pointer"
                         />
                       </div>
                     ) : (
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 mt-2">
-                        <div className="flex items-center gap-3">
-                          <span className="text-ceefax-white font-bold text-xs w-8 shrink-0">NRG</span>
-                          <input type="range" min="1" max="10" value={p.nrg || 5} onChange={e => setPlayers(players.map(x => x.id === p.id ? { ...x, nrg: parseInt(e.target.value) } : x))} className="flex-grow w-full min-w-0 accent-ceefax-white h-1 bg-ceefax-white/30 appearance-none cursor-pointer" />
-                          <span className="text-ceefax-white font-bold text-sm w-4 text-right shrink-0">{p.nrg || 5}</span>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <span className="text-ceefax-blue font-bold text-xs w-8 shrink-0">SPD</span>
-                          <input type="range" min="1" max="10" value={p.spd || 5} onChange={e => setPlayers(players.map(x => x.id === p.id ? { ...x, spd: parseInt(e.target.value) } : x))} className="flex-grow w-full min-w-0 accent-ceefax-blue h-1 bg-ceefax-blue/30 appearance-none cursor-pointer" />
-                          <span className="text-ceefax-blue font-bold text-sm w-4 text-right shrink-0">{p.spd || 5}</span>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <span className="text-ceefax-green font-bold text-xs w-8 shrink-0">GKP</span>
-                          <input type="range" min="1" max="10" value={p.ratings ? p.ratings[Position.GKP] : 5} onChange={e => setPlayers(players.map(x => x.id === p.id ? { ...x, ratings: { ...(x.ratings || { [Position.GKP]: 5, [Position.DEFENCE]: 5, [Position.MIDFIELD]: 5, [Position.ATTACK]: 5 }), [Position.GKP]: parseInt(e.target.value) } } : x))} className="flex-grow w-full min-w-0 accent-ceefax-green h-1 bg-ceefax-green/30 appearance-none cursor-pointer" />
-                          <span className="text-ceefax-green font-bold text-sm w-4 text-right shrink-0">{p.ratings ? p.ratings[Position.GKP] : 5}</span>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <span className="text-ceefax-cyan font-bold text-xs w-8 shrink-0">DEF</span>
-                          <input type="range" min="1" max="10" value={p.ratings ? p.ratings[Position.DEFENCE] : 5} onChange={e => setPlayers(players.map(x => x.id === p.id ? { ...x, ratings: { ...(x.ratings || { [Position.GKP]: 5, [Position.DEFENCE]: 5, [Position.MIDFIELD]: 5, [Position.ATTACK]: 5 }), [Position.DEFENCE]: parseInt(e.target.value) } } : x))} className="flex-grow w-full min-w-0 accent-ceefax-cyan h-1 bg-ceefax-cyan/30 appearance-none cursor-pointer" />
-                          <span className="text-ceefax-cyan font-bold text-sm w-4 text-right shrink-0">{p.ratings ? p.ratings[Position.DEFENCE] : 5}</span>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <span className="text-ceefax-red font-bold text-xs w-8 shrink-0">MID</span>
-                          <input type="range" min="1" max="10" value={p.ratings ? p.ratings[Position.MIDFIELD] : 5} onChange={e => setPlayers(players.map(x => x.id === p.id ? { ...x, ratings: { ...(x.ratings || { [Position.GKP]: 5, [Position.DEFENCE]: 5, [Position.MIDFIELD]: 5, [Position.ATTACK]: 5 }), [Position.MIDFIELD]: parseInt(e.target.value) } } : x))} className="flex-grow w-full min-w-0 accent-ceefax-red h-1 bg-ceefax-red/30 appearance-none cursor-pointer" />
-                          <span className="text-ceefax-red font-bold text-sm w-4 text-right shrink-0">{p.ratings ? p.ratings[Position.MIDFIELD] : 5}</span>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <span className="text-ceefax-yellow font-bold text-xs w-8 shrink-0">ATT</span>
-                          <input type="range" min="1" max="10" value={p.ratings ? p.ratings[Position.ATTACK] : 5} onChange={e => setPlayers(players.map(x => x.id === p.id ? { ...x, ratings: { ...(x.ratings || { [Position.GKP]: 5, [Position.DEFENCE]: 5, [Position.MIDFIELD]: 5, [Position.ATTACK]: 5 }), [Position.ATTACK]: parseInt(e.target.value) } } : x))} className="flex-grow w-full min-w-0 accent-ceefax-yellow h-1 bg-ceefax-yellow/30 appearance-none cursor-pointer" />
-                          <span className="text-ceefax-yellow font-bold text-sm w-4 text-right shrink-0">{p.ratings ? p.ratings[Position.ATTACK] : 5}</span>
-                        </div>
+                      <div className="grid grid-cols-3 gap-2 mt-2">
+                        {[
+                          { label: 'GKP', color: 'text-ceefax-green', val: p.ratings ? p.ratings[Position.GKP] : 5, setter: (v: number) => setPlayers(players.map(x => x.id === p.id ? { ...x, ratings: { ...(x.ratings || { [Position.GKP]: 5, [Position.DEFENCE]: 5, [Position.MIDFIELD]: 5, [Position.ATTACK]: 5 }), [Position.GKP]: v } } : x)) },
+                          { label: 'MID', color: 'text-ceefax-red', val: p.ratings ? p.ratings[Position.MIDFIELD] : 5, setter: (v: number) => setPlayers(players.map(x => x.id === p.id ? { ...x, ratings: { ...(x.ratings || { [Position.GKP]: 5, [Position.DEFENCE]: 5, [Position.MIDFIELD]: 5, [Position.ATTACK]: 5 }), [Position.MIDFIELD]: v } } : x)) },
+                          { label: 'NRG', color: 'text-ceefax-white', val: p.nrg || 5, setter: (v: number) => setPlayers(players.map(x => x.id === p.id ? { ...x, nrg: v } : x)) },
+                          { label: 'DEF', color: 'text-ceefax-cyan', val: p.ratings ? p.ratings[Position.DEFENCE] : 5, setter: (v: number) => setPlayers(players.map(x => x.id === p.id ? { ...x, ratings: { ...(x.ratings || { [Position.GKP]: 5, [Position.DEFENCE]: 5, [Position.MIDFIELD]: 5, [Position.ATTACK]: 5 }), [Position.DEFENCE]: v } } : x)) },
+                          { label: 'ATT', color: 'text-ceefax-yellow', val: p.ratings ? p.ratings[Position.ATTACK] : 5, setter: (v: number) => setPlayers(players.map(x => x.id === p.id ? { ...x, ratings: { ...(x.ratings || { [Position.GKP]: 5, [Position.DEFENCE]: 5, [Position.MIDFIELD]: 5, [Position.ATTACK]: 5 }), [Position.ATTACK]: v } } : x)) },
+                          { label: 'SPD', color: 'text-ceefax-blue', val: p.spd || 5, setter: (v: number) => setPlayers(players.map(x => x.id === p.id ? { ...x, spd: v } : x)) }
+                        ].map((stat) => (
+                          <div key={stat.label} className="grid grid-cols-4 border-2 border-gray-500 aspect-[4/1]">
+                            <div className={`border-r-2 border-gray-500 flex items-center justify-center text-[10px] md:text-xs font-bold ${stat.color} bg-black`}>
+                              {stat.label}
+                            </div>
+                            <button onClick={() => stat.setter(Math.max(1, stat.val - 1))} className="flex items-center justify-center text-white bg-black border-r-2 border-gray-500 font-bold text-lg leading-none pb-1">-</button>
+                            <div className="flex items-center justify-center text-ceefax-yellow font-bold text-sm bg-black border-r-2 border-gray-500">
+                              {stat.val}
+                            </div>
+                            <button onClick={() => stat.setter(Math.min(10, stat.val + 1))} className="flex items-center justify-center text-white bg-black font-bold text-lg leading-none pb-1">+</button>
+                          </div>
+                        ))}
                       </div>
                     )}
                   </div>
