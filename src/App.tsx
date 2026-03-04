@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
 enum Position { GKP = 'GKP', DEFENCE = 'DEFENCE', MIDFIELD = 'MIDFIELD', ATTACK = 'ATTACK' }
-interface Player { id: string; name: string; ratings: Record<Position, number>; position: Position; isSelected: boolean; }
+interface Player { id: string; name: string; ratings: Record<Position, number>; position: Position; isSelected: boolean; nrg?: number; }
 interface Team { name: string; players: Player[]; totalRating: number; positions: Record<Position, number>; }
 
 const TEAM_NAMES = [
@@ -112,7 +112,7 @@ export default function App() {
 
   const getEffectiveRating = (p: Player) => {
     if (appMode === 'MM2' && p.ratings) {
-      return (p.ratings[Position.GKP] + p.ratings[Position.DEFENCE] + p.ratings[Position.MIDFIELD] + p.ratings[Position.ATTACK]) / 4;
+      return (p.ratings[Position.GKP] + p.ratings[Position.DEFENCE] + p.ratings[Position.MIDFIELD] + p.ratings[Position.ATTACK] + (p.nrg || 5)) / 5;
     }
     return p.ratings ? p.ratings[p.position] : ((p as any).rating || 5);
   };
@@ -229,21 +229,21 @@ export default function App() {
     <div className="flex flex-col h-[100dvh] max-w-5xl mx-auto overflow-hidden bg-black text-white font-mono uppercase">
       <header className="p-4 pt-8 shrink-0">
         <div className="mb-[11px]">
-          <div className="text-ceefax-yellow font-title font-normal text-[50px] tracking-normal">
-            {appMode === 'MM1' ? 'Man Marker' : 'Micro Manager'}
+          <div className="text-ceefax-yellow font-title font-normal text-[50px] tracking-normal uppercase">
+            {appMode === 'MM1' ? 'MAN MANAGER' : 'MICRO MANAGER'}
           </div>
         </div>
         <div className="flex justify-between items-center text-sm font-bold border-b-4 border-ceefax-cyan pb-2">
           <div className="flex border-2 border-ceefax-white text-sm font-bold">
             <button 
               onClick={() => setAppMode('MM1')} 
-              className={`px-3 py-1 ${appMode === 'MM1' ? 'bg-ceefax-white text-black' : 'bg-black text-ceefax-white'}`}
+              className={`px-3 py-1 tracking-[0.2em] ${appMode === 'MM1' ? 'bg-ceefax-white text-black' : 'bg-black text-ceefax-white'}`}
             >
               MM1
             </button>
             <button 
               onClick={() => setAppMode('MM2')} 
-              className={`px-3 py-1 border-l-2 border-ceefax-white ${appMode === 'MM2' ? 'bg-ceefax-white text-black' : 'bg-black text-ceefax-white'}`}
+              className={`px-3 py-1 border-l-2 border-ceefax-white tracking-[0.2em] ${appMode === 'MM2' ? 'bg-ceefax-white text-black' : 'bg-black text-ceefax-white'}`}
             >
               MM2
             </button>
@@ -301,23 +301,41 @@ export default function App() {
                   </div>
                   <div className="flex flex-col gap-2">
                     <div className="flex gap-2 items-start">
-                      {editingPlayerId === p.id ? (
-                        <input 
-                          autoFocus 
-                          value={p.name} 
-                          onBlur={() => setEditingPlayerId(null)} 
-                          onKeyDown={e => e.key === 'Enter' && setEditingPlayerId(null)}
-                          onChange={e => setPlayers(players.map(x => x.id === p.id ? { ...x, name: e.target.value.toUpperCase() } : x))} 
-                          className="border-2 border-ceefax-yellow p-2 flex-grow text-sm bg-black text-ceefax-white uppercase outline-none font-normal h-[38px]" 
-                        />
-                      ) : (
-                        <div 
-                          onClick={() => setEditingPlayerId(p.id)} 
-                          className="border-2 border-ceefax-cyan p-2 flex-grow text-sm text-ceefax-white truncate uppercase cursor-text font-normal flex items-center h-[38px]"
-                        >
-                          {p.name}
-                        </div>
-                      )}
+                      <div className="flex flex-col flex-grow justify-between self-stretch">
+                        {editingPlayerId === p.id ? (
+                          <input 
+                            autoFocus 
+                            value={p.name} 
+                            onBlur={() => setEditingPlayerId(null)} 
+                            onKeyDown={e => e.key === 'Enter' && setEditingPlayerId(null)}
+                            onChange={e => setPlayers(players.map(x => x.id === p.id ? { ...x, name: e.target.value.toUpperCase() } : x))} 
+                            className="border-2 border-ceefax-yellow p-2 w-full text-sm bg-black text-ceefax-white uppercase outline-none font-bold h-[38px]" 
+                          />
+                        ) : (
+                          <div 
+                            onClick={() => setEditingPlayerId(p.id)} 
+                            className="border-2 border-ceefax-cyan p-2 w-full text-sm text-ceefax-white truncate uppercase cursor-text font-bold flex items-center h-[38px]"
+                          >
+                            {p.name}
+                          </div>
+                        )}
+                        
+                        {appMode === 'MM2' && (
+                          <div className="flex items-center gap-3 h-[28px] px-1">
+                            <span className="text-ceefax-white font-normal text-sm leading-none">NRG</span>
+                            <input 
+                              type="range" 
+                              min="1" max="10" 
+                              value={p.nrg || 5} 
+                              onChange={e => {
+                                const val = parseInt(e.target.value);
+                                setPlayers(players.map(x => x.id === p.id ? { ...x, nrg: val } : x));
+                              }}
+                              className="w-full accent-ceefax-yellow h-1 bg-ceefax-yellow/50 appearance-none cursor-pointer"
+                            />
+                          </div>
+                        )}
+                      </div>
                       
                       {appMode === 'MM1' ? (
                         <div className="flex border-2 border-ceefax-white overflow-hidden h-[38px] flex-shrink-0 w-40 md:w-48">
@@ -498,8 +516,8 @@ export default function App() {
             onClick={() => setView('payment')} 
             className="w-full bg-ceefax-yellow text-black py-2 font-bold text-sm uppercase border-4 border-ceefax-yellow overflow-hidden relative block text-left"
           >
-            <span className="animate-marquee">
-              &gt; 10-DAY FREE TRIAL &lt; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &gt; LAZY GAFFER YEAR LICENCE £1.99 &lt; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &gt; BORED GAFFER YEAR LICENCE £3.99 &lt;
+            <span className="animate-marquee whitespace-nowrap">
+              &gt; 10 DAY TRIAL &lt; &nbsp;&nbsp;&nbsp;&nbsp; &gt; MAN MARKER - ANNUAL LICENCE - £1.99 &lt; &nbsp;&nbsp;&nbsp;&nbsp; &gt; MICRO MANAGER - ANNUAL LICENCE - £3.99 &lt;
             </span>
           </button>
         )}
