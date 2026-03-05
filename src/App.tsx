@@ -132,14 +132,16 @@ export default function App() {
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const currentScrollY = e.currentTarget.scrollTop;
-    const scrollDelta = currentScrollY - lastScrollY.current;
+    const headerHeight = headerRef.current?.offsetHeight || 0;
     if (headerRef.current) {
-      const headerHeight = headerRef.current.offsetHeight;
-      let newTranslateY = translateY.current - scrollDelta;
-      if (currentScrollY <= 0) newTranslateY = 0;
-      else newTranslateY = Math.max(-headerHeight, Math.min(0, newTranslateY));
-      translateY.current = newTranslateY;
-      headerRef.current.style.transform = `translateY(${newTranslateY}px)`;
+      if (currentScrollY <= 5) {
+        // Only show header when back at the very top
+        translateY.current = 0;
+      } else {
+        // Hide immediately once scrolled away from top — never re-show mid-scroll
+        translateY.current = -headerHeight;
+      }
+      headerRef.current.style.transform = `translateY(${translateY.current}px)`;
     }
     lastScrollY.current = currentScrollY;
   };
