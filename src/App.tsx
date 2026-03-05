@@ -372,7 +372,7 @@ export default function App() {
                               <button
                                 key={pos}
                                 onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: pos } : x))}
-                                className={`flex-1 text-[11px] md:text-[9px] font-bold tracking-wide ${i < arr.length - 1 ? 'border-r-2 border-ceefax-white' : ''} ${p.position === pos
+                                className={`flex-1 text-[11px] md:text-[8px] font-bold tracking-wide ${i < arr.length - 1 ? 'border-r-2 border-ceefax-white' : ''} ${p.position === pos
                                   ? pos === Position.GKP ? 'bg-ceefax-green text-black'
                                     : pos === Position.DEFENCE ? 'bg-ceefax-cyan text-black'
                                     : pos === Position.MIDFIELD ? 'bg-ceefax-red text-black'
