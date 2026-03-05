@@ -2,6 +2,20 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
+class ErrorBoundary extends React.Component<{children: React.ReactNode}, {error: string | null}> {
+  constructor(props: any) { super(props); this.state = { error: null }; }
+  static getDerivedStateFromError(e: any) { return { error: e?.message || 'Unknown error' }; }
+  render() {
+    if (this.state.error) return (
+      <div style={{ background: '#000', color: '#ff0', fontFamily: 'monospace', padding: 24, minHeight: '100vh' }}>
+        <div style={{ fontSize: 18, marginBottom: 16 }}>APP ERROR</div>
+        <div style={{ fontSize: 12, color: '#fff' }}>{this.state.error}</div>
+      </div>
+    );
+    return this.props.children;
+  }
+}
+
 enum Position { GKP = 'GKP', DEFENCE = 'DEFENCE', MIDFIELD = 'MIDFIELD', ATTACK = 'ATTACK' }
 type StatKey = Position | 'NRG' | 'SPD';
 interface Player { id: string; name: string; ratings: Record<StatKey, number>; position: Position; isSelected: boolean; }
@@ -150,10 +164,9 @@ export default function App() {
     fetch(`/api/squad-status/${squadId}`).then(r => r.json()).then(setSquadStatus);
     fetch(`/api/players/${squadId}`).then(r => r.json()).then(data => {
       if (data.length > 0) {
-        // Migrate old players that might be missing NRG/SPD
         setPlayers(data.map((p: any) => ({
           ...p,
-          ratings: { ...DEFAULT_RATINGS(), ...p.ratings }
+          ratings: { ...DEFAULT_RATINGS(), ...(typeof p.ratings === 'string' ? JSON.parse(p.ratings) : p.ratings) }
         })));
       } else {
         setPlayers(GET_RANDOM_16());
@@ -310,6 +323,7 @@ export default function App() {
   ];
 
   return (
+    <ErrorBoundary>
     <div className="flex flex-col h-[100dvh] max-w-5xl mx-auto overflow-hidden bg-black text-white font-mono uppercase">
       <main ref={mainRef} className="flex-grow overflow-y-auto relative" onScroll={handleScroll}>
         <header ref={headerRef} className="sticky top-0 z-10 bg-black p-4 pt-8 shrink-0">
@@ -611,5 +625,6 @@ export default function App() {
         <div className="text-center text-xs font-normal text-white bg-black normal-case">Copyright - Gary Neill Limited</div>
       </div>
     </div>
+    </ErrorBoundary>
   );
 }
