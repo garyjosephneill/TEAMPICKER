@@ -102,6 +102,8 @@ export default function App() {
   const teamsContainerRef = useRef<HTMLDivElement>(null);
   const mainRef = useRef<HTMLDivElement>(null);
 
+  const playerCardRefs = useRef<Record<string, HTMLElement | null>>({});
+
   const [swipedPlayerId, setSwipedPlayerId] = useState<string | null>(null);
   const swipeStartX = useRef<number>(0);
   const swipeStartY = useRef<number>(0);
