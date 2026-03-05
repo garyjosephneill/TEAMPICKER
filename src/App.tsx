@@ -113,12 +113,18 @@ export default function App() {
     swipeStartY.current = e.touches[0].clientY;
   };
 
+  const handleSwipeTouchMove = (e: React.TouchEvent) => {
+    const dx = Math.abs(e.touches[0].clientX - swipeStartX.current);
+    const dy = Math.abs(e.touches[0].clientY - swipeStartY.current);
+    if (dx > dy) e.stopPropagation(); // horizontal swipe — stop scroll stealing it
+  };
+
   const handleSwipeTouchEnd = (e: React.TouchEvent, id: string) => {
     const dx = e.changedTouches[0].clientX - swipeStartX.current;
     const dy = Math.abs(e.changedTouches[0].clientY - swipeStartY.current);
-    if (dy > 20) return; // ignore vertical scrolls
-    if (dx < -50) setSwipedPlayerId(id);
-    if (dx > 50) setSwipedPlayerId(null);
+    if (dy > dx * 2) return; // clearly vertical — ignore
+    if (dx < -40) setSwipedPlayerId(id);
+    if (dx > 40) setSwipedPlayerId(null);
   };
 
   const deletePlayer = (id: string) => {
@@ -388,8 +394,9 @@ export default function App() {
                       <section
                         ref={el => { playerCardRefs.current[p.id] = el; }}
                         className="relative py-3 bg-black transition-transform duration-200"
-                        style={{ transform: swipedPlayerId === p.id ? 'translateX(-96px)' : 'translateX(0)', zIndex: 2 }}
+                        style={{ transform: swipedPlayerId === p.id ? 'translateX(-112px)' : 'translateX(0)', zIndex: 2 }}
                         onTouchStart={e => handleSwipeTouchStart(e, p.id)}
+                        onTouchMove={e => handleSwipeTouchMove(e)}
                         onTouchEnd={e => handleSwipeTouchEnd(e, p.id)}
                         onClick={() => { if (swipedPlayerId === p.id) setSwipedPlayerId(null); }}
                       >
