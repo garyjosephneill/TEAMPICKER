@@ -88,7 +88,27 @@ export default function App() {
   const teamsContainerRef = useRef<HTMLDivElement>(null);
   const mainRef = useRef<HTMLDivElement>(null);
 
-  const playerCardRefs = useRef<Record<string, HTMLElement | null>>({});
+  const [swipedPlayerId, setSwipedPlayerId] = useState<string | null>(null);
+  const swipeStartX = useRef<number>(0);
+  const swipeStartY = useRef<number>(0);
+
+  const handleSwipeTouchStart = (e: React.TouchEvent, id: string) => {
+    swipeStartX.current = e.touches[0].clientX;
+    swipeStartY.current = e.touches[0].clientY;
+  };
+
+  const handleSwipeTouchEnd = (e: React.TouchEvent, id: string) => {
+    const dx = e.changedTouches[0].clientX - swipeStartX.current;
+    const dy = Math.abs(e.changedTouches[0].clientY - swipeStartY.current);
+    if (dy > 20) return; // ignore vertical scrolls
+    if (dx < -50) setSwipedPlayerId(id);
+    if (dx > 50) setSwipedPlayerId(null);
+  };
+
+  const deletePlayer = (id: string) => {
+    setPlayers(players.filter(p => p.id !== id));
+    setSwipedPlayerId(null);
+  };
 
   const toggleExpanded = (id: string) => {
     setExpandedPlayers(prev => {
@@ -178,11 +198,16 @@ export default function App() {
 
   const addPlayer = () => {
     if (!newPlayerName) return;
+    const randomPosition = [Position.DEFENCE, Position.MIDFIELD, Position.ATTACK][Math.floor(Math.random() * 3)];
+    const randomRating = Math.floor(Math.random() * 5) + 4; // 4 to 8
+    const allRatings = Object.fromEntries(
+      Object.keys(DEFAULT_RATINGS()).map(k => [k, randomRating])
+    ) as ReturnType<typeof DEFAULT_RATINGS>;
     setPlayers([...players, {
       id: crypto.randomUUID(),
       name: newPlayerName,
-      ratings: DEFAULT_RATINGS(),
-      position: Position.MIDFIELD,
+      ratings: allRatings,
+      position: randomPosition,
       isSelected: true
     }]);
     setNewPlayerName('');
@@ -332,7 +357,29 @@ export default function App() {
                     : p.ratings[p.position];
 
                   return (
-                    <section key={p.id} ref={el => { playerCardRefs.current[p.id] = el; }} className="border-b border-gray-800 py-3">
+                    <div key={p.id} className="relative overflow-hidden border-b border-gray-800">
+                      {/* Delete button revealed on swipe — matches name box style */}
+                      <div
+                        className="absolute right-0 flex items-center py-3"
+                        style={{ top: 0, bottom: 0, zIndex: 1 }}
+                      >
+                        <button
+                          onClick={() => deletePlayer(p.id)}
+                          className="border-2 border-ceefax-red bg-ceefax-red text-black font-bold text-sm tracking-widest uppercase flex items-center justify-center px-4"
+                          style={{ height: 36 }}
+                        >
+                          DELETE
+                        </button>
+                      </div>
+                      {/* Player card — slides left on swipe */}
+                      <section
+                        ref={el => { playerCardRefs.current[p.id] = el; }}
+                        className="relative py-3 bg-black transition-transform duration-200"
+                        style={{ transform: swipedPlayerId === p.id ? 'translateX(-96px)' : 'translateX(0)', zIndex: 2 }}
+                        onTouchStart={e => handleSwipeTouchStart(e, p.id)}
+                        onTouchEnd={e => handleSwipeTouchEnd(e, p.id)}
+                        onClick={() => { if (swipedPlayerId === p.id) setSwipedPlayerId(null); }}
+                      >
 
                       {/* MM1 stars */}
                       {appMode === 'MM1' && (
@@ -452,7 +499,8 @@ export default function App() {
                           ))}
                         </div>
                       )}
-                    </section>
+                      </section>
+                    </div>
                   );
                 })}
               </div>
