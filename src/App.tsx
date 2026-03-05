@@ -18,24 +18,24 @@ const TEAM_NAMES = [
 ];
 
 const FAMOUS_PLAYERS = [
-  { name: 'THE CAT',    ratings: { GKP: 9, DEFENCE: 4, MIDFIELD: 3, ATTACK: 2, NRG: 6, SPD: 5 }, position: Position.GKP },
-  { name: 'SIMMO',      ratings: { GKP: 8, DEFENCE: 5, MIDFIELD: 4, ATTACK: 3, NRG: 7, SPD: 6 }, position: Position.GKP },
-  { name: 'CHOPPER',    ratings: { GKP: 3, DEFENCE: 10,MIDFIELD: 6, ATTACK: 4, NRG: 9, SPD: 5 }, position: Position.DEFENCE },
-  { name: 'BIG JOHN',   ratings: { GKP: 4, DEFENCE: 9, MIDFIELD: 5, ATTACK: 5, NRG: 7, SPD: 4 }, position: Position.DEFENCE },
-  { name: 'FRANCO',     ratings: { GKP: 2, DEFENCE: 9, MIDFIELD: 7, ATTACK: 4, NRG: 8, SPD: 7 }, position: Position.DEFENCE },
-  { name: 'BARRY',      ratings: { GKP: 5, DEFENCE: 8, MIDFIELD: 4, ATTACK: 3, NRG: 6, SPD: 5 }, position: Position.DEFENCE },
-  { name: 'BONES',      ratings: { GKP: 1, DEFENCE: 8, MIDFIELD: 6, ATTACK: 2, NRG: 7, SPD: 6 }, position: Position.DEFENCE },
-  { name: 'LUNGS',      ratings: { GKP: 2, DEFENCE: 7, MIDFIELD: 10,ATTACK: 7, NRG: 10,SPD: 8 }, position: Position.MIDFIELD },
-  { name: 'TRICKY PETE',ratings: { GKP: 1, DEFENCE: 4, MIDFIELD: 9, ATTACK: 8, NRG: 7, SPD: 9 }, position: Position.MIDFIELD },
-  { name: 'WOR DAVE',   ratings: { GKP: 3, DEFENCE: 6, MIDFIELD: 9, ATTACK: 6, NRG: 8, SPD: 7 }, position: Position.MIDFIELD },
-  { name: 'GADGET',     ratings: { GKP: 4, DEFENCE: 5, MIDFIELD: 8, ATTACK: 7, NRG: 8, SPD: 8 }, position: Position.MIDFIELD },
-  { name: 'SWEATY',     ratings: { GKP: 2, DEFENCE: 8, MIDFIELD: 8, ATTACK: 5, NRG: 9, SPD: 6 }, position: Position.MIDFIELD },
-  { name: 'BOBBY SCORE',ratings: { GKP: 1, DEFENCE: 3, MIDFIELD: 7, ATTACK: 10,NRG: 8, SPD: 9 }, position: Position.ATTACK },
-  { name: 'GAZADONNA',  ratings: { GKP: 1, DEFENCE: 2, MIDFIELD: 8, ATTACK: 10,NRG: 7, SPD: 10}, position: Position.ATTACK },
-  { name: 'THE POSTMAN',ratings: { GKP: 2, DEFENCE: 4, MIDFIELD: 6, ATTACK: 9, NRG: 6, SPD: 7 }, position: Position.ATTACK },
-  { name: 'SNIFFER',    ratings: { GKP: 1, DEFENCE: 3, MIDFIELD: 5, ATTACK: 9, NRG: 7, SPD: 8 }, position: Position.ATTACK },
-  { name: 'LITTLE JOHN',ratings: { GKP: 1, DEFENCE: 5, MIDFIELD: 6, ATTACK: 8, NRG: 6, SPD: 6 }, position: Position.ATTACK },
-  { name: 'GAV',        ratings: { GKP: 3, DEFENCE: 4, MIDFIELD: 7, ATTACK: 8, NRG: 7, SPD: 8 }, position: Position.ATTACK },
+  { name: 'THE CAT',    ratings: { GKP: 7, DEFENCE: 7, MIDFIELD: 7, ATTACK: 7, NRG: 6, SPD: 5 }, position: Position.GKP },
+  { name: 'SIMMO',      ratings: { GKP: 6, DEFENCE: 6, MIDFIELD: 6, ATTACK: 6, NRG: 7, SPD: 6 }, position: Position.GKP },
+  { name: 'CHOPPER',    ratings: { GKP: 6, DEFENCE: 6, MIDFIELD: 6, ATTACK: 6, NRG: 9, SPD: 5 }, position: Position.DEFENCE },
+  { name: 'BIG JOHN',   ratings: { GKP: 6, DEFENCE: 6, MIDFIELD: 6, ATTACK: 6, NRG: 7, SPD: 4 }, position: Position.DEFENCE },
+  { name: 'FRANCO',     ratings: { GKP: 6, DEFENCE: 6, MIDFIELD: 6, ATTACK: 6, NRG: 8, SPD: 7 }, position: Position.DEFENCE },
+  { name: 'BARRY',      ratings: { GKP: 5, DEFENCE: 5, MIDFIELD: 5, ATTACK: 5, NRG: 6, SPD: 5 }, position: Position.DEFENCE },
+  { name: 'BONES',      ratings: { GKP: 5, DEFENCE: 5, MIDFIELD: 5, ATTACK: 5, NRG: 7, SPD: 6 }, position: Position.DEFENCE },
+  { name: 'LUNGS',      ratings: { GKP: 8, DEFENCE: 8, MIDFIELD: 8, ATTACK: 8, NRG: 10,SPD: 8 }, position: Position.MIDFIELD },
+  { name: 'TRICKY PETE',ratings: { GKP: 7, DEFENCE: 7, MIDFIELD: 7, ATTACK: 7, NRG: 7, SPD: 9 }, position: Position.MIDFIELD },
+  { name: 'WOR DAVE',   ratings: { GKP: 7, DEFENCE: 7, MIDFIELD: 7, ATTACK: 7, NRG: 8, SPD: 7 }, position: Position.MIDFIELD },
+  { name: 'GADGET',     ratings: { GKP: 6, DEFENCE: 6, MIDFIELD: 6, ATTACK: 6, NRG: 8, SPD: 8 }, position: Position.MIDFIELD },
+  { name: 'SWEATY',     ratings: { GKP: 6, DEFENCE: 6, MIDFIELD: 6, ATTACK: 6, NRG: 9, SPD: 6 }, position: Position.MIDFIELD },
+  { name: 'BOBBY SCORE',ratings: { GKP: 7, DEFENCE: 7, MIDFIELD: 7, ATTACK: 7, NRG: 8, SPD: 9 }, position: Position.ATTACK },
+  { name: 'GAZADONNA',  ratings: { GKP: 7, DEFENCE: 7, MIDFIELD: 7, ATTACK: 7, NRG: 7, SPD: 10}, position: Position.ATTACK },
+  { name: 'THE POSTMAN',ratings: { GKP: 6, DEFENCE: 6, MIDFIELD: 6, ATTACK: 6, NRG: 6, SPD: 7 }, position: Position.ATTACK },
+  { name: 'SNIFFER',    ratings: { GKP: 6, DEFENCE: 6, MIDFIELD: 6, ATTACK: 6, NRG: 7, SPD: 8 }, position: Position.ATTACK },
+  { name: 'LITTLE JOHN',ratings: { GKP: 6, DEFENCE: 6, MIDFIELD: 6, ATTACK: 6, NRG: 6, SPD: 6 }, position: Position.ATTACK },
+  { name: 'GAV',        ratings: { GKP: 7, DEFENCE: 7, MIDFIELD: 7, ATTACK: 7, NRG: 7, SPD: 8 }, position: Position.ATTACK },
 ];
 
 const GET_RANDOM_16 = (): Player[] => {
@@ -328,7 +328,7 @@ export default function App() {
 
                       {/* MM1 stars */}
                       {appMode === 'MM1' && (
-                        <div className="flex justify-end mb-1">
+                        <div className="flex justify-end mb-1 pt-4">
                           <div className="flex justify-between text-[20px] leading-none w-[148px]">
                             {Array.from({ length: 10 }).map((_, idx) => (
                               <span key={idx} className={idx < p.ratings[p.position] ? 'text-ceefax-yellow' : 'text-white/20'}>★</span>
