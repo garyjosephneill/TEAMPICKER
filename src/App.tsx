@@ -104,10 +104,11 @@ export default function App() {
 
   const playerCardRefs = useRef<Record<string, HTMLElement | null>>({});
 
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
+
   const deletePlayer = (id: string) => {
-    if (window.confirm('Remove this player?')) {
-      setPlayers(players.filter(p => p.id !== id));
-    }
+    setPlayers(players.filter(p => p.id !== id));
+    setConfirmDeleteId(null);
   };
 
   const toggleExpanded = (id: string) => {
@@ -386,7 +387,7 @@ export default function App() {
                           >
                             <span className="flex-1 truncate px-2">{p.name}</span>
                             <button
-                              onClick={e => { e.stopPropagation(); deletePlayer(p.id); }}
+                              onClick={e => { e.stopPropagation(); setConfirmDeleteId(p.id); }}
                               className="flex items-center justify-center flex-shrink-0 border-l-2 border-ceefax-cyan text-ceefax-red"
                               style={{ width: 36, height: '100%' }}
                             >
@@ -601,6 +602,24 @@ export default function App() {
         <div className="text-center text-xs font-normal text-white bg-black normal-case">Copyright - Gary Neill Limited</div>
       </div>
     </div>
+      {/* ── DELETE CONFIRMATION MODAL ── */}
+      {confirmDeleteId && (
+        <div className="fixed inset-0 z-50 flex flex-col justify-end" style={{ background: 'rgba(0,0,0,0.75)' }} onClick={() => setConfirmDeleteId(null)}>
+          <div className="bg-black border-t-2 border-ceefax-red p-6" onClick={e => e.stopPropagation()}>
+            <div className="text-ceefax-red font-bold tracking-widest text-sm mb-5">Remove Player?</div>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setConfirmDeleteId(null)}
+                className="flex-1 h-11 border-2 border-ceefax-white bg-black text-ceefax-white font-bold tracking-widest text-sm"
+              >Cancel</button>
+              <button
+                onClick={() => deletePlayer(confirmDeleteId)}
+                className="flex-1 h-11 border-2 border-ceefax-red bg-ceefax-red text-black font-bold tracking-widest text-sm"
+              >Remove</button>
+            </div>
+          </div>
+        </div>
+      )}
     </ErrorBoundary>
   );
 }
