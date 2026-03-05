@@ -11,17 +11,27 @@ if (dbPath.includes("://")) {
 }
 const db = new Database(dbPath);
 
-// Initialize database tables
+// Force clean recreate of players table to fix schema migration
+try {
+  db.exec("DROP TABLE IF EXISTS players");
+  db.exec(`
+    CREATE TABLE players (
+      id TEXT,
+      squad_id TEXT NOT NULL,
+      name TEXT NOT NULL,
+      ratings TEXT NOT NULL,
+      position TEXT NOT NULL,
+      isSelected INTEGER DEFAULT 0,
+      PRIMARY KEY (id, squad_id)
+    );
+  `);
+  console.log("Players table recreated cleanly.");
+} catch (e) {
+  console.error("Migration error:", e);
+}
+
+// Initialize squad_metadata table
 db.exec(`
-  CREATE TABLE IF NOT EXISTS players (
-    id TEXT,
-    squad_id TEXT NOT NULL,
-    name TEXT NOT NULL,
-    rating REAL NOT NULL,
-    position TEXT NOT NULL,
-    isSelected INTEGER DEFAULT 0,
-    PRIMARY KEY (id, squad_id)
-  );
   CREATE TABLE IF NOT EXISTS squad_metadata (
     squad_id TEXT PRIMARY KEY,
     created_at INTEGER NOT NULL,
@@ -57,7 +67,11 @@ async function startServer() {
   app.get("/api/players/:squadId", (req, res) => {
     const { squadId } = req.params;
     const players = db.prepare("SELECT * FROM players WHERE squad_id = ?").all(squadId);
-    res.json(players.map((p: any) => ({ ...p, isSelected: !!p.isSelected })));
+    res.json(players.map((p: any) => ({
+      ...p,
+      ratings: JSON.parse(p.ratings),
+      isSelected: !!p.isSelected
+    })));
   });
 
   // API: Save Players
@@ -66,9 +80,9 @@ async function startServer() {
     const players = req.body;
     const transaction = db.transaction((playerList) => {
       db.prepare("DELETE FROM players WHERE squad_id = ?").run(squadId);
-      const insert = db.prepare("INSERT INTO players (id, squad_id, name, rating, position, isSelected) VALUES (?, ?, ?, ?, ?, ?)");
+      const insert = db.prepare("INSERT INTO players (id, squad_id, name, ratings, position, isSelected) VALUES (?, ?, ?, ?, ?, ?)");
       for (const p of playerList) {
-        insert.run(p.id, squadId, p.name, p.rating, p.position, p.isSelected ? 1 : 0);
+        insert.run(p.id, squadId, p.name, JSON.stringify(p.ratings), p.position, p.isSelected ? 1 : 0);
       }
     });
     transaction(players);
