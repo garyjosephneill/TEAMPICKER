@@ -443,10 +443,10 @@ export default function App() {
                         <div className="flex items-center pb-4" style={{ marginTop: '18px' }}>
                           <input
                             type="range" min="1" max="10"
-                            defaultValue={p.ratings[p.position]}
+                            value={p.ratings[p.position]}
                             key={`${p.id}-${p.position}`}
-                            onPointerUp={e => {
-                              const val = parseInt((e.target as HTMLInputElement).value);
+                            onChange={e => {
+                              const val = parseInt(e.target.value);
                               setPlayers(prev => prev.map(x => x.id === p.id ? {
                                 ...x,
                                 ratings: {
