@@ -199,14 +199,11 @@ export default function App() {
   const addPlayer = () => {
     if (!newPlayerName) return;
     const randomPosition = [Position.DEFENCE, Position.MIDFIELD, Position.ATTACK][Math.floor(Math.random() * 3)];
-    const randomRating = Math.floor(Math.random() * 5) + 4; // 4 to 8
-    const allRatings = Object.fromEntries(
-      Object.keys(DEFAULT_RATINGS()).map(k => [k, randomRating])
-    ) as ReturnType<typeof DEFAULT_RATINGS>;
+    const r = Math.floor(Math.random() * 5) + 4;
     setPlayers([...players, {
       id: crypto.randomUUID(),
       name: newPlayerName,
-      ratings: allRatings,
+      ratings: { GKP: r, DEFENCE: r, MIDFIELD: r, ATTACK: r, NRG: r, SPD: r },
       position: randomPosition,
       isSelected: true
     }]);
