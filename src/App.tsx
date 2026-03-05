@@ -391,18 +391,36 @@ export default function App() {
 
                       {/* MM1: slider */}
                       {appMode === 'MM1' && (
-                        <div className="flex items-center" style={{ marginTop: '18px' }}>
+                        <div className="flex items-center pb-4" style={{ marginTop: '18px' }}>
                           <input
                             type="range" min="1" max="10"
                             defaultValue={p.ratings[p.position]}
                             key={`${p.id}-${p.position}`}
                             onPointerUp={e => {
                               const val = parseInt((e.target as HTMLInputElement).value);
-                              setPlayers(prev => prev.map(x => x.id === p.id ? { ...x, ratings: { ...x.ratings, [x.position]: val } } : x));
+                              setPlayers(prev => prev.map(x => x.id === p.id ? {
+                                ...x,
+                                ratings: {
+                                  ...x.ratings,
+                                  [Position.GKP]: val,
+                                  [Position.DEFENCE]: val,
+                                  [Position.MIDFIELD]: val,
+                                  [Position.ATTACK]: val,
+                                }
+                              } : x));
                             }}
                             onKeyUp={e => {
                               const val = parseInt((e.target as HTMLInputElement).value);
-                              setPlayers(prev => prev.map(x => x.id === p.id ? { ...x, ratings: { ...x.ratings, [x.position]: val } } : x));
+                              setPlayers(prev => prev.map(x => x.id === p.id ? {
+                                ...x,
+                                ratings: {
+                                  ...x.ratings,
+                                  [Position.GKP]: val,
+                                  [Position.DEFENCE]: val,
+                                  [Position.MIDFIELD]: val,
+                                  [Position.ATTACK]: val,
+                                }
+                              } : x));
                             }}
                             className="w-full h-1 bg-white/75 appearance-none cursor-pointer"
                           />
@@ -413,14 +431,14 @@ export default function App() {
                       {appMode === 'MM2' && isExpanded && (
                         <div className="mt-3 space-y-[6px]">
                           {MM2_STATS.map(stat => (
-                            <div key={stat.key} className="flex items-center gap-2">
+                            <div key={stat.key} className="flex items-center">
                               <span className={`w-8 text-xs font-bold flex-shrink-0 mr-2 ${stat.textColor}`}>{stat.label}</span>
                               <TapZone
                                 value={p.ratings[stat.key]}
                                 onChange={v => updateStat(p.id, stat.key, v)}
                                 color={stat.fillColor}
                               />
-                              <span className="text-ceefax-yellow font-bold text-sm w-5 text-left flex-shrink-0" style={{ marginLeft: '10px' }}>{p.ratings[stat.key]}</span>
+                              <span className="text-ceefax-yellow font-bold text-sm flex-shrink-0" style={{ marginLeft: '10px' }}>{p.ratings[stat.key]}</span>
                             </div>
                           ))}
                         </div>
