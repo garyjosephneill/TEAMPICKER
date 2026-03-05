@@ -98,11 +98,8 @@ export default function App() {
       if (isOpening) {
         setTimeout(() => {
           const card = playerCardRefs.current[id];
-          const main = mainRef.current;
-          if (card && main) {
-            const cardTop = card.offsetTop;
-            const headerHeight = headerRef.current?.offsetHeight || 0;
-            main.scrollTo({ top: cardTop - headerHeight - 8, behavior: 'smooth' });
+          if (card) {
+            card.scrollIntoView({ behavior: 'smooth', block: 'start' });
           }
         }, 50);
       }
