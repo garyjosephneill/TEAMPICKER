@@ -354,12 +354,12 @@ export default function App() {
                             onBlur={() => setEditingPlayerId(null)}
                             onKeyDown={e => e.key === 'Enter' && setEditingPlayerId(null)}
                             onChange={e => setPlayers(players.map(x => x.id === p.id ? { ...x, name: e.target.value.toUpperCase() } : x))}
-                            className="border-2 border-ceefax-yellow p-2 flex-1 text-sm bg-black text-ceefax-white uppercase outline-none font-bold h-[38px]"
+                            className="border-2 border-ceefax-yellow p-2 flex-1 text-sm bg-black text-ceefax-white uppercase outline-none font-bold h-[36px]"
                           />
                         ) : (
                           <div
                             onClick={() => setEditingPlayerId(p.id)}
-                            className="border-2 border-ceefax-cyan p-2 flex-1 text-sm text-ceefax-white truncate uppercase cursor-text font-bold flex items-center h-[38px]"
+                            className="border-2 border-ceefax-cyan p-2 flex-1 text-sm text-ceefax-white truncate uppercase cursor-text font-bold flex items-center h-[36px]"
                           >
                             {p.name}
                           </div>
@@ -367,12 +367,13 @@ export default function App() {
 
                         {/* MM1: position toggle */}
                         {appMode === 'MM1' && (
-                          <div className="flex border-2 border-ceefax-white overflow-hidden h-[38px] flex-shrink-0 w-[148px]">
+                          <div className="flex border-2 border-ceefax-white overflow-hidden flex-shrink-0" style={{ height: 36 }}>
                             {([Position.GKP, Position.DEFENCE, Position.MIDFIELD, Position.ATTACK] as Position[]).map((pos, i, arr) => (
                               <button
                                 key={pos}
                                 onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: pos } : x))}
-                                className={`flex-1 text-[11px] md:text-[8px] font-bold tracking-wide ${i < arr.length - 1 ? 'border-r-2 border-ceefax-white' : ''} ${p.position === pos
+                                style={{ width: 36, height: 36, lineHeight: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                className={`text-[11px] md:text-[8px] font-bold tracking-wide flex-shrink-0 ${i < arr.length - 1 ? 'border-r-2 border-ceefax-white' : ''} ${p.position === pos
                                   ? pos === Position.GKP ? 'bg-ceefax-green text-black'
                                     : pos === Position.DEFENCE ? 'bg-ceefax-cyan text-black'
                                     : pos === Position.MIDFIELD ? 'bg-ceefax-red text-black'
