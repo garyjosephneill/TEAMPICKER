@@ -58,7 +58,9 @@ const GET_RANDOM_16 = (): Player[] => {
   const midfielders = shuffled.filter(p => p.position === Position.MIDFIELD).slice(0, 2);
   const remaining = shuffled.filter(p => !defenders.includes(p) && !midfielders.includes(p));
   const selected16 = [...defenders, ...midfielders, ...remaining.slice(0, 12)].sort(() => 0.5 - Math.random());
-  return selected16.map(p => ({ ...p, id: crypto.randomUUID(), isSelected: true }));
+  // Randomly select exactly 10 for the first matchday
+  const selectedIds = new Set(selected16.sort(() => 0.5 - Math.random()).slice(0, 10).map(p => p.name));
+  return selected16.map(p => ({ ...p, id: crypto.randomUUID(), isSelected: selectedIds.has(p.name) }));
 };
 
 // Tap Zone component for MM2
