@@ -56,7 +56,7 @@ function TapZone({ value, onChange, color }: { value: number; onChange: (v: numb
           key={i}
           onClick={() => onChange(i + 1)}
           className={`flex-1 ${i < value ? color : 'bg-white/10'}`}
-          style={{ height: 14, WebkitTapHighlightColor: 'transparent', border: 'none', padding: 0, minWidth: 0 }}
+          style={{ aspectRatio: '1 / 1', WebkitTapHighlightColor: 'transparent', border: 'none', padding: 0, minWidth: 0 }}
         />
       ))}
     </div>
@@ -88,10 +88,24 @@ export default function App() {
   const teamsContainerRef = useRef<HTMLDivElement>(null);
   const mainRef = useRef<HTMLDivElement>(null);
 
+  const playerCardRefs = useRef<Record<string, HTMLElement | null>>({});
+
   const toggleExpanded = (id: string) => {
     setExpandedPlayers(prev => {
       const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
+      const isOpening = !next.has(id);
+      isOpening ? next.add(id) : next.delete(id);
+      if (isOpening) {
+        setTimeout(() => {
+          const card = playerCardRefs.current[id];
+          const main = mainRef.current;
+          if (card && main) {
+            const cardTop = card.offsetTop;
+            const headerHeight = headerRef.current?.offsetHeight || 0;
+            main.scrollTo({ top: cardTop - headerHeight - 8, behavior: 'smooth' });
+          }
+        }, 50);
+      }
       return next;
     });
   };
@@ -321,7 +335,7 @@ export default function App() {
                     : p.ratings[p.position];
 
                   return (
-                    <section key={p.id} className="border-b border-gray-800 py-3">
+                    <section key={p.id} ref={el => { playerCardRefs.current[p.id] = el; }} className="border-b border-gray-800 py-3">
 
                       {/* MM1 stars */}
                       {appMode === 'MM1' && (
