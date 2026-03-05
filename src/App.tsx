@@ -315,7 +315,7 @@ export default function App() {
                 <button onClick={addPlayer} className="px-6 text-xl font-bold border-2 transition-all bg-ceefax-green text-black border-ceefax-green hover:bg-black hover:text-ceefax-green">ADD</button>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-0">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-0">
                 {players.map((p) => {
                   const isExpanded = expandedPlayers.has(p.id);
                   const overallRating = appMode === 'MM2'
@@ -428,7 +428,7 @@ export default function App() {
 
                       {/* MM2: expanded tap zones */}
                       {appMode === 'MM2' && isExpanded && (
-                        <div className="mt-3 space-y-[6px]">
+                        <div className="mt-3 space-y-[6px] inline-block">
                           {MM2_STATS.map(stat => (
                             <div key={stat.key} className="flex items-center">
                               <span className={`w-8 text-xs font-bold flex-shrink-0 mr-2 ${stat.textColor}`}>{stat.label}</span>
