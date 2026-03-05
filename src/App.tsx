@@ -104,32 +104,10 @@ export default function App() {
 
   const playerCardRefs = useRef<Record<string, HTMLElement | null>>({});
 
-  const [swipedPlayerId, setSwipedPlayerId] = useState<string | null>(null);
-  const swipeStartX = useRef<number>(0);
-  const swipeStartY = useRef<number>(0);
-
-  const handleSwipeTouchStart = (e: React.TouchEvent, id: string) => {
-    swipeStartX.current = e.touches[0].clientX;
-    swipeStartY.current = e.touches[0].clientY;
-  };
-
-  const handleSwipeTouchMove = (e: React.TouchEvent) => {
-    const dx = Math.abs(e.touches[0].clientX - swipeStartX.current);
-    const dy = Math.abs(e.touches[0].clientY - swipeStartY.current);
-    if (dx > dy) e.stopPropagation(); // horizontal swipe — stop scroll stealing it
-  };
-
-  const handleSwipeTouchEnd = (e: React.TouchEvent, id: string) => {
-    const dx = e.changedTouches[0].clientX - swipeStartX.current;
-    const dy = Math.abs(e.changedTouches[0].clientY - swipeStartY.current);
-    if (dy > dx * 2) return; // clearly vertical — ignore
-    if (dx < -40) setSwipedPlayerId(id);
-    if (dx > 40) setSwipedPlayerId(null);
-  };
-
   const deletePlayer = (id: string) => {
-    setPlayers(players.filter(p => p.id !== id));
-    setSwipedPlayerId(null);
+    if (window.confirm('Remove this player?')) {
+      setPlayers(players.filter(p => p.id !== id));
+    }
   };
 
   const toggleExpanded = (id: string) => {
@@ -376,30 +354,7 @@ export default function App() {
                     : p.ratings[p.position];
 
                   return (
-                    <div key={p.id} className="relative overflow-hidden border-b border-gray-800">
-                      {/* Delete button revealed on swipe — matches name box style */}
-                      <div
-                        className="absolute right-0 flex items-center py-3"
-                        style={{ top: 0, bottom: 0, zIndex: 1 }}
-                      >
-                        <button
-                          onClick={() => deletePlayer(p.id)}
-                          className="border-2 border-ceefax-red bg-ceefax-red text-black font-bold text-sm tracking-widest uppercase flex items-center justify-center px-4"
-                          style={{ height: 36 }}
-                        >
-                          DELETE
-                        </button>
-                      </div>
-                      {/* Player card — slides left on swipe */}
-                      <section
-                        ref={el => { playerCardRefs.current[p.id] = el; }}
-                        className="relative py-3 bg-black transition-transform duration-200"
-                        style={{ transform: swipedPlayerId === p.id ? 'translateX(-112px)' : 'translateX(0)', zIndex: 2 }}
-                        onTouchStart={e => handleSwipeTouchStart(e, p.id)}
-                        onTouchMove={e => handleSwipeTouchMove(e)}
-                        onTouchEnd={e => handleSwipeTouchEnd(e, p.id)}
-                        onClick={() => { if (swipedPlayerId === p.id) setSwipedPlayerId(null); }}
-                      >
+                    <section key={p.id} ref={el => { playerCardRefs.current[p.id] = el; }} className="border-b border-gray-800 py-3">
 
                       {/* MM1 stars */}
                       {appMode === 'MM1' && (
@@ -426,9 +381,22 @@ export default function App() {
                         ) : (
                           <div
                             onClick={() => setEditingPlayerId(p.id)}
-                            className="border-2 border-ceefax-cyan p-2 flex-1 text-sm text-ceefax-white truncate uppercase cursor-text font-bold flex items-center h-[36px]"
+                            className="border-2 border-ceefax-cyan flex-1 text-sm text-ceefax-white truncate uppercase cursor-text font-bold flex items-center"
+                            style={{ height: 36 }}
                           >
-                            {p.name}
+                            <span className="flex-1 truncate px-2">{p.name}</span>
+                            <button
+                              onClick={e => { e.stopPropagation(); deletePlayer(p.id); }}
+                              className="flex items-center justify-center flex-shrink-0 border-l-2 border-ceefax-cyan text-ceefax-red"
+                              style={{ width: 36, height: '100%' }}
+                            >
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                <polyline points="3 6 5 6 21 6"/>
+                                <path d="M19 6l-1 14H6L5 6"/>
+                                <path d="M10 11v6M14 11v6"/>
+                                <path d="M9 6V4h6v2"/>
+                              </svg>
+                            </button>
                           </div>
                         )}
 
@@ -520,7 +488,6 @@ export default function App() {
                         </div>
                       )}
                       </section>
-                    </div>
                   );
                 })}
               </div>
