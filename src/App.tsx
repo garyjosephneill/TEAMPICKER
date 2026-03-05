@@ -52,7 +52,7 @@ function TapZone({ value, onChange, color }: { value: number; onChange: (v: numb
   const SIZE = 14;
   const GAP = 3;
   return (
-    <div className="flex items-center flex-1" style={{ gap: `${GAP}px` }}>
+    <div className="flex items-center flex-shrink-0" style={{ gap: `${GAP}px` }}>
       {Array.from({ length: 10 }).map((_, i) => (
         <button
           key={i}
@@ -61,7 +61,6 @@ function TapZone({ value, onChange, color }: { value: number; onChange: (v: numb
           style={{ width: SIZE, height: SIZE, WebkitTapHighlightColor: 'transparent', border: 'none', padding: 0 }}
         />
       ))}
-      <div className="flex-1" />
     </div>
   );
 }
