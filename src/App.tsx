@@ -604,19 +604,16 @@ export default function App() {
     </div>
       {/* ── DELETE CONFIRMATION MODAL ── */}
       {confirmDeleteId && (
-        <div className="fixed inset-0 z-50 flex flex-col justify-end" style={{ background: 'rgba(0,0,0,0.75)' }} onClick={() => setConfirmDeleteId(null)}>
-          <div className="bg-black border-t-2 border-ceefax-red p-6" onClick={e => e.stopPropagation()}>
-            <div className="text-ceefax-red font-bold tracking-widest text-sm mb-5">Remove Player?</div>
-            <div className="flex gap-3">
-              <button
-                onClick={() => setConfirmDeleteId(null)}
-                className="flex-1 h-11 border-2 border-ceefax-white bg-black text-ceefax-white font-bold tracking-widest text-sm"
-              >Cancel</button>
-              <button
-                onClick={() => deletePlayer(confirmDeleteId)}
-                className="flex-1 h-11 border-2 border-ceefax-red bg-ceefax-red text-black font-bold tracking-widest text-sm"
-              >Remove</button>
-            </div>
+        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.75)' }} onClick={() => setConfirmDeleteId(null)}>
+          <div className="flex gap-3 px-6 w-full max-w-sm" onClick={e => e.stopPropagation()}>
+            <button
+              onClick={() => setConfirmDeleteId(null)}
+              className="flex-1 h-11 border-2 border-ceefax-white bg-black text-ceefax-white font-bold tracking-widest text-sm"
+            >Cancel</button>
+            <button
+              onClick={() => deletePlayer(confirmDeleteId)}
+              className="flex-1 h-11 border-2 border-ceefax-red bg-ceefax-red text-black font-bold tracking-widest text-sm"
+            >Remove</button>
           </div>
         </div>
       )}
