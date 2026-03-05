@@ -50,7 +50,7 @@ const GET_RANDOM_16 = (): Player[] => {
 // Tap Zone component for MM2
 function TapZone({ value, onChange, color }: { value: number; onChange: (v: number) => void; color: string }) {
   return (
-    <div className="flex items-center w-full" style={{ gap: '3px' }}>
+    <div className="flex items-center w-full" style={{ gap: '4px' }}>
       {Array.from({ length: 10 }).map((_, i) => (
         <button
           key={i}
@@ -286,8 +286,8 @@ export default function App() {
     { key: Position.DEFENCE, label: 'DEF', textColor: 'text-ceefax-cyan',  fillColor: 'bg-ceefax-cyan' },
     { key: Position.MIDFIELD,label: 'MID', textColor: 'text-ceefax-red',   fillColor: 'bg-ceefax-red' },
     { key: Position.ATTACK,  label: 'ATT', textColor: 'text-ceefax-yellow',fillColor: 'bg-ceefax-yellow' },
-    { key: 'SPD',            label: 'SPD', textColor: 'text-[#f7941d]',    fillColor: 'bg-[#f7941d]' },
-    { key: 'NRG',            label: 'NRG', textColor: 'text-white',        fillColor: 'bg-white/60' },
+    { key: 'SPD',            label: 'SPD', textColor: 'text-white/60',      fillColor: 'bg-white/40' },
+    { key: 'NRG',            label: 'NRG', textColor: 'text-[#f7941d]',    fillColor: 'bg-[#f7941d]' },
   ];
 
   return (
