@@ -49,16 +49,14 @@ const GET_RANDOM_16 = (): Player[] => {
 
 // Tap Zone component for MM2
 function TapZone({ value, onChange, color }: { value: number; onChange: (v: number) => void; color: string }) {
-  const SIZE = 14;
-  const GAP = 3;
   return (
-    <div className="flex items-center flex-shrink-0" style={{ gap: `${GAP}px` }}>
+    <div className="flex items-center w-full" style={{ gap: '3px' }}>
       {Array.from({ length: 10 }).map((_, i) => (
         <button
           key={i}
           onClick={() => onChange(i + 1)}
-          className={`flex-shrink-0 ${i < value ? color : 'bg-white/10'}`}
-          style={{ width: SIZE, height: SIZE, WebkitTapHighlightColor: 'transparent', border: 'none', padding: 0 }}
+          className={`flex-1 ${i < value ? color : 'bg-white/10'}`}
+          style={{ height: 14, WebkitTapHighlightColor: 'transparent', border: 'none', padding: 0, minWidth: 0 }}
         />
       ))}
     </div>
@@ -428,9 +426,9 @@ export default function App() {
 
                       {/* MM2: expanded tap zones */}
                       {appMode === 'MM2' && isExpanded && (
-                        <div className="mt-3 space-y-[6px] inline-block">
+                        <div className="mt-3 space-y-[6px] w-full">
                           {MM2_STATS.map(stat => (
-                            <div key={stat.key} className="flex items-center">
+                            <div key={stat.key} className="flex items-center w-full">
                               <span className={`w-8 text-xs font-bold flex-shrink-0 mr-2 ${stat.textColor}`}>{stat.label}</span>
                               <TapZone
                                 value={p.ratings[stat.key]}
