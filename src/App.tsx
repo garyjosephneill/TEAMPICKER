@@ -293,13 +293,13 @@ export default function App() {
         <header ref={headerRef} className="sticky top-0 z-10 bg-black p-4 pt-8 shrink-0">
           <div className="mb-[11px]">
             <div className="text-ceefax-yellow font-title font-normal text-[50px] tracking-normal uppercase">
-              {appMode === 'MM1' ? 'MAN MARKER' : 'MICRO MANAGER'}
+              {appMode === 'MM1' ? 'MAN MANAGER' : 'MICRO MANAGER'}
             </div>
           </div>
           <div className="flex justify-between items-center text-sm font-bold border-b-4 border-ceefax-cyan pb-2">
             <div className="flex border-2 border-ceefax-white text-sm font-bold">
-              <button onClick={() => setAppMode('MM1')} className={`px-3 py-1 tracking-[0.2em] ${appMode === 'MM1' ? 'bg-ceefax-white text-black' : 'bg-black text-ceefax-white'}`}>MM1</button>
-              <button onClick={() => setAppMode('MM2')} className={`px-3 py-1 border-l-2 border-ceefax-white tracking-[0.2em] ${appMode === 'MM2' ? 'bg-ceefax-white text-black' : 'bg-black text-ceefax-white'}`}>MM2</button>
+              <button onClick={() => setAppMode('MM1')} className={`px-3 py-1 tracking-[0.2em] ${appMode === 'MM1' ? 'bg-ceefax-white text-black' : 'bg-black text-ceefax-white'}`}>PARK</button>
+              <button onClick={() => setAppMode('MM2')} className={`px-3 py-1 border-l-2 border-ceefax-white tracking-[0.2em] ${appMode === 'MM2' ? 'bg-ceefax-white text-black' : 'bg-black text-ceefax-white'}`}>PRO</button>
             </div>
             {view === 'selection'
               ? <span className="text-ceefax-white">SELECTED {players.filter(x => x.isSelected).length}/{players.length}</span>
