@@ -389,7 +389,7 @@ export default function App() {
                             className="border-2 border-ceefax-cyan flex-1 text-sm text-ceefax-white truncate uppercase cursor-text font-bold flex items-center"
                             style={{ height: 36 }}
                           >
-                            <span className="flex-1 truncate px-2">{p.name}</span>
+                            <span className="flex-1 truncate px-2" style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: '16px', letterSpacing: '2px' }}>{p.name}</span>
                             <button
                               onClick={e => { e.stopPropagation(); setConfirmDeleteId(p.id); }}
                               className="flex items-center justify-center flex-shrink-0 border-l-2 border-ceefax-cyan text-ceefax-red"
