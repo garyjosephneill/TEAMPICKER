@@ -458,7 +458,7 @@ export default function App() {
                         {appMode === 'MM2' && (
                           <button
                             onClick={() => toggleExpanded(p.id)}
-                            className="flex items-center gap-2 border-2 border-ceefax-white px-3 h-[38px] flex-shrink-0"
+                            className="flex items-center gap-2 border-2 border-ceefax-white px-3 h-[36px] flex-shrink-0"
                           >
                             <span className="text-ceefax-yellow font-bold text-sm">{overallRating}</span>
                             <span className="text-white/50 text-xs">{isExpanded ? '▲' : '▼'}</span>
