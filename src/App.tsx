@@ -52,15 +52,27 @@ const FAMOUS_PLAYERS = [
   { name: 'GAV',        ratings: { GKP: 7, DEFENCE: 7, MIDFIELD: 7, ATTACK: 7, NRG: 7, SPD: 8 }, position: Position.ATTACK },
 ];
 
+
+// Generates randomised MM2 ratings: GKP=10%, ATT/MID/DEF=30% each of total points
+const RANDOM_MM2_RATINGS = (): Record<StatKey, number> => {
+  const total = Math.floor(Math.random() * 20) + 30; // total pool 30-50 points
+  const gkp  = Math.max(1, Math.min(10, Math.round(total * 0.10 + (Math.random() * 2 - 1))));
+  const def  = Math.max(1, Math.min(10, Math.round(total * 0.30 + (Math.random() * 2 - 1))));
+  const mid  = Math.max(1, Math.min(10, Math.round(total * 0.30 + (Math.random() * 2 - 1))));
+  const att  = Math.max(1, Math.min(10, Math.round(total * 0.30 + (Math.random() * 2 - 1))));
+  const nrg  = Math.floor(Math.random() * 5) + 4;
+  const spd  = Math.floor(Math.random() * 5) + 4;
+  return { [Position.GKP]: gkp, [Position.DEFENCE]: def, [Position.MIDFIELD]: mid, [Position.ATTACK]: att, NRG: nrg, SPD: spd };
+};
+
 const GET_RANDOM_16 = (): Player[] => {
   const shuffled = [...FAMOUS_PLAYERS].sort(() => 0.5 - Math.random());
   const defenders = shuffled.filter(p => p.position === Position.DEFENCE).slice(0, 2);
   const midfielders = shuffled.filter(p => p.position === Position.MIDFIELD).slice(0, 2);
   const remaining = shuffled.filter(p => !defenders.includes(p) && !midfielders.includes(p));
   const selected16 = [...defenders, ...midfielders, ...remaining.slice(0, 12)].sort(() => 0.5 - Math.random());
-  // Randomly select exactly 10 for the first matchday
   const selectedIds = new Set(selected16.sort(() => 0.5 - Math.random()).slice(0, 10).map(p => p.name));
-  return selected16.map(p => ({ ...p, id: crypto.randomUUID(), isSelected: selectedIds.has(p.name) }));
+  return selected16.map(p => ({ ...p, id: crypto.randomUUID(), isSelected: selectedIds.has(p.name), ratings: RANDOM_MM2_RATINGS() }));
 };
 
 // Tap Zone component for MM2
@@ -196,11 +208,10 @@ export default function App() {
   const addPlayer = () => {
     if (!newPlayerName) return;
     const randomPosition = [Position.DEFENCE, Position.MIDFIELD, Position.ATTACK][Math.floor(Math.random() * 3)];
-    const r = Math.floor(Math.random() * 5) + 4;
     setPlayers([...players, {
       id: crypto.randomUUID(),
       name: newPlayerName,
-      ratings: { GKP: r, DEFENCE: r, MIDFIELD: r, ATTACK: r, NRG: r, SPD: r },
+      ratings: RANDOM_MM2_RATINGS(),
       position: randomPosition,
       isSelected: true
     }]);
