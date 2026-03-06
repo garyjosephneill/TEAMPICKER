@@ -360,8 +360,8 @@ export default function App() {
           </div>
           <div className="flex justify-between items-center text-sm font-bold border-b-4 border-ceefax-cyan pb-2">
             <div className="flex border-2 border-ceefax-white text-base font-bold">
-              <button onClick={() => setAppMode('MM1')} className={`px-3 py-1 tracking-[0.2em] ${appMode === 'MM1' ? 'bg-ceefax-white text-black' : 'bg-black text-ceefax-white'}`}>PARK</button>
-              <button onClick={() => setAppMode('MM2')} className={`px-3 py-1 border-l-2 border-ceefax-white tracking-[0.2em] ${appMode === 'MM2' ? 'bg-ceefax-white text-black' : 'bg-black text-ceefax-white'}`}>PRO</button>
+              <button onClick={() => setAppMode('MM1')} className={`px-3 py-1 tracking-[0.2em] ${appMode === 'MM1' ? 'bg-ceefax-white text-black' : 'bg-black text-ceefax-white'}`}>MM1</button>
+              <button onClick={() => setAppMode('MM2')} className={`px-3 py-1 border-l-2 border-ceefax-white tracking-[0.2em] ${appMode === 'MM2' ? 'bg-ceefax-white text-black' : 'bg-black text-ceefax-white'}`}>MM2</button>
             </div>
             {view === 'selection'
               ? <span className="text-ceefax-white">SELECTED {players.filter(x => x.isSelected).length}/{players.length}</span>
