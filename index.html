@@ -1,17 +1,76 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta name="theme-color" content="#000000" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <link rel="manifest" href="/manifest.json" />
-    <link rel="apple-touch-icon" href="https://picsum.photos/192" />
-    <title>GAFFER 2.0</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
-</html>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-mono: "Courier New", Courier, monospace;
+  --font-title: "Bebas Neue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --color-ceefax-red: #ff0000;
+  --color-ceefax-green: #00ff00;
+  --color-ceefax-yellow: #ffff00;
+  --color-ceefax-blue: #0000ff;
+  --color-ceefax-cyan: #00ffff;
+  --color-ceefax-white: #ffffff;
+
+  /* ── Theme tokens — swap these five to change colourway ── */
+  --color-t-background: #000000;  /* black  — page background                          */
+  --color-t-primary:    #00ffff;  /* cyan   — name borders, SQUAD, Team 1, header line */
+  --color-t-secondary:  #ff0000;  /* red    — GAFFER, Team 2, odd tap zones            */
+  --color-t-accent:     #ffff00;  /* yellow — title, stars, ratings                    */
+  --color-t-tertiary:   #ffffff;  /* white  — toggle, borders, player count, SHARE     */
+}
+
+body {
+  background-color: var(--color-t-background);
+  color: white;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-mono);
+  font-weight: 400;
+}
+
+.input-field {
+  @apply w-full bg-black border-2 border-white p-2 text-ceefax-white outline-none focus:border-ceefax-yellow transition-colors;
+}
+
+/* Custom range slider styling */
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: #ffffff;
+  cursor: pointer;
+  border-radius: 0;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: #ffffff;
+  cursor: pointer;
+  border-radius: 0;
+  border: none;
+}
+
+@layer utilities {
+  .hide-spinners::-webkit-inner-spin-button,
+  .hide-spinners::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  .hide-spinners {
+    -moz-appearance: textfield;
+  }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+
+.animate-marquee {
+  display: inline-block;
+  white-space: nowrap;
+  padding-left: 100%;
+  animation: marquee 13.8s linear infinite;
+}
