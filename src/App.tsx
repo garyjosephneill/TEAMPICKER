@@ -78,13 +78,13 @@ const GET_RANDOM_16 = (): Player[] => {
 // Tap Zone component for MM2
 function TapZone({ value, onChange, color }: { value: number; onChange: (v: number) => void; color: string }) {
   return (
-    <div className="flex items-center w-full" style={{ gap: '4px' }}>
+    <div className="flex items-stretch w-full" style={{ gap: '4px', height: '24px' }}>
       {Array.from({ length: 10 }).map((_, i) => (
         <button
           key={i}
           onClick={() => onChange(i + 1)}
           className={`flex-1 ${i < value ? color : 'bg-white/10'}`}
-          style={{ aspectRatio: '1 / 1', WebkitTapHighlightColor: 'transparent', border: 'none', padding: 0, minWidth: 0 }}
+          style={{ height: '24px', minWidth: 0, WebkitTapHighlightColor: 'transparent', border: 'none', padding: 0, display: 'block' }}
         />
       ))}
     </div>
@@ -160,10 +160,15 @@ export default function App() {
     fetch(`/api/squad-status/${squadId}`).then(r => r.json()).then(setSquadStatus);
     fetch(`/api/players/${squadId}`).then(r => r.json()).then(data => {
       if (data.length > 0) {
-        setPlayers(data.map((p: any) => ({
-          ...p,
-          ratings: { ...DEFAULT_RATINGS(), ...(typeof p.ratings === 'string' ? JSON.parse(p.ratings) : p.ratings) }
-        })));
+        setPlayers(data.map((p: any) => {
+          const r = typeof p.ratings === 'string' ? JSON.parse(p.ratings) : p.ratings;
+          const merged = { ...DEFAULT_RATINGS(), ...r };
+          // If all positional ratings are equal, replace with randomised ratings
+          const isFlat = merged[Position.GKP] === merged[Position.DEFENCE] &&
+                         merged[Position.DEFENCE] === merged[Position.MIDFIELD] &&
+                         merged[Position.MIDFIELD] === merged[Position.ATTACK];
+          return { ...p, ratings: isFlat ? RANDOM_MM2_RATINGS() : merged };
+        }));
       } else {
         setPlayers(GET_RANDOM_16());
       }
