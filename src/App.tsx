@@ -398,47 +398,29 @@ export default function App() {
     <div className="flex flex-col h-[100dvh] max-w-5xl mx-auto overflow-hidden bg-t-bg text-white uppercase" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
       <main ref={mainRef} className="flex-grow overflow-y-auto relative" onScroll={handleScroll}>
         <header ref={headerRef} className="sticky top-0 z-10 bg-t-bg p-4 pt-8 shrink-0">
-          {/* Title row */}
-          <div className="mb-[11px]">
+          {/* Title row with ball right-aligned */}
+          <div className="mb-[11px] flex items-center justify-between">
             <div className="text-t-c4 font-title font-normal text-[50px] tracking-normal uppercase leading-none">
               {appMode === 'MM1' ? 'MAN MANAGER' : 'MICRO MANAGER'}
             </div>
+            <button
+              onClick={() => setView(v => v === 'settings' ? 'squad' : 'settings')}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, opacity: view === 'settings' ? 1 : 0.75, flexShrink: 0, alignSelf: 'center' }}
+            >
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAArwAAAJYCAYAAACAbzXXAAABCGlDQ1BJQ0MgUHJvZmlsZQAAeJxjYGA8wQAELAYMDLl5JUVB7k4KEZFRCuwPGBiBEAwSk4sLGHADoKpv1yBqL+viUYcLcKakFicD6Q9ArFIEtBxopAiQLZIOYWuA2EkQtg2IXV5SUAJkB4DYRSFBzkB2CpCtkY7ETkJiJxcUgdT3ANk2uTmlyQh3M/Ck5oUGA2kOIJZhKGYIYnBncAL5H6IkfxEDg8VXBgbmCQixpJkMDNtbGRgkbiHEVBYwMPC3MDBsO48QQ4RJQWJRIliIBYiZ0tIYGD4tZ2DgjWRgEL7AwMAVDQsIHG5TALvNnSEfCNMZchhSgSKeDHkMyQx6QJYRgwGDIYMZAKbWPz9HbOBQAAAcBklEQVR4nO3dWXbrOBIFQLpP7X/L7g+Xy5MGkiKAHCIW0C0TOVxBeqptAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgIreVr8AgOze39/fR/7vv729mdUALzBEAf41OrjOJigDfDAMgTaqBdpXCcRAF4YdUIpQew1hGKjEQAPSEm7nEoKBrAwvIAXhNiYhGMjAoALCEW5zE4KBaAwlYDkBtzYBGFjNEAKmE3B7E4CB2QwdYDgBl0cEYGA0QwYYQsjlDOEXGMFgAS4j5HIl4Re4imECnCbgMpMADJxleACHCLlEIPwCRxgYwC6CLhEJvsAeBgVwl5BLJsIvcI/hAPwg5FKB8At8ZyAA27YJutQl/AKGADQm5NKJ4At9aX5oSNClM8EX+tH00ISQC38Jv9CDRofiBF14TvCF2jQ4FCXownGCL9SksaEYQRdeJ/hCLRoaChByYRzhF/LTxJCYoAvzCL6Ql+aFhARdWEfwhXw0LSQi6EIcgi/koVkhAUEX4hJ8Ib7/rX4BwGPCLsSmRyE+70ohKEsU8nHbCzFpTAhG0IX8BF+IxVcaIIj3f61+Ha+w5LlK9lqq0M9QSeqBAhVkX4r3gkn2v4s1qtZT9gAP2WlAWCjrEt+7vLP+faxRva6EXlhH88ECGRf22WWd8W9lvk71JfjCfJoOJuq8nDP+7YzXub4EX5hHs8EkmRbyqEWc6RkwnjoTemEWjQaDWb4/ZXoejKPWfhJ8YSwNBoNYto9lej5cR609JvjCGBoLBsiyYFcv1yzPiWuot31WPyeoSFPBhTIs1IjLNMNz4zw1d07E5wZZaSa4SPQFGn15Rn9+nKPuXhP9+UEWGgleZGFeJ/qz5Bi1d51MzxIi0kDwgshLMvOCjPxceU7tjZH5ucJqmgdOsBTHi/yMuU/9jVXl+cJsGgcOsgjnifqsuU0NzlPxWcNIGgYOiLj8Oiy+iM+dL2pwjQ7PHa6iWWCHiMtu23otvKhn0J0aXK/TGcBZmgSeiLjkOi+4iOfRkRqMpfN5wB4aBB6IttgstQ/RzqUbdfghWh06F7hPc8ANFll80c6oC7X4V7RadEbwl6aAXyyvXKKdV1Xq8LFodei84CcNAd9EWloW1n6Rzq0itbhfpFp0bvBFM8BmSVUQ6QwrUY/nRKpHZwgCL1hMxUQ6z8zU4usi1aLzpDsNQGtRFpJldK0o55qVerxWlHp0rnSm+GnLEqovyhlnoRbHiVKLzpiuFD4tRVg+Fs8cEc46A/U4R4R6dNZ0pOhpxbLpKcK5R6Ym54tQk86dThQ7bVgwRKiBSNTjWhHqUQ3Qxf9WvwCYwWJh25zBd57FehHOIMJshBmWNxuMtnqgR1hq/LW6LlZRjzGtrkd1QXVueCnNEuGejmfT8W/OYvXZrJ6VMJrhR1krB/jq5cV+XRa9mszD7ILrKWxKsjA4qmrwVY85mWFwLUVNKatDi0WR2+r6uZp6zG11PaofKlHMlOFGhCusDhlXUZN1mG3wOoVMCRYCV8safNVjTWYcvMavNJCeRcAIGc8242tmn5Vnm/XNH3xnOJKasMsM0Re+WuzDzINzFC9prRr8hn5PUUOveuzJ/INjfKWBlAx7Zot49hFfE3OsOvuob/zgGcOSdIRdVlu99NUin8xD2McNL6kY7kSwsh7UIt+56YV9BF7SEHaJZEVdqEVuEXrhOcOTFFYMVuGCvUbXp1pkL7MSbnPDS3gGONGNrBe1yBEr6sVNLxkIvIQm7JLFiLpRi5wh9MJfAi9hCbsA5wi98JPAS0jCLsBrhF74IvDCJuwCNZlt8EHgJZzZNwQWAlDZ7BnnlpeIBF5CEXYBrif00p3ASxjCLsA4Qi+dCbyEIOwCjCf00pXAy3LCLsA8Qi8dCbwsJewCzCf00o3AyzLCLsA6Qi+dCLy0IOwC/GU20oXAyxIz3+kb6AD3zZyRbnlZReBlOmEXIBahl+oEXqYSdgFiEnqpTOBlGmEXIDahl6oEXqYQdgFyEHqpSOClFGEX4HVmKdUIvAw36x28AQ1wnVkz1S0vMwi8DCXsAuQl9FKFwMswwi5AfkIvFQi8pCbsAoxn1pKdwMsQ3qkDcJTdwSgCL5fzVQaAeny1gcwEXi4l7ALUJfSSlcBLOsIuwDpmMBkJvFxmxjtygxZgvRmz2C0vVxJ4uYSwC9CL0EsmAi8vM5AAGMWO4QoCLym43QWIx2wmC4GXl/gqA0BvvtpABgIvpwm7AGyb0Et8Ai9hCbsAeZjZRCbwcop32gDMZvdwlsDLYb7KAMAtvtpAVAIv4Qi7AHmZ4UQk8HLI6HfWBiVAfqNnuVtejhJ42c2AASAKO4kjBF7CcLsLUIeZTiQCL7v4KgMAR/lqA1EIvAAAlCbw8pTbXQDOcstLBAIvDwm7ALxK6GU1gRcAgNIEXu5yuwvAVdzyspLAyxLCLkA/Zj+rCLzc5J0yANnYXdwj8PKHrzIAMIqvNrCCwAsAQGkCLz/MeGfs3TdAX/YMKwi8AACUJvDyH++IAajCTuM7gZclDCKAfsx+VhF42bbNEAKgHruNTwIvBgIAZdlxbJvAy0KGEEAfZj4rCbzNGUAAVGfXIfACAFCawNtYhHe8EV4DAGNFmPURXgPrCLwAAJQm8DblnS4A3dh9fQm8LGcAAdRlxhOBwNuQ4QNAV3ZgTwIvAAClCbzNRH1nG/V1AXBe1Nke9XUxjsALAEBpAm8j3tECwAc7sReBlzAMH4A6zHQiEXgBAChN4G3CO20A+Mlu7OOf1S8AILtRS/Pzf/ft7e1txP8+QBdueBvI9A4202uFbZtTs/qCbDLVbKbXynkCL8BJMxelpQxwnsBbnCUJ13v/V5f/X6hOX9Un8BKOwUNkEeozwmuAe9QnEQm8ADtFWuSRXgtAdAJvYRYiXCPqVwmivi7ISC/VJvASksFDFBlqMcNrpAe1SFQCb1GGDrwm2+1pttcLEemhugRegF8yL73Mrx1gFIG3oCoLr8rfQS4V6q7C30A+Vequyt/BT/7TwgBbvSXnP0sM8MUNL9BetbD7XeW/DWAv7/yLqbjc3FAxSsV+eUQvMUrFXtIvtbjhBVqquKCf6fg3A2ybwAs01Dn4df7bgb5c1xdSeZH5aIkrVO6RM/QVV6jcV3qkDje8QAuVl/JZngnQhcBbhMUF9+mP+zwbuE9/1OF3eIGyLKt9/GYvUJ0bXlIQXDhKzRznmXGUmiELgbcAAwe+vP9r9evIyvODn/RDDQIvUIbFdB3PEqhE4CUNC5hH1Mf1PFMeUR9kIvAmZ+DQnY/gx/J8wa6tQOAF0rKE5vGsgcwEXlKxdPmkFubzzPmkFshG4E3MwKEjH7Gv5fnTlbrPTeAF0rBw4nAWQCYCL+lYtP24VYzJufTkzMlI4AVCs1zjc0ZAdAJvUhYMHajzPJwVHajzvAReUjJ0avNReU7OrT7nS1YCLxCKhZqfMwSiEXgTskyoSm3X4SypSm3nJPCSlqFTh4/Ca3KutThLMhN4gaUs0fqcMbDaP6tfANCTENTL53m/vb29rX4tQD9ueJMREqhAHffl7KlAHecj8JKaoZOPM0MN5OPMyM5XGoApLEy+8xUHYCY3vMBwwi73qA1gBoE3EYvhNs8lNufDM2okNudzm+eSi680AENYBhzhKw7ASG54gcsJu5yldoARBF5KsCRj8F/W4grqKA7nQBUCbxKGDtGpUa6mpohOjeYh8FKGwbOOZ88oamsNt+xU4x8HJGHwHOcfv4ynLplJT4+ln89Rlzk4pCQMotcYSNdTk6ygl6+lj1+nJnNwSEkYStcxnF6nHllJD79G/15LPebgkBIwnMYxqI5Ri0Sif/fTu2OpxfgcUAIG1RwG1mPqkIj07X16dh51GJ8DSsDQms/w+qL+yEDPftCva6i/+BxQAgbYWp0Hmdojk469qkdj6Fh72TigBAy0ODoNNXVHRh16VG/G06HusnNAwRlscVUdcGqOCqr1p76Mr1rNVeNwgjPkcqgy6NQblWTvS/2YS/Z6q87hBGfg5ZN16Kk1KsrWj/owr2y11o3DCc7wyy3DAFRjdBC5F/VgDZFrDIE3PIOwjojDUH3RSaQe1Hv1RKov/nI4gRmIda0ejGqLzlb1n76rb/Vs5z4HE5jh2MPsAamuYF7f6bdeBN64HExgBmU/o4elmoIvo/pNn/Ul8MblYAIzNHu7cnCqJbjvil7TY2ybwBuZgwnMAOXTK0NUHcFzZ3pMb/GbwBuXgwnMML3t7e3trfOzOTJQOz8nOGpPb3Xvqc9n1P053CPwxuVgAjNQfro3SLo/p1vPpfszgVf87qnu/fQoxHV/Nr8JvHE5mKAMkZ/2DpHuz6377TdwDZ8knSf0xuRQgjJAPvjuKsAcrwY1M/eDwBuTQwnK4PArBQCjXR3OzFqBNyqHElT3oTFyYHR/tkBvfu97LIE3JocSVNeB4b86BnC9FSGs63wVeGNyKEF1HBSrh0THZw7UtXqmblvPuRrhufOXQwmq05CIOBw6PX+gjojzdNt6zdSoZ9CdQwmqy3DIMBi6nAWQU4Y5um19ZmmW8+jGoQRkKMTV5WyA2DLOz23rM0Oznk9lDiSg6gOhyiCofk5ALFVm57bVn5+VzqoKBxJQ5UFQdQhUPjNgnaozc9tqz83K55aVAwmo4hDo1PwVzw+Yp9O83LaaM7PbGWbgQAKq1vydG7/aWQJjdJ6T21ZvVnY/z4gcSECVGl/Tf6l0rsBrzMa/Ks1I5xuPAwmoQtNr9scqnDFwjLm4T4X56KzjcSABZW92jX5M9vMG7jMPz8k+F517PA4koKyNrsFfl/XsgS9m4XWyzkQ1EI8DCShjg2vu62WsA+jKDBwn4yxUD/E4kICyNbfGHi9bTUAHZt882Wag2ojHgQSUpbE19BpZ6gOqMvvWyTL/1Eg8/1v9AshJM6/j2QNdmX+cJfByyNu/Vr+O7pwBrKH31rOHOEPgDSbyxzUGDABRRN5JkXd5VwIvu0QeLAD0ZDexl8DLQz46isu5wFx6LiZ7ij0EXu4yQADIws7iEYGXmwwOALJx28s9Ai8/GBa5OCuYQ6/l4rz4TeDlPwYEAFXYaXz3z+oXwHqGAgAVfe43PxOGG97mhN38nCGMpcfyc4YIvI0ZAAB0Yef15isNDWl6ADryFYe+3PA2I+zW5FxhDL1Vk3Ptxw1vE5obAL647e3FDW8Dwi4A3GZH9iDwFqeR+3DWcC091Yezrk/gBQCgNIEXAIDSBF4oxMdycA29BLUIvAAAlCbwAgBQmsALxfgoFl6jh6AegRcAgNIE3uL8F2QA4DG7sj6BFwrykSyco3egJoE3GMMWAHKzy+MReAEAKE3ghaLcMMAxegbqEngBAChN4AUAoDSBFwrzES3so1egNoEXAIDSBF4AAEoTeAEAKE3gheJ8NxEe0yNQn8ALAEBpAi8AAKUJvA28v7+/r34NrOUjW7hNb2BH9iDwBmQAA0BOdnhMAi8AAKUJvNCEWwf4SU9AHwIvAAClCbwAAJQm8EIjPsKFD3oBehF4AQAoTeBtwu8MAsBPdmMfAi8046NcutMD0I/AG5SBDAC52N1xCbwAAJQm8EJDbiHoSu1DTwIvAAClCbwAAJQm8Dbi51f4zke7dKPm+c5O7EXgDcxwBgB4ncALAPAil1SxCbzQmAFNF2odehN4AQAoTeBtxpf0AejOLuxH4IXmfNRLdWocEHiDM6gBIDa7Oj6BFwCA0gRewO0EZaltYNsE3pZ8WR+AruzAngReAABKE3gT8JEcM6gzqlHTzKDOchB4AQAoTeBtyneYAOjG7utL4AX+46M5qlDLwHcCLwAApQm8SbitAIBY7OY8BF7gBwOc7NQw8JvA25gv7wPQhZ3Xm8ALAEBpAm8iPqYDgBjs5FwE3uZ8xMMtBjlZqV1usesQeAEAKE3gBQCgNIE3GR/XMYtaIxs1yyxqLR+BF99tAqAsO45tE3gBAChO4AXu8rEdWahV4BGBN6ERg91HPgBUM2K3eXOVk8ALAEBpAi/wkNsMolOjwDMCb1K+1gAA9/k6A98JvAAAlCbwAk+51SAqtQnsIfAm5msNAPCXrzPwm8ALAEBpAi+wi9sNolGTwF4CL3/4WgMAWdlh3CLwJueGAwDGsmvzE3iB3Qx9olCLwBECLzf5SAiAbOwu7hF4C3DTAQBj2LE1CLzc5Z0ytxj+rKYGucXO4hGBtwgLAADgNoEXAOAGl0l1CLw85CMibrEEWEXtcYtdxTMCbyEWAQBcw06tReDlKe+cAYjKjmIPgRc4xe0Hs6k54CyBtxgLAQBeY5fWI/Cyi4+MAIjGbmIvgbcg70yZRa0xi1oDXiHwspt30gBEMWoneXNVk8ALAEBpAm9Ro96huuXlN7chQBXmWV0CLwDhebPNd+qBowTewrxTBSoRchjJzqxN4OUwS4ffLApmMX9QA5wh8AKQisADHCXwFucfrwEVmUE9+SkyzhJ4gZcJH6yg7oC9BN4G3PIykjpgJfXXh9tdXiHwAqcJG0SgDoFnBN4m3PJyNWdPJOqxNre7vErgBQ4TLohIXQL3CLyNuOXlCs6byNRnPc6UKwi8wG4WDxmoU/bwdYZeBF4uYcHU54zJRL3W4By5isDbjHe0nGHpkJG65R67sB+Bl8tYLjU5VzJTv3k5O67kHU5TIweJd851zF44aqcPtcUjdhRXc8ML3CSQMNLs83ZbCL0JvE2NXDYWS37CLjMIvdzidpcRBF7gB2GXmYReYAaBtzG3vPwm7LKC0Msnt7uMIvAC27YJu6wl9AIjCbzNueVl24RdYhB6e3O7y0gCL0Jvc8IukQi9PTkHRhN4oTFhl4iEXq5k7rBtAi//csvbj7BLZEJvH77KwAwCLzQk7JKB0AtcReDlP255exB2yUTorc3tLrMIvExjkawn7JKR0FuT58xMAi8/CCh1CbtkJvRyhPnDbwIvU1kiawi7VCD01uHZMpvAyx/CSi3CLpUIvfmNfqZmELcIvNzkH7DVIOxSkdDLPWYQ9wi8LGGBjCfsUpnQm5PnyCoCL3eNXigG3zjCLh0Ivbn4KgMr/bP6BQDXEnbp5O3t7W1mzb+/v7+r+X28QSASTctT3pXnIezSldpfJ0KwdR48o0DYReiNz8KnOz0wVoRge0u3c+AcX2mAAix68PWGK0QNtfCqUo3KWG55YxJ24Sc98VyVYJvx2bOGQmG3GQPS8DrGYofb9MaHKsH2nqjPnXgUCoe45Y3DQofHuvRI9VB7j5nEEYqFw4Te9boscnhVpV7pGmxvMZM4SsFwWKUFkpHnD8dk6xnB9jlziaMUDKdEGcjdhl62xQ1RROudKDM0I3OJMxQNp0Ue2BUHYrSFDdms6KHIczIjc4mzFA6nZRzkWYelsAvXyDi3+GI2cZbC4SWVlkfUQSrswrUqza1OzCZeoXh4WfXlsXLICrswRvW5VY3ZxKsUEC/rujhGD2BhF8bqOrsyMp94lQLiEhbHlysGs7ALc5hd8ZlPXEERcRmL47k9g1vYhbnMrrjMJ66ikLiUxXHO51AXdmENsyse84kr/W/1CwA+lq2wC+voB6hN4OVSlkYOzgn+0hdxOAuuJvByOYMqNucD9+mP9ZwBIwi8DGFgxeRc4Dl9so5nzygCLzRhkcB++gVqEXgZxsKIw1nAcfpmLs+bkQRehjLA1nMGcJ7+mcNzZjSBl+EMsnU8eyA6c4oZBF4oyhIBgA8CL1MIX3N53kAGZhWzCLxMY7DN4TnDdfwnh8cxq5hJ4GUqA24szxfIwKxiNoGX6Qy6MTxXIAOzihUEXpYw8K7leQIZmFWsIvACAFCawMsy3ukD9GHms5LAy1IGIBCVX2i4jlnPagIvyxmEr7OYgajMeCIQeAnBQASox2wnCoGXMAxGgDrMdCIReAnFgATIzywnGoGXcAxKgLzMcCISeAEAKE3gJSQ3BMf5pQa4jn46x+wmKoGXsAxOgDzMbCITeAnNAAWIz6wmOoGX8AxSgLjMaDIQeEnBQAWIx2wmC4GXNAxWgDjMZDIReEnFgAVG8wsNz5nFZCPwko5Be59FDYxmBpORwEtKBi7AfGYvWQm8pGXwAsxj5pKZwEtqBjDAeGYt2Qm8pGcQA4xjxlKBwEsJBjJwBf/w8yezlSoEXsowmD9Y2MAVzFQq+Wf1C4ArfQ5ooQ/gHEGXitzwUpKBDXCc2UlVAi9lGdwA+5mZVCbwUpoBDvCcWUl1Ai/lGeQA95mRdCDw0kK3ge4f7cFxHfum22ykL4GXNgx2gC9mIp34WTJa8bNlQHeCLh254aUlAx/oyOyjK4GXtgx+oBMzj84EXlqzAIAOzDq6E3hpzyIAKn+v34yDbdME8E21pWfRwT7Ven/b9D9854YXvrEggArMMvhJ4IVfLAogMzMM/vI7vHCD3+sFshF04T43vPCABQJkYFbBYwIvPGGRQG3ZP8kxo+A5TQIHZFyMliE8lrGvt01vwxFueOEACwaIwCyCYwReOMiiAVYyg+A4v9IAJ/gVB2A2QRfOc8MLL7CAgBnMGniNBoKLRL/ttTDhL30LPWgkuFD05bltFihsm16FbjQTDJBhmW6bhUo/GXpTX8L1NBUMkmGxfrJgqUwvAhoLBrNsYQ29B3zSYDBJpuW7bRYwOekz4BaNBhNlW8bbZiGTg94CHtFssEDG5bxtFjSx6CNgL00HC1nYcJy+AY7SfLBY1uX9yRJnBn0CvEIDQhDZF/q2WepcS08AV9GIEEyFJb9tFj3nqH9gBA0JQVVZ/Ntm+fOYWgdG05gQWKUg8EkgYNvUNjCX5oQEKoaDT0JCD2oYWEmTQiKVQ8O2CQ7VqFcgCs0KCVUPEt8JFTmoSSAyTQuJdQoZn4SNGNQekInmhQI6ho/vBJGx1Jf6guw0MRTSPZh8J6Sco4Y+qB+oRUNDUYLLfd3DjNq4r3ttQFUaG4oTbo7LHnqc+XHZzxx4TINDE0LQOKPDkrMbR9CFHjQ6NCRA0ZmQC/1oemhM8KUTQRf60vyA4EtZQi6wbQIv8IvwSwWCLvCdgQDcJfySiZAL3GM4ALsIv0Qk5AJ7GBTAIYIvqwm5wFGGBnCa8MssQi7wCgMEuIwAzJWEXOAqhgkwhPDLGUIuMILBAgwn/PKIkAuMZsgA0wnAvQm4wGyGDrCcAFybgAusZggB4QjAuQm4QDSGEpCCEByTcAtkYFABaQnBcwm3QFaGF1CKEPw6wRaoxlAD2hCGfxJsgS4MO4B/VQvEAi3AB8MQ4EWjg7LgCgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD89X+YMrAtHWQROgAAAABJRU5ErkJggg==" width="28" height="28" alt="settings" style={{display:"block"}} />
+            </button>
           </div>
-          {/* Toggle row with SVG ball on right */}
+          {/* Toggle row — no ball here */}
           <div className="flex justify-between items-center text-sm font-bold border-b-4 border-t-c2 pb-2">
             <div className="flex border-2 border-t-c1 text-base font-bold">
               <button onClick={() => setAppMode('MM1')} className={`px-3 py-1 tracking-[0.2em] ${appMode === 'MM1' ? 'bg-t-c1 text-t-bg' : 'bg-t-bg text-t-c1'}`}>MM1</button>
               <button onClick={() => setAppMode('MM2')} className={`px-3 py-1 border-l-2 border-t-c1 tracking-[0.2em] ${appMode === 'MM2' ? 'bg-t-c1 text-t-bg' : 'bg-t-bg text-t-c1'}`}>MM2</button>
             </div>
-            <div className="flex items-center gap-3">
-              <span className="text-t-c1 text-sm">
-                {view === 'selection'
-                  ? `SELECTED ${players.filter(x => x.isSelected).length}/${players.length}`
-                  : `PLAYERS: ${players.length}`}
-              </span>
-              <button
-                onClick={() => setView(v => v === 'settings' ? 'squad' : 'settings')}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, opacity: view === 'settings' ? 1 : 0.75, flexShrink: 0 }}
-              >
-                <svg width="26" height="26" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="50" cy="50" r="46" stroke="white" strokeWidth="4"/>
-                  {/* centre pentagon */}
-                  <polygon points="50,32 63,41 58,57 42,57 37,41" stroke="white" strokeWidth="3" fill="none"/>
-                  {/* top */}
-                  <polygon points="50,6 62,14 63,27 50,32 37,27 38,14" stroke="white" strokeWidth="2.5" fill="none"/>
-                  {/* top-right */}
-                  <polygon points="63,14 78,18 84,32 74,42 63,41 62,27" stroke="white" strokeWidth="2.5" fill="none"/>
-                  {/* bottom-right */}
-                  <polygon points="74,42 84,32 94,46 88,62 74,62 63,57" stroke="white" strokeWidth="2.5" fill="none" transform="rotate(0 50 50)"/>
-                  {/* bottom */}
-                  <polygon points="58,57 74,62 70,78 50,82 30,78 26,62 42,57" stroke="white" strokeWidth="2.5" fill="none"/>
-                  {/* bottom-left */}
-                  <polygon points="26,62 16,46 26,32 37,41 42,57 26,62" stroke="white" strokeWidth="2.5" fill="none"/>
-                  {/* top-left */}
-                  <polygon points="26,32 38,14 50,6 50,32 37,41" stroke="white" strokeWidth="2.5" fill="none"/>
-                </svg>
-              </button>
-            </div>
+            <span className="text-t-c1 text-sm">
+              {view === 'selection'
+                ? `SELECTED ${players.filter(x => x.isSelected).length}/${players.length}`
+                : `PLAYERS: ${players.length}`}
+            </span>
           </div>
           {deleteMode && (
             <div className="text-t-c3 text-xs font-bold tracking-widest mt-2 text-center">SWIPE LEFT TO DELETE</div>
@@ -717,14 +699,13 @@ export default function App() {
 
           {/* ── SETTINGS VIEW ── */}
           {view === 'settings' && (
-            <div className="flex flex-col items-center justify-center gap-10 py-24">
-              {/* KITS */}
+            <div className="flex flex-col items-center justify-center gap-4 py-16">
               <button
                 onClick={() => setKitOpen(o => !o)}
-                className={`w-[260px] border-4 border-t-c1 py-4 text-2xl font-bold tracking-widest transition-all ${kitOpen ? 'bg-t-c1 text-t-bg' : 'bg-t-bg text-t-c1'}`}
+                className={`w-full border-4 border-t-c1 py-2 text-xl font-bold transition-all ${kitOpen ? 'bg-t-c1 text-t-bg' : 'bg-t-bg text-t-c1'}`}
               >KITS</button>
               {kitOpen && (
-                <div className="w-[260px] border-2 border-t-c1">
+                <div className="w-full border-2 border-t-c1">
                   {KITS.map(kit => (
                     <button
                       key={kit.name}
@@ -741,22 +722,15 @@ export default function App() {
                   ))}
                 </div>
               )}
-              {/* TRANSFERS */}
-              <button
-                className="w-[260px] border-4 border-t-c1 py-4 text-2xl font-bold tracking-widest bg-t-bg text-t-c1"
-                onClick={() => {/* future */ }}
-              >TRANSFERS</button>
-              {/* T&C'S */}
-              <button
-                className="w-[260px] border-4 border-t-c1 py-4 text-2xl font-bold tracking-widest bg-t-bg text-t-c1"
-                onClick={() => {/* future */ }}
-              >T&amp;C'S</button>
+              <button className="w-full border-4 border-t-c1 py-2 text-xl font-bold bg-t-bg text-t-c1">TRANSFERS</button>
+              <button className="w-full border-4 border-t-c1 py-2 text-xl font-bold bg-t-bg text-t-c1">T&amp;C'S</button>
             </div>
           )}
 
         </div>
       </main>
 
+      {view !== 'settings' && (
       <div className="shrink-0 bg-t-bg p-4 flex flex-col gap-4">
         <nav className="flex w-full font-bold text-xl gap-4">
           <button onClick={() => setView('squad')} className={`flex-1 py-2 transition-all border-4 border-t-c2 ${view === 'squad' ? 'bg-t-c2 text-t-bg' : 'bg-t-bg text-t-c2'}`}>SQUAD</button>
@@ -764,6 +738,7 @@ export default function App() {
         </nav>
         <div className="text-center text-xs font-normal text-white bg-t-bg normal-case" style={{ fontFamily: 'Courier New, monospace' }}>Copyright - Gary Neill Limited</div>
       </div>
+      )}
     </div>
     </ErrorBoundary>
   );
