@@ -352,7 +352,7 @@ export default function App() {
     <ErrorBoundary>
     <div className="flex flex-col h-[100dvh] max-w-5xl mx-auto overflow-hidden bg-t-background text-white uppercase" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
       <main ref={mainRef} className="flex-grow overflow-y-auto relative" onScroll={handleScroll}>
-        <header ref={headerRef} className="sticky top-0 z-10 bg-black p-4 pt-8 shrink-0">
+        <header ref={headerRef} className="sticky top-0 z-10 bg-t-background p-4 pt-8 shrink-0">
           <div className="mb-[11px]">
             <div className="text-t-accent font-title font-normal text-[50px] tracking-normal uppercase">
               {appMode === 'MM1' ? 'MAN MANAGER' : 'MICRO MANAGER'}
@@ -360,8 +360,8 @@ export default function App() {
           </div>
           <div className="flex justify-between items-center text-sm font-bold border-b-4 border-t-primary pb-2">
             <div className="flex border-2 border-t-tertiary text-base font-bold">
-              <button onClick={() => setAppMode('MM1')} className={`px-3 py-1 tracking-[0.2em] ${appMode === 'MM1' ? 'bg-t-tertiary text-black' : 'bg-black text-t-tertiary'}`}>MM1</button>
-              <button onClick={() => setAppMode('MM2')} className={`px-3 py-1 border-l-2 border-t-tertiary tracking-[0.2em] ${appMode === 'MM2' ? 'bg-t-tertiary text-black' : 'bg-black text-t-tertiary'}`}>MM2</button>
+              <button onClick={() => setAppMode('MM1')} className={`px-3 py-1 tracking-[0.2em] ${appMode === 'MM1' ? 'bg-t-tertiary text-black' : 'bg-t-background text-t-tertiary'}`}>MM1</button>
+              <button onClick={() => setAppMode('MM2')} className={`px-3 py-1 border-l-2 border-t-tertiary tracking-[0.2em] ${appMode === 'MM2' ? 'bg-t-tertiary text-black' : 'bg-t-background text-t-tertiary'}`}>MM2</button>
             </div>
             {view === 'selection'
               ? <span className="text-t-tertiary">SELECTED {players.filter(x => x.isSelected).length}/{players.length}</span>
@@ -381,12 +381,12 @@ export default function App() {
                   onChange={e => setNewPlayerName(e.target.value.toUpperCase())}
                   placeholder="NAME . . ."
                   onKeyDown={e => e.key === 'Enter' && addPlayer()}
-                  className="flex-1 bg-black border-2 border-t-primary text-white placeholder-white/30 uppercase outline-none px-2 font-bold"
+                  className="flex-1 bg-t-background border-2 border-t-primary text-white placeholder-white/30 uppercase outline-none px-2 font-bold"
                   style={{ height: 36, fontSize: '16px', letterSpacing: '2px' }}
                 />
                 <button
                   onClick={addPlayer}
-                  className="flex-shrink-0 bg-black border-2 border-t-secondary text-t-secondary font-bold tracking-widest text-lg active:bg-t-secondary active:text-black transition-colors"
+                  className="flex-shrink-0 bg-t-background border-2 border-t-secondary text-t-secondary font-bold tracking-widest text-lg active:bg-t-secondary active:text-black transition-colors"
                   style={{ width: 88, height: 36 }}
                 >ADD</button>
               </div>
@@ -421,7 +421,7 @@ export default function App() {
                             onBlur={() => setEditingPlayerId(null)}
                             onKeyDown={e => e.key === 'Enter' && setEditingPlayerId(null)}
                             onChange={e => setPlayers(players.map(x => x.id === p.id ? { ...x, name: e.target.value.toUpperCase() } : x))}
-                            className="border-2 border-t-accent p-2 flex-1 text-sm bg-black text-ceefax-white uppercase outline-none font-bold h-[36px]"
+                            className="border-2 border-t-accent p-2 flex-1 text-sm bg-t-background text-ceefax-white uppercase outline-none font-bold h-[36px]"
                           />
                         ) : (
                           <div
@@ -443,7 +443,7 @@ export default function App() {
                                 style={{ width: 36, height: 36, lineHeight: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                                 className={`text-[14px] md:text-[12px] font-bold tracking-wide flex-shrink-0 ${i < arr.length - 1 ? 'border-r-2 border-t-tertiary' : ''} ${p.position === pos
                                   ? 'bg-t-tertiary text-black'
-                                  : 'bg-black text-white/75'}`}
+                                  : 'bg-t-background text-white/75'}`}
                               >
                                 {pos === Position.DEFENCE ? 'DEF' : pos === Position.MIDFIELD ? 'MID' : pos === Position.ATTACK ? 'ATT' : pos}
                               </button>
@@ -534,7 +534,7 @@ export default function App() {
                   <button
                     key={p.id}
                     onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, isSelected: !x.isSelected } : x))}
-                    className={`p-2 border-2 text-left text-sm transition-all font-bold ${p.isSelected ? 'bg-t-accent text-black border-t-accent' : 'bg-black text-ceefax-white border-white/20'}`}
+                    className={`p-2 border-2 text-left text-sm transition-all font-bold ${p.isSelected ? 'bg-t-accent text-black border-t-accent' : 'bg-t-background text-ceefax-white border-white/20'}`}
                   >
                     {p.name}
                   </button>
@@ -543,7 +543,7 @@ export default function App() {
               <div className="flex justify-center">
                 <button
                   onClick={balanceTeams}
-                  className={`w-[300px] border-4 border-t-accent p-2 text-lg font-bold transition-all ${isGenerating ? 'bg-t-accent text-black' : 'text-t-accent bg-black'}`}
+                  className={`w-[300px] border-4 border-t-accent p-2 text-lg font-bold transition-all ${isGenerating ? 'bg-t-accent text-black' : 'text-t-accent bg-t-background'}`}
                 >
                   GENERATE TEAMS
                 </button>
@@ -551,8 +551,8 @@ export default function App() {
               {teams && (
                 <div className="flex justify-center">
                   <div className="flex w-[300px] border-4 border-t-tertiary text-lg font-bold">
-                    <button onClick={() => setShowPlayerDetails(false)} className={`flex-1 p-2 transition-all ${!showPlayerDetails ? 'bg-t-tertiary text-black' : 'bg-black text-t-tertiary'}`}>HIDE INFO</button>
-                    <button onClick={() => setShowPlayerDetails(true)} className={`flex-1 p-2 transition-all ${showPlayerDetails ? 'bg-t-tertiary text-black' : 'bg-black text-t-tertiary'}`}>SHOW INFO</button>
+                    <button onClick={() => setShowPlayerDetails(false)} className={`flex-1 p-2 transition-all ${!showPlayerDetails ? 'bg-t-tertiary text-black' : 'bg-t-background text-t-tertiary'}`}>HIDE INFO</button>
+                    <button onClick={() => setShowPlayerDetails(true)} className={`flex-1 p-2 transition-all ${showPlayerDetails ? 'bg-t-tertiary text-black' : 'bg-t-background text-t-tertiary'}`}>SHOW INFO</button>
                   </div>
                 </div>
               )}
@@ -591,7 +591,7 @@ export default function App() {
                 <div className="flex justify-center mt-8 pb-4">
                   <button
                     onClick={handleShareTeams}
-                    className={`w-[300px] border-4 border-t-tertiary p-2 text-lg font-bold transition-all ${isSharing ? 'bg-t-tertiary text-black' : 'text-t-tertiary bg-black'}`}
+                    className={`w-[300px] border-4 border-t-tertiary p-2 text-lg font-bold transition-all ${isSharing ? 'bg-t-tertiary text-black' : 'text-t-tertiary bg-t-background'}`}
                   >
                     SHARE TEAMS
                   </button>
@@ -602,7 +602,7 @@ export default function App() {
 
           {/* ── PAYMENT VIEW ── */}
           {view === 'payment' && (
-            <div className="border-4 border-t-accent p-6 space-y-6 bg-black mb-12">
+            <div className="border-4 border-t-accent p-6 space-y-6 bg-t-background mb-12">
               <h2 className="text-3xl text-t-accent font-bold text-center">SECURE PAYMENT</h2>
               <div className="border-2 border-t-primary p-4 text-center">
                 <p className="text-t-tertiary text-sm mb-1">ITEM: GAFFER 2.0 LICENSE</p>
@@ -625,12 +625,12 @@ export default function App() {
         </div>
       </main>
 
-      <div className="shrink-0 bg-black p-4 flex flex-col gap-4">
+      <div className="shrink-0 bg-t-background p-4 flex flex-col gap-4">
         <nav className="flex w-full font-bold text-xl gap-4">
-          <button onClick={() => setView('squad')} className={`flex-1 py-2 transition-all border-4 border-t-primary ${view === 'squad' ? 'bg-t-primary text-black' : 'bg-black text-t-primary'}`}>SQUAD</button>
-          <button onClick={() => setView('selection')} className={`flex-1 py-2 transition-all border-4 border-t-secondary ${view === 'selection' ? 'bg-t-secondary text-black' : 'bg-black text-t-secondary'}`}>GAFFER</button>
+          <button onClick={() => setView('squad')} className={`flex-1 py-2 transition-all border-4 border-t-primary ${view === 'squad' ? 'bg-t-primary text-black' : 'bg-t-background text-t-primary'}`}>SQUAD</button>
+          <button onClick={() => setView('selection')} className={`flex-1 py-2 transition-all border-4 border-t-secondary ${view === 'selection' ? 'bg-t-secondary text-black' : 'bg-t-background text-t-secondary'}`}>GAFFER</button>
         </nav>
-        <div className="text-center text-xs font-normal text-white bg-black normal-case" style={{ fontFamily: 'Courier New, monospace' }}>Copyright - Gary Neill Limited</div>
+        <div className="text-center text-xs font-normal text-white bg-t-background normal-case" style={{ fontFamily: 'Courier New, monospace' }}>Copyright - Gary Neill Limited</div>
       </div>
     </div>
     </ErrorBoundary>
