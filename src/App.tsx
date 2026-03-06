@@ -338,34 +338,34 @@ export default function App() {
     window.location.href = `mailto:?subject=${encodeURIComponent(`Teams for ${new Date().toLocaleDateString()}`)}&body=${encodeURIComponent(body)}`;
   };
 
-  // MM2 stat definitions with tap zone colours
+  // MM2 stat definitions — tap zones alternate secondary / tertiary
   const MM2_STATS: { key: StatKey; label: string; textColor: string; fillColor: string }[] = [
-    { key: Position.GKP,     label: 'GKP', textColor: 'text-ceefax-green', fillColor: 'bg-ceefax-green' },
-    { key: Position.DEFENCE, label: 'DEF', textColor: 'text-ceefax-cyan',  fillColor: 'bg-ceefax-cyan' },
-    { key: Position.MIDFIELD,label: 'MID', textColor: 'text-ceefax-red',   fillColor: 'bg-ceefax-red' },
-    { key: Position.ATTACK,  label: 'ATT', textColor: 'text-ceefax-yellow',fillColor: 'bg-ceefax-yellow' },
-    { key: 'SPD',            label: 'SPD', textColor: 'text-white/60',      fillColor: 'bg-white/40' },
-    { key: 'NRG',            label: 'NRG', textColor: 'text-[#f7941d]',    fillColor: 'bg-[#f7941d]' },
+    { key: Position.GKP,     label: 'GKP', textColor: 'text-t-secondary', fillColor: 'bg-t-secondary' },
+    { key: Position.DEFENCE, label: 'DEF', textColor: 'text-t-tertiary',  fillColor: 'bg-t-tertiary'  },
+    { key: Position.MIDFIELD,label: 'MID', textColor: 'text-t-secondary', fillColor: 'bg-t-secondary' },
+    { key: Position.ATTACK,  label: 'ATT', textColor: 'text-t-tertiary',  fillColor: 'bg-t-tertiary'  },
+    { key: 'SPD',            label: 'SPD', textColor: 'text-t-secondary', fillColor: 'bg-t-secondary' },
+    { key: 'NRG',            label: 'NRG', textColor: 'text-t-tertiary',  fillColor: 'bg-t-tertiary'  },
   ];
 
   return (
     <ErrorBoundary>
-    <div className="flex flex-col h-[100dvh] max-w-5xl mx-auto overflow-hidden bg-black text-white uppercase" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
+    <div className="flex flex-col h-[100dvh] max-w-5xl mx-auto overflow-hidden bg-t-background text-white uppercase" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
       <main ref={mainRef} className="flex-grow overflow-y-auto relative" onScroll={handleScroll}>
         <header ref={headerRef} className="sticky top-0 z-10 bg-black p-4 pt-8 shrink-0">
           <div className="mb-[11px]">
-            <div className="text-ceefax-yellow font-title font-normal text-[50px] tracking-normal uppercase">
+            <div className="text-t-accent font-title font-normal text-[50px] tracking-normal uppercase">
               {appMode === 'MM1' ? 'MAN MANAGER' : 'MICRO MANAGER'}
             </div>
           </div>
-          <div className="flex justify-between items-center text-sm font-bold border-b-4 border-ceefax-cyan pb-2">
-            <div className="flex border-2 border-ceefax-white text-base font-bold">
-              <button onClick={() => setAppMode('MM1')} className={`px-3 py-1 tracking-[0.2em] ${appMode === 'MM1' ? 'bg-ceefax-white text-black' : 'bg-black text-ceefax-white'}`}>MM1</button>
-              <button onClick={() => setAppMode('MM2')} className={`px-3 py-1 border-l-2 border-ceefax-white tracking-[0.2em] ${appMode === 'MM2' ? 'bg-ceefax-white text-black' : 'bg-black text-ceefax-white'}`}>MM2</button>
+          <div className="flex justify-between items-center text-sm font-bold border-b-4 border-t-primary pb-2">
+            <div className="flex border-2 border-t-tertiary text-base font-bold">
+              <button onClick={() => setAppMode('MM1')} className={`px-3 py-1 tracking-[0.2em] ${appMode === 'MM1' ? 'bg-t-tertiary text-black' : 'bg-black text-t-tertiary'}`}>MM1</button>
+              <button onClick={() => setAppMode('MM2')} className={`px-3 py-1 border-l-2 border-t-tertiary tracking-[0.2em] ${appMode === 'MM2' ? 'bg-t-tertiary text-black' : 'bg-black text-t-tertiary'}`}>MM2</button>
             </div>
             {view === 'selection'
-              ? <span className="text-ceefax-white">SELECTED {players.filter(x => x.isSelected).length}/{players.length}</span>
-              : <span className="text-ceefax-white">PLAYERS: {players.length}</span>
+              ? <span className="text-t-tertiary">SELECTED {players.filter(x => x.isSelected).length}/{players.length}</span>
+              : <span className="text-t-tertiary">PLAYERS: {players.length}</span>
             }
           </div>
         </header>
@@ -381,12 +381,12 @@ export default function App() {
                   onChange={e => setNewPlayerName(e.target.value.toUpperCase())}
                   placeholder="NAME . . ."
                   onKeyDown={e => e.key === 'Enter' && addPlayer()}
-                  className="flex-1 bg-black border-2 border-ceefax-cyan text-white placeholder-white/30 uppercase outline-none px-2 font-bold"
+                  className="flex-1 bg-black border-2 border-t-primary text-white placeholder-white/30 uppercase outline-none px-2 font-bold"
                   style={{ height: 36, fontSize: '16px', letterSpacing: '2px' }}
                 />
                 <button
                   onClick={addPlayer}
-                  className="flex-shrink-0 bg-black border-2 border-ceefax-green text-ceefax-green font-bold tracking-widest text-lg active:bg-ceefax-green active:text-black transition-colors"
+                  className="flex-shrink-0 bg-black border-2 border-t-secondary text-t-secondary font-bold tracking-widest text-lg active:bg-t-secondary active:text-black transition-colors"
                   style={{ width: 88, height: 36 }}
                 >ADD</button>
               </div>
@@ -406,7 +406,7 @@ export default function App() {
                         <div className="flex justify-end mb-1 pt-4">
                           <div className="flex justify-between leading-none" style={{ width: 148, fontSize: '15px' }}>
                             {Array.from({ length: 10 }).map((_, idx) => (
-                              <span key={idx} className={idx < p.ratings[p.position] ? 'text-ceefax-yellow' : 'text-white/20'}>★</span>
+                              <span key={idx} className={idx < p.ratings[p.position] ? 'text-t-accent' : 'text-white/20'}>★</span>
                             ))}
                           </div>
                         </div>
@@ -421,12 +421,12 @@ export default function App() {
                             onBlur={() => setEditingPlayerId(null)}
                             onKeyDown={e => e.key === 'Enter' && setEditingPlayerId(null)}
                             onChange={e => setPlayers(players.map(x => x.id === p.id ? { ...x, name: e.target.value.toUpperCase() } : x))}
-                            className="border-2 border-ceefax-yellow p-2 flex-1 text-sm bg-black text-ceefax-white uppercase outline-none font-bold h-[36px]"
+                            className="border-2 border-t-accent p-2 flex-1 text-sm bg-black text-ceefax-white uppercase outline-none font-bold h-[36px]"
                           />
                         ) : (
                           <div
                             onClick={() => setEditingPlayerId(p.id)}
-                            className="border-2 border-ceefax-cyan flex-1 text-sm text-ceefax-white truncate uppercase cursor-text font-bold flex items-center"
+                            className="border-2 border-t-primary flex-1 text-sm text-ceefax-white truncate uppercase cursor-text font-bold flex items-center"
                             style={{ height: 36 }}
                           >
                             <span className="flex-1 truncate px-2" style={{ fontSize: '16px', letterSpacing: '2px' }}>{p.name}</span>
@@ -435,17 +435,14 @@ export default function App() {
 
                         {/* MM1: position toggle */}
                         {appMode === 'MM1' && (
-                          <div className="flex border-2 border-ceefax-white overflow-hidden flex-shrink-0" style={{ height: 36 }}>
+                          <div className="flex border-2 border-t-tertiary overflow-hidden flex-shrink-0" style={{ height: 36 }}>
                             {([Position.GKP, Position.DEFENCE, Position.MIDFIELD, Position.ATTACK] as Position[]).map((pos, i, arr) => (
                               <button
                                 key={pos}
                                 onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: pos } : x))}
                                 style={{ width: 36, height: 36, lineHeight: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                                className={`text-[14px] md:text-[12px] font-bold tracking-wide flex-shrink-0 ${i < arr.length - 1 ? 'border-r-2 border-ceefax-white' : ''} ${p.position === pos
-                                  ? pos === Position.GKP ? 'bg-ceefax-green text-black'
-                                    : pos === Position.DEFENCE ? 'bg-ceefax-cyan text-black'
-                                    : pos === Position.MIDFIELD ? 'bg-ceefax-red text-black'
-                                    : 'bg-ceefax-yellow text-black'
+                                className={`text-[14px] md:text-[12px] font-bold tracking-wide flex-shrink-0 ${i < arr.length - 1 ? 'border-r-2 border-t-tertiary' : ''} ${p.position === pos
+                                  ? 'bg-t-tertiary text-black'
                                   : 'bg-black text-white/75'}`}
                               >
                                 {pos === Position.DEFENCE ? 'DEF' : pos === Position.MIDFIELD ? 'MID' : pos === Position.ATTACK ? 'ATT' : pos}
@@ -458,10 +455,10 @@ export default function App() {
                         {appMode === 'MM2' && (
                           <button
                             onClick={() => toggleExpanded(p.id)}
-                            className="flex items-center justify-between border-2 border-ceefax-white px-3 h-[36px] flex-shrink-0"
+                            className="flex items-center justify-between border-2 border-t-tertiary px-3 h-[36px] flex-shrink-0"
                             style={{ width: 88 }}
                           >
-                            <span className="text-ceefax-yellow font-bold text-sm">{overallRating}</span>
+                            <span className="text-t-accent font-bold text-sm">{overallRating}</span>
                             <span className="text-white/50 text-xs">{isExpanded ? '▲' : '▼'}</span>
                           </button>
                         )}
@@ -537,7 +534,7 @@ export default function App() {
                   <button
                     key={p.id}
                     onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, isSelected: !x.isSelected } : x))}
-                    className={`p-2 border-2 text-left text-sm transition-all font-bold ${p.isSelected ? 'bg-ceefax-yellow text-black border-ceefax-yellow' : 'bg-black text-ceefax-white border-white/20'}`}
+                    className={`p-2 border-2 text-left text-sm transition-all font-bold ${p.isSelected ? 'bg-t-accent text-black border-t-accent' : 'bg-black text-ceefax-white border-white/20'}`}
                   >
                     {p.name}
                   </button>
@@ -546,24 +543,24 @@ export default function App() {
               <div className="flex justify-center">
                 <button
                   onClick={balanceTeams}
-                  className={`w-[300px] border-4 border-ceefax-yellow p-2 text-lg font-bold transition-all ${isGenerating ? 'bg-ceefax-yellow text-black' : 'text-ceefax-yellow bg-black'}`}
+                  className={`w-[300px] border-4 border-t-accent p-2 text-lg font-bold transition-all ${isGenerating ? 'bg-t-accent text-black' : 'text-t-accent bg-black'}`}
                 >
                   GENERATE TEAMS
                 </button>
               </div>
               {teams && (
                 <div className="flex justify-center">
-                  <div className="flex w-[300px] border-4 border-ceefax-white text-lg font-bold">
-                    <button onClick={() => setShowPlayerDetails(false)} className={`flex-1 p-2 transition-all ${!showPlayerDetails ? 'bg-ceefax-white text-black' : 'bg-black text-ceefax-white'}`}>HIDE INFO</button>
-                    <button onClick={() => setShowPlayerDetails(true)} className={`flex-1 p-2 transition-all ${showPlayerDetails ? 'bg-ceefax-white text-black' : 'bg-black text-ceefax-white'}`}>SHOW INFO</button>
+                  <div className="flex w-[300px] border-4 border-t-tertiary text-lg font-bold">
+                    <button onClick={() => setShowPlayerDetails(false)} className={`flex-1 p-2 transition-all ${!showPlayerDetails ? 'bg-t-tertiary text-black' : 'bg-black text-t-tertiary'}`}>HIDE INFO</button>
+                    <button onClick={() => setShowPlayerDetails(true)} className={`flex-1 p-2 transition-all ${showPlayerDetails ? 'bg-t-tertiary text-black' : 'bg-black text-t-tertiary'}`}>SHOW INFO</button>
                   </div>
                 </div>
               )}
               {teams && (
                 <div ref={teamsContainerRef} className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
                   {[
-                    { data: teams.team1, color: 'text-ceefax-cyan', border: 'border-ceefax-cyan' },
-                    { data: teams.team2, color: 'text-ceefax-red', border: 'border-ceefax-red' }
+                    { data: teams.team1, color: 'text-t-primary', border: 'border-t-primary' },
+                    { data: teams.team2, color: 'text-t-secondary', border: 'border-t-secondary' }
                   ].map(t => (
                     <div key={t.data.name} className={`border-4 ${t.border} p-4`}>
                       <div className="flex items-end border-b-2 border-white mb-4 pb-2">
@@ -571,7 +568,7 @@ export default function App() {
                         {showPlayerDetails && (
                           <>
                             <span className="w-12 md:w-16 text-white text-base md:text-xl font-bold">RTG</span>
-                            <span className="w-8 md:w-10 text-ceefax-yellow text-base md:text-xl font-bold">{t.data.totalRating % 1 === 0 ? t.data.totalRating : t.data.totalRating.toFixed(1)}</span>
+                            <span className="w-8 md:w-10 text-t-accent text-base md:text-xl font-bold">{t.data.totalRating % 1 === 0 ? t.data.totalRating : t.data.totalRating.toFixed(1)}</span>
                           </>
                         )}
                       </div>
@@ -581,7 +578,7 @@ export default function App() {
                           {showPlayerDetails && (
                             <>
                               <span className="w-12 md:w-16 text-white">{getEffectivePosition(p).substring(0, 3)}</span>
-                              <span className="w-8 md:w-10 text-ceefax-yellow">{getEffectiveRating(p) % 1 === 0 ? getEffectiveRating(p) : getEffectiveRating(p).toFixed(1)}</span>
+                              <span className="w-8 md:w-10 text-t-accent">{getEffectiveRating(p) % 1 === 0 ? getEffectiveRating(p) : getEffectiveRating(p).toFixed(1)}</span>
                             </>
                           )}
                         </div>
@@ -594,7 +591,7 @@ export default function App() {
                 <div className="flex justify-center mt-8 pb-4">
                   <button
                     onClick={handleShareTeams}
-                    className={`w-[300px] border-4 border-ceefax-white p-2 text-lg font-bold transition-all ${isSharing ? 'bg-ceefax-white text-black' : 'text-ceefax-white bg-black'}`}
+                    className={`w-[300px] border-4 border-t-tertiary p-2 text-lg font-bold transition-all ${isSharing ? 'bg-t-tertiary text-black' : 'text-t-tertiary bg-black'}`}
                   >
                     SHARE TEAMS
                   </button>
@@ -605,11 +602,11 @@ export default function App() {
 
           {/* ── PAYMENT VIEW ── */}
           {view === 'payment' && (
-            <div className="border-4 border-ceefax-yellow p-6 space-y-6 bg-black mb-12">
-              <h2 className="text-3xl text-ceefax-yellow font-bold text-center">SECURE PAYMENT</h2>
-              <div className="border-2 border-ceefax-cyan p-4 text-center">
-                <p className="text-ceefax-white text-sm mb-1">ITEM: GAFFER 2.0 LICENSE</p>
-                <p className="text-ceefax-green text-xl font-bold">PRICE: £1.99</p>
+            <div className="border-4 border-t-accent p-6 space-y-6 bg-black mb-12">
+              <h2 className="text-3xl text-t-accent font-bold text-center">SECURE PAYMENT</h2>
+              <div className="border-2 border-t-primary p-4 text-center">
+                <p className="text-t-tertiary text-sm mb-1">ITEM: GAFFER 2.0 LICENSE</p>
+                <p className="text-t-secondary text-xl font-bold">PRICE: £1.99</p>
               </div>
               <div className="bg-white p-4 rounded-md w-full max-w-sm mx-auto min-h-[150px] flex flex-col justify-center">
                 <PayPalScriptProvider options={{ clientId: import.meta.env.VITE_PAYPAL_CLIENT_ID || "test", currency: "GBP", intent: "capture" }}>
@@ -620,8 +617,8 @@ export default function App() {
                   />
                 </PayPalScriptProvider>
               </div>
-              <button onClick={handlePurchase} className="w-full bg-ceefax-cyan text-black py-2 text-lg font-bold border-4 border-ceefax-cyan hover:bg-black hover:text-ceefax-cyan transition-all">SIMULATE PAYMENT (DEV TEST)</button>
-              <button onClick={() => setView('squad')} className="w-full text-ceefax-red text-center underline pt-4">CANCEL</button>
+              <button onClick={handlePurchase} className="w-full bg-t-primary text-black py-2 text-lg font-bold border-4 border-t-primary transition-all">SIMULATE PAYMENT (DEV TEST)</button>
+              <button onClick={() => setView('squad')} className="w-full text-t-secondary text-center underline pt-4">CANCEL</button>
             </div>
           )}
 
@@ -630,8 +627,8 @@ export default function App() {
 
       <div className="shrink-0 bg-black p-4 flex flex-col gap-4">
         <nav className="flex w-full font-bold text-xl gap-4">
-          <button onClick={() => setView('squad')} className={`flex-1 py-2 transition-all border-4 border-ceefax-cyan ${view === 'squad' ? 'bg-ceefax-cyan text-black' : 'bg-black text-ceefax-cyan'}`}>SQUAD</button>
-          <button onClick={() => setView('selection')} className={`flex-1 py-2 transition-all border-4 border-ceefax-red ${view === 'selection' ? 'bg-ceefax-red text-black' : 'bg-black text-ceefax-red'}`}>GAFFER</button>
+          <button onClick={() => setView('squad')} className={`flex-1 py-2 transition-all border-4 border-t-primary ${view === 'squad' ? 'bg-t-primary text-black' : 'bg-black text-t-primary'}`}>SQUAD</button>
+          <button onClick={() => setView('selection')} className={`flex-1 py-2 transition-all border-4 border-t-secondary ${view === 'selection' ? 'bg-t-secondary text-black' : 'bg-black text-t-secondary'}`}>GAFFER</button>
         </nav>
         <div className="text-center text-xs font-normal text-white bg-black normal-case" style={{ fontFamily: 'Courier New, monospace' }}>Copyright - Gary Neill Limited</div>
       </div>
