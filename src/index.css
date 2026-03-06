@@ -12,10 +12,10 @@
   --color-ceefax-white: #ffffff;
 
   /* ── Theme tokens — swap these five to change colourway ── */
-  --color-t-background: #000000;  /* black  — page background                          */
-  --color-t-primary:    #00ffff;  /* cyan   — name borders, SQUAD, Team 1, header line */
-  --color-t-secondary:  #ff0000;  /* red    — GAFFER, Team 2, odd tap zones            */
-  --color-t-accent:     #ffff00;  /* yellow — title, stars, ratings                    */
+  --color-t-background: #7A263A;  /* claret — page background                          */
+  --color-t-primary:    #1BB1E7;  /* blue   — name borders, SQUAD, Team 1, header line */
+  --color-t-secondary:  #ffffff;  /* white  — GAFFER, Team 2, odd tap zones            */
+  --color-t-accent:     #F3D459;  /* gold   — title, stars, ratings                    */
   --color-t-tertiary:   #ffffff;  /* white  — toggle, borders, player count, SHARE     */
 }
 
