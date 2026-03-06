@@ -172,9 +172,9 @@ export default function App() {
 
   const getEffectivePosition = (p: Player): Position => {
     if (appMode === 'MM2') {
-      const pos = ([Position.GKP, Position.DEFENCE, Position.MIDFIELD, Position.ATTACK] as Position[])
-        .reduce((best, cur) => p.ratings[cur] > p.ratings[best] ? cur : best, Position.GKP);
-      return pos;
+      // Priority order: ATT > MID > DEF > GKP — so ties resolve towards outfield positions
+      const priority = [Position.ATTACK, Position.MIDFIELD, Position.DEFENCE, Position.GKP];
+      return priority.reduce((best, cur) => p.ratings[cur] > p.ratings[best] ? cur : best, Position.ATTACK);
     }
     return p.position;
   };
@@ -362,7 +362,7 @@ export default function App() {
                       {/* MM1 stars */}
                       {appMode === 'MM1' && (
                         <div className="flex justify-end mb-1 pt-4">
-                          <div className="flex justify-between text-[15px] leading-none" style={{ width: 146 }}>
+                          <div className="flex justify-between leading-none" style={{ width: 148, fontSize: '15px' }}>
                             {Array.from({ length: 10 }).map((_, idx) => (
                               <span key={idx} className={idx < p.ratings[p.position] ? 'text-ceefax-yellow' : 'text-white/20'}>★</span>
                             ))}
