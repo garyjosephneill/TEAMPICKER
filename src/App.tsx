@@ -119,7 +119,7 @@ function TapZone({ value, onChange, color }: { value: number; onChange: (v: numb
 
 export default function App() {
   const [players, setPlayers] = useState<Player[]>([]);
-  const [view, setView] = useState<'selection' | 'squad' | 'payment'>('squad');
+  const [view, setView] = useState<'selection' | 'squad' | 'payment' | 'settings'>('squad');
   const [appMode, setAppMode] = useState<'MM1' | 'MM2'>('MM1');
   const [teams, setTeams] = useState<{ team1: Team; team2: Team } | null>(null);
   const [expandedPlayers, setExpandedPlayers] = useState<Set<string>>(new Set());
@@ -398,51 +398,48 @@ export default function App() {
     <div className="flex flex-col h-[100dvh] max-w-5xl mx-auto overflow-hidden bg-t-bg text-white uppercase" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
       <main ref={mainRef} className="flex-grow overflow-y-auto relative" onScroll={handleScroll}>
         <header ref={headerRef} className="sticky top-0 z-10 bg-t-bg p-4 pt-8 shrink-0">
+          {/* Title row */}
           <div className="mb-[11px]">
-            <div className="text-t-c4 font-title font-normal text-[50px] tracking-normal uppercase">
+            <div className="text-t-c4 font-title font-normal text-[50px] tracking-normal uppercase leading-none">
               {appMode === 'MM1' ? 'MAN MANAGER' : 'MICRO MANAGER'}
             </div>
           </div>
+          {/* Toggle row with SVG ball on right */}
           <div className="flex justify-between items-center text-sm font-bold border-b-4 border-t-c2 pb-2">
             <div className="flex border-2 border-t-c1 text-base font-bold">
               <button onClick={() => setAppMode('MM1')} className={`px-3 py-1 tracking-[0.2em] ${appMode === 'MM1' ? 'bg-t-c1 text-t-bg' : 'bg-t-bg text-t-c1'}`}>MM1</button>
               <button onClick={() => setAppMode('MM2')} className={`px-3 py-1 border-l-2 border-t-c1 tracking-[0.2em] ${appMode === 'MM2' ? 'bg-t-c1 text-t-bg' : 'bg-t-bg text-t-c1'}`}>MM2</button>
             </div>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => { setKitOpen(o => !o); setDeleteMode(false); }}
-                className={`px-3 py-1 border-2 border-t-c1 text-base font-bold tracking-[0.2em] ${kitOpen ? 'bg-t-c1 text-t-bg' : 'bg-t-bg text-t-c1'}`}
-              >KIT</button>
-              <button
-                onClick={() => { setDeleteMode(d => !d); setKitOpen(false); }}
-                className={`px-3 py-1 border-2 border-t-c3 text-base font-bold tracking-[0.2em] ${deleteMode ? 'bg-t-c3 text-t-bg' : 'bg-t-bg text-t-c3'}`}
-              >DEL</button>
+            <div className="flex items-center gap-3">
               <span className="text-t-c1 text-sm">
                 {view === 'selection'
-                  ? `${players.filter(x => x.isSelected).length}/${players.length}`
-                  : players.length}
+                  ? `SELECTED ${players.filter(x => x.isSelected).length}/${players.length}`
+                  : `PLAYERS: ${players.length}`}
               </span>
+              <button
+                onClick={() => setView(v => v === 'settings' ? 'squad' : 'settings')}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, opacity: view === 'settings' ? 1 : 0.75, flexShrink: 0 }}
+              >
+                <svg width="26" height="26" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="50" cy="50" r="46" stroke="white" strokeWidth="4"/>
+                  {/* centre pentagon */}
+                  <polygon points="50,32 63,41 58,57 42,57 37,41" stroke="white" strokeWidth="3" fill="none"/>
+                  {/* top */}
+                  <polygon points="50,6 62,14 63,27 50,32 37,27 38,14" stroke="white" strokeWidth="2.5" fill="none"/>
+                  {/* top-right */}
+                  <polygon points="63,14 78,18 84,32 74,42 63,41 62,27" stroke="white" strokeWidth="2.5" fill="none"/>
+                  {/* bottom-right */}
+                  <polygon points="74,42 84,32 94,46 88,62 74,62 63,57" stroke="white" strokeWidth="2.5" fill="none" transform="rotate(0 50 50)"/>
+                  {/* bottom */}
+                  <polygon points="58,57 74,62 70,78 50,82 30,78 26,62 42,57" stroke="white" strokeWidth="2.5" fill="none"/>
+                  {/* bottom-left */}
+                  <polygon points="26,62 16,46 26,32 37,41 42,57 26,62" stroke="white" strokeWidth="2.5" fill="none"/>
+                  {/* top-left */}
+                  <polygon points="26,32 38,14 50,6 50,32 37,41" stroke="white" strokeWidth="2.5" fill="none"/>
+                </svg>
+              </button>
             </div>
           </div>
-          {/* ── KIT DROPDOWN ── */}
-          {kitOpen && (
-            <div className="border-2 border-t-c1 mt-2 grid grid-cols-3 gap-0">
-              {KITS.map(kit => (
-                <button
-                  key={kit.name}
-                  onClick={() => applyKit(kit)}
-                  className="flex items-center gap-2 px-3 py-2 border border-t-c1/30 text-t-c1 text-sm font-bold tracking-widest hover:bg-t-c1/10"
-                >
-                  <span className="flex gap-[2px] flex-shrink-0">
-                    {[kit.bg, kit.c2, kit.c4].map((col, i) => (
-                      <span key={i} style={{ background: col, width: 10, height: 10, display: 'inline-block', border: '1px solid rgba(255,255,255,0.3)' }} />
-                    ))}
-                  </span>
-                  <span className="truncate">{kit.name}</span>
-                </button>
-              ))}
-            </div>
-          )}
           {deleteMode && (
             <div className="text-t-c3 text-xs font-bold tracking-widest mt-2 text-center">SWIPE LEFT TO DELETE</div>
           )}
@@ -715,6 +712,45 @@ export default function App() {
               </div>
               <button onClick={handlePurchase} className="w-full bg-t-c2 text-t-bg py-2 text-lg font-bold border-4 border-t-c2 transition-all">SIMULATE PAYMENT (DEV TEST)</button>
               <button onClick={() => setView('squad')} className="w-full text-t-c3 text-center underline pt-4">CANCEL</button>
+            </div>
+          )}
+
+          {/* ── SETTINGS VIEW ── */}
+          {view === 'settings' && (
+            <div className="flex flex-col items-center justify-center gap-10 py-24">
+              {/* KITS */}
+              <button
+                onClick={() => setKitOpen(o => !o)}
+                className={`w-[260px] border-4 border-t-c1 py-4 text-2xl font-bold tracking-widest transition-all ${kitOpen ? 'bg-t-c1 text-t-bg' : 'bg-t-bg text-t-c1'}`}
+              >KITS</button>
+              {kitOpen && (
+                <div className="w-[260px] border-2 border-t-c1">
+                  {KITS.map(kit => (
+                    <button
+                      key={kit.name}
+                      onClick={() => { applyKit(kit); setKitOpen(false); }}
+                      className="w-full flex items-center gap-3 px-4 py-3 border-b border-t-c1/30 text-t-c1 text-lg font-bold tracking-widest last:border-b-0"
+                    >
+                      <span className="flex gap-1 flex-shrink-0">
+                        {[kit.bg, kit.c2, kit.c4].map((col, i) => (
+                          <span key={i} style={{ background: col, width: 14, height: 14, display: 'inline-block', border: '1px solid rgba(255,255,255,0.4)' }} />
+                        ))}
+                      </span>
+                      <span>{kit.name}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+              {/* TRANSFERS */}
+              <button
+                className="w-[260px] border-4 border-t-c1 py-4 text-2xl font-bold tracking-widest bg-t-bg text-t-c1"
+                onClick={() => {/* future */ }}
+              >TRANSFERS</button>
+              {/* T&C'S */}
+              <button
+                className="w-[260px] border-4 border-t-c1 py-4 text-2xl font-bold tracking-widest bg-t-bg text-t-c1"
+                onClick={() => {/* future */ }}
+              >T&amp;C'S</button>
             </div>
           )}
 
