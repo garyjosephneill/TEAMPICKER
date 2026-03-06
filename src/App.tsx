@@ -510,7 +510,7 @@ export default function App() {
                         <div className="mt-3 space-y-[6px]" style={{ width: '100%', maxWidth: '100%', overflow: 'hidden' }}>
                           {MM2_STATS.map(stat => (
                             <div key={stat.key} style={{ display: 'flex', alignItems: 'center', width: '100%', maxWidth: '100%', overflow: 'hidden' }}>
-                              <span className={`flex-shrink-0 font-bold ${stat.textColor}`} style={{ fontSize: '0.805rem', width: 32, marginRight: 8 }}>{stat.label}</span>
+                              <span className={`flex-shrink-0 font-bold ${stat.textColor}`} style={{ fontSize: '0.805rem', width: 32, marginRight: 4 }}>{stat.label}</span>
                               <div style={{ flex: 1, minWidth: 0, overflow: 'hidden' }}>
                                 <TapZone
                                   value={p.ratings[stat.key]}
