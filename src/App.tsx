@@ -75,23 +75,42 @@ const GET_RANDOM_16 = (): Player[] => {
   return selected16.map(p => ({ ...p, id: crypto.randomUUID(), isSelected: selectedIds.has(p.name), ratings: RANDOM_MM2_RATINGS() }));
 };
 
-// Tap Zone — CSS-only squares using padding-bottom trick, works in all browsers
+// Tap Zone — measures container, calculates exact square pixel size, sets width=height explicitly
 function TapZone({ value, onChange, color }: { value: number; onChange: (v: number) => void; color: string }) {
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const [cellSize, setCellSize] = React.useState(24);
+
+  React.useLayoutEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const calc = () => {
+      const w = el.getBoundingClientRect().width;
+      const gap = 3 * 9; // 9 gaps of 3px
+      setCellSize(Math.floor((w - gap) / 10));
+    };
+    calc();
+    const ro = new ResizeObserver(calc);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(10, 1fr)', gap: '3px', width: '100%' }}>
+    <div
+      ref={containerRef}
+      style={{ display: 'flex', flexDirection: 'row', width: '100%', gap: '3px' }}
+    >
       {Array.from({ length: 10 }).map((_, i) => (
         <div
           key={i}
           onClick={() => onChange(i + 1)}
+          className={i < value ? color : 'bg-white/15'}
           style={{
-            position: 'relative',
-            width: '100%',
-            paddingBottom: '100%', // forces square
-            cursor: 'pointer',
-            backgroundColor: i < value ? undefined : 'rgba(255,255,255,0.15)',
+            width: cellSize,
+            height: cellSize,
             flexShrink: 0,
+            flexGrow: 0,
+            cursor: 'pointer',
           }}
-          className={i < value ? color : ''}
         />
       ))}
     </div>
