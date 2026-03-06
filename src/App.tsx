@@ -136,13 +136,58 @@ export default function App() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
   const [showPlayerDetails, setShowPlayerDetails] = useState(true);
+  const [kitOpen, setKitOpen] = useState(false);
+  const [deleteMode, setDeleteMode] = useState(false);
+  const [swipingId, setSwipingId] = useState<string | null>(null);
+  const [swipeX, setSwipeX] = useState(0);
+  const swipeStartX = useRef(0);
   const headerRef = useRef<HTMLElement>(null);
   const lastScrollY = useRef(0);
   const translateY = useRef(0);
   const teamsContainerRef = useRef<HTMLDivElement>(null);
   const mainRef = useRef<HTMLDivElement>(null);
-
   const playerCardRefs = useRef<Record<string, HTMLElement | null>>({});
+
+  // ── KIT THEMES ──
+  const KITS = [
+    { name: 'CEEFAX',   bg: '#000000', c1: '#ffffff', c2: '#00ffff', c3: '#ff0000', c4: '#ffff00' },
+    { name: 'WEST HAM', bg: '#7A263A', c1: '#ffffff', c2: '#1BB1E7', c3: '#ffffff', c4: '#F3D459' },
+    { name: 'CHELSEA',  bg: '#034694', c1: '#ffffff', c2: '#ffffff', c3: '#DBA111', c4: '#DBA111' },
+    { name: 'MAN UTD',  bg: '#DA291C', c1: '#ffffff', c2: '#FBE122', c3: '#ffffff', c4: '#FBE122' },
+    { name: 'ARSENAL',  bg: '#EF0107', c1: '#ffffff', c2: '#ffffff', c3: '#9C824A', c4: '#9C824A' },
+    { name: 'LIVERPOOL',bg: '#C8102E', c1: '#ffffff', c2: '#00B2A9', c3: '#F6EB61', c4: '#F6EB61' },
+  ];
+
+  const applyKit = (kit: typeof KITS[0]) => {
+    const root = document.documentElement;
+    root.style.setProperty('--color-t-bg', kit.bg);
+    root.style.setProperty('--color-t-c1', kit.c1);
+    root.style.setProperty('--color-t-c2', kit.c2);
+    root.style.setProperty('--color-t-c3', kit.c3);
+    root.style.setProperty('--color-t-c4', kit.c4);
+    setKitOpen(false);
+  };
+
+  // ── SWIPE TO DELETE ──
+  const handleSwipeStart = (id: string, x: number) => {
+    if (!deleteMode) return;
+    setSwipingId(id);
+    setSwipeX(0);
+    swipeStartX.current = x;
+  };
+  const handleSwipeMove = (x: number) => {
+    if (!swipingId) return;
+    const delta = swipeStartX.current - x;
+    setSwipeX(Math.max(0, delta));
+  };
+  const handleSwipeEnd = () => {
+    if (!swipingId) return;
+    if (swipeX > 80) {
+      setPlayers(prev => prev.filter(p => p.id !== swipingId));
+    }
+    setSwipingId(null);
+    setSwipeX(0);
+  };
 
   const toggleExpanded = (id: string) => {
     setExpandedPlayers(prev => {
@@ -340,34 +385,67 @@ export default function App() {
 
   // MM2 stat definitions — tap zones alternate secondary / tertiary
   const MM2_STATS: { key: StatKey; label: string; textColor: string; fillColor: string }[] = [
-    { key: Position.GKP,     label: 'GKP', textColor: 'text-t-secondary', fillColor: 'bg-t-secondary' },
-    { key: Position.DEFENCE, label: 'DEF', textColor: 'text-t-tertiary',  fillColor: 'bg-t-tertiary'  },
-    { key: Position.MIDFIELD,label: 'MID', textColor: 'text-t-secondary', fillColor: 'bg-t-secondary' },
-    { key: Position.ATTACK,  label: 'ATT', textColor: 'text-t-tertiary',  fillColor: 'bg-t-tertiary'  },
-    { key: 'SPD',            label: 'SPD', textColor: 'text-t-secondary', fillColor: 'bg-t-secondary' },
-    { key: 'NRG',            label: 'NRG', textColor: 'text-t-tertiary',  fillColor: 'bg-t-tertiary'  },
+    { key: Position.GKP,     label: 'GKP', textColor: 'text-t-c3', fillColor: 'bg-t-c3' },
+    { key: Position.DEFENCE, label: 'DEF', textColor: 'text-t-c1',  fillColor: 'bg-t-c1'  },
+    { key: Position.MIDFIELD,label: 'MID', textColor: 'text-t-c3', fillColor: 'bg-t-c3' },
+    { key: Position.ATTACK,  label: 'ATT', textColor: 'text-t-c1',  fillColor: 'bg-t-c1'  },
+    { key: 'SPD',            label: 'SPD', textColor: 'text-t-c3', fillColor: 'bg-t-c3' },
+    { key: 'NRG',            label: 'NRG', textColor: 'text-t-c1',  fillColor: 'bg-t-c1'  },
   ];
 
   return (
     <ErrorBoundary>
-    <div className="flex flex-col h-[100dvh] max-w-5xl mx-auto overflow-hidden bg-t-background text-white uppercase" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
+    <div className="flex flex-col h-[100dvh] max-w-5xl mx-auto overflow-hidden bg-t-bg text-white uppercase" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
       <main ref={mainRef} className="flex-grow overflow-y-auto relative" onScroll={handleScroll}>
-        <header ref={headerRef} className="sticky top-0 z-10 bg-t-background p-4 pt-8 shrink-0">
+        <header ref={headerRef} className="sticky top-0 z-10 bg-t-bg p-4 pt-8 shrink-0">
           <div className="mb-[11px]">
-            <div className="text-t-accent font-title font-normal text-[50px] tracking-normal uppercase">
+            <div className="text-t-c4 font-title font-normal text-[50px] tracking-normal uppercase">
               {appMode === 'MM1' ? 'MAN MANAGER' : 'MICRO MANAGER'}
             </div>
           </div>
-          <div className="flex justify-between items-center text-sm font-bold border-b-4 border-t-primary pb-2">
-            <div className="flex border-2 border-t-tertiary text-base font-bold">
-              <button onClick={() => setAppMode('MM1')} className={`px-3 py-1 tracking-[0.2em] ${appMode === 'MM1' ? 'bg-t-tertiary text-t-background' : 'bg-t-background text-t-tertiary'}`}>MM1</button>
-              <button onClick={() => setAppMode('MM2')} className={`px-3 py-1 border-l-2 border-t-tertiary tracking-[0.2em] ${appMode === 'MM2' ? 'bg-t-tertiary text-t-background' : 'bg-t-background text-t-tertiary'}`}>MM2</button>
+          <div className="flex justify-between items-center text-sm font-bold border-b-4 border-t-c2 pb-2">
+            <div className="flex border-2 border-t-c1 text-base font-bold">
+              <button onClick={() => setAppMode('MM1')} className={`px-3 py-1 tracking-[0.2em] ${appMode === 'MM1' ? 'bg-t-c1 text-t-bg' : 'bg-t-bg text-t-c1'}`}>MM1</button>
+              <button onClick={() => setAppMode('MM2')} className={`px-3 py-1 border-l-2 border-t-c1 tracking-[0.2em] ${appMode === 'MM2' ? 'bg-t-c1 text-t-bg' : 'bg-t-bg text-t-c1'}`}>MM2</button>
             </div>
-            {view === 'selection'
-              ? <span className="text-t-tertiary">SELECTED {players.filter(x => x.isSelected).length}/{players.length}</span>
-              : <span className="text-t-tertiary">PLAYERS: {players.length}</span>
-            }
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => { setKitOpen(o => !o); setDeleteMode(false); }}
+                className={`px-3 py-1 border-2 border-t-c1 text-base font-bold tracking-[0.2em] ${kitOpen ? 'bg-t-c1 text-t-bg' : 'bg-t-bg text-t-c1'}`}
+              >KIT</button>
+              <button
+                onClick={() => { setDeleteMode(d => !d); setKitOpen(false); }}
+                className={`px-3 py-1 border-2 border-t-c3 text-base font-bold tracking-[0.2em] ${deleteMode ? 'bg-t-c3 text-t-bg' : 'bg-t-bg text-t-c3'}`}
+              >DEL</button>
+              <span className="text-t-c1 text-sm">
+                {view === 'selection'
+                  ? `${players.filter(x => x.isSelected).length}/${players.length}`
+                  : players.length}
+              </span>
+            </div>
           </div>
+          {/* ── KIT DROPDOWN ── */}
+          {kitOpen && (
+            <div className="border-2 border-t-c1 mt-2 grid grid-cols-3 gap-0">
+              {KITS.map(kit => (
+                <button
+                  key={kit.name}
+                  onClick={() => applyKit(kit)}
+                  className="flex items-center gap-2 px-3 py-2 border border-t-c1/30 text-t-c1 text-sm font-bold tracking-widest hover:bg-t-c1/10"
+                >
+                  <span className="flex gap-[2px] flex-shrink-0">
+                    {[kit.bg, kit.c2, kit.c4].map((col, i) => (
+                      <span key={i} style={{ background: col, width: 10, height: 10, display: 'inline-block', border: '1px solid rgba(255,255,255,0.3)' }} />
+                    ))}
+                  </span>
+                  <span className="truncate">{kit.name}</span>
+                </button>
+              ))}
+            </div>
+          )}
+          {deleteMode && (
+            <div className="text-t-c3 text-xs font-bold tracking-widest mt-2 text-center">SWIPE LEFT TO DELETE</div>
+          )}
         </header>
 
         <div className="p-4 space-y-6">
@@ -381,12 +459,12 @@ export default function App() {
                   onChange={e => setNewPlayerName(e.target.value.toUpperCase())}
                   placeholder="NAME . . ."
                   onKeyDown={e => e.key === 'Enter' && addPlayer()}
-                  className="flex-1 bg-t-background border-2 border-t-primary text-white placeholder-white/30 uppercase outline-none px-2 font-bold"
+                  className="flex-1 bg-t-bg border-2 border-t-c2 text-white placeholder-white/30 uppercase outline-none px-2 font-bold"
                   style={{ height: 36, fontSize: '16px', letterSpacing: '2px' }}
                 />
                 <button
                   onClick={addPlayer}
-                  className="flex-shrink-0 bg-t-background border-2 border-t-secondary text-t-secondary font-bold tracking-widest text-lg active:bg-t-secondary active:text-t-background transition-colors"
+                  className="flex-shrink-0 bg-t-bg border-2 border-t-c3 text-t-c3 font-bold tracking-widest text-lg active:bg-t-c3 active:text-t-bg transition-colors"
                   style={{ width: 88, height: 36 }}
                 >ADD</button>
               </div>
@@ -399,14 +477,31 @@ export default function App() {
                     : p.ratings[p.position];
 
                   return (
-                    <section key={p.id} ref={el => { playerCardRefs.current[p.id] = el; }} className="border-b border-gray-800 py-3">
+                    <section
+                      key={p.id}
+                      ref={el => { playerCardRefs.current[p.id] = el; }}
+                      className="border-b border-t-c2 py-3 relative overflow-hidden"
+                      onTouchStart={e => handleSwipeStart(p.id, e.touches[0].clientX)}
+                      onTouchMove={e => { if (swipingId === p.id) handleSwipeMove(e.touches[0].clientX); }}
+                      onTouchEnd={handleSwipeEnd}
+                      onMouseDown={e => handleSwipeStart(p.id, e.clientX)}
+                      onMouseMove={e => { if (swipingId === p.id && e.buttons === 1) handleSwipeMove(e.clientX); }}
+                      onMouseUp={handleSwipeEnd}
+                    >
+                      {/* Delete reveal zone */}
+                      {deleteMode && swipingId === p.id && swipeX > 20 && (
+                        <div className="absolute right-0 top-0 bottom-0 flex items-center justify-center bg-t-c3 text-t-bg font-bold text-sm px-4" style={{ width: Math.min(swipeX, 120) }}>
+                          {swipeX > 80 ? '✕ DELETE' : '✕'}
+                        </div>
+                      )}
+                      <div style={{ transform: deleteMode && swipingId === p.id ? `translateX(-${Math.min(swipeX, 120)}px)` : 'none', transition: swipingId === p.id ? 'none' : 'transform 0.2s' }}>
 
                       {/* MM1 stars */}
                       {appMode === 'MM1' && (
                         <div className="flex justify-end mb-1 pt-4">
                           <div className="flex justify-between leading-none" style={{ width: 148, fontSize: '15px' }}>
                             {Array.from({ length: 10 }).map((_, idx) => (
-                              <span key={idx} className={idx < p.ratings[p.position] ? 'text-t-accent' : 'text-white/20'}>★</span>
+                              <span key={idx} className={idx < p.ratings[p.position] ? 'text-t-c4' : 'text-white/20'}>★</span>
                             ))}
                           </div>
                         </div>
@@ -421,12 +516,12 @@ export default function App() {
                             onBlur={() => setEditingPlayerId(null)}
                             onKeyDown={e => e.key === 'Enter' && setEditingPlayerId(null)}
                             onChange={e => setPlayers(players.map(x => x.id === p.id ? { ...x, name: e.target.value.toUpperCase() } : x))}
-                            className="border-2 border-t-accent p-2 flex-1 text-sm bg-t-background text-ceefax-white uppercase outline-none font-bold h-[36px]"
+                            className="border-2 border-t-c4 p-2 flex-1 text-sm bg-t-bg text-ceefax-white uppercase outline-none font-bold h-[36px]"
                           />
                         ) : (
                           <div
                             onClick={() => setEditingPlayerId(p.id)}
-                            className="border-2 border-t-primary flex-1 text-sm text-ceefax-white truncate uppercase cursor-text font-bold flex items-center"
+                            className="border-2 border-t-c2 flex-1 text-sm text-ceefax-white truncate uppercase cursor-text font-bold flex items-center"
                             style={{ height: 36 }}
                           >
                             <span className="flex-1 truncate px-2" style={{ fontSize: '16px', letterSpacing: '2px' }}>{p.name}</span>
@@ -435,15 +530,15 @@ export default function App() {
 
                         {/* MM1: position toggle */}
                         {appMode === 'MM1' && (
-                          <div className="flex border-2 border-t-tertiary overflow-hidden flex-shrink-0" style={{ height: 36 }}>
+                          <div className="flex border-2 border-t-c1 overflow-hidden flex-shrink-0" style={{ height: 36 }}>
                             {([Position.GKP, Position.DEFENCE, Position.MIDFIELD, Position.ATTACK] as Position[]).map((pos, i, arr) => (
                               <button
                                 key={pos}
                                 onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: pos } : x))}
                                 style={{ width: 36, height: 36, lineHeight: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                                className={`text-[14px] md:text-[12px] font-bold tracking-wide flex-shrink-0 ${i < arr.length - 1 ? 'border-r-2 border-t-tertiary' : ''} ${p.position === pos
-                                  ? 'bg-t-tertiary text-t-background'
-                                  : 'bg-t-background text-white/75'}`}
+                                className={`text-[14px] md:text-[12px] font-bold tracking-wide flex-shrink-0 ${i < arr.length - 1 ? 'border-r-2 border-t-c1' : ''} ${p.position === pos
+                                  ? 'bg-t-c1 text-t-bg'
+                                  : 'bg-t-bg text-white/75'}`}
                               >
                                 {pos === Position.DEFENCE ? 'DEF' : pos === Position.MIDFIELD ? 'MID' : pos === Position.ATTACK ? 'ATT' : pos}
                               </button>
@@ -455,10 +550,10 @@ export default function App() {
                         {appMode === 'MM2' && (
                           <button
                             onClick={() => toggleExpanded(p.id)}
-                            className="flex items-center justify-between border-2 border-t-tertiary px-3 h-[36px] flex-shrink-0"
+                            className="flex items-center justify-between border-2 border-t-c1 px-3 h-[36px] flex-shrink-0"
                             style={{ width: 88 }}
                           >
-                            <span className="text-t-accent font-bold text-sm">{overallRating}</span>
+                            <span className="text-t-c4 font-bold text-sm">{overallRating}</span>
                             <span className="text-white/50 text-xs">{isExpanded ? '▲' : '▼'}</span>
                           </button>
                         )}
@@ -519,6 +614,7 @@ export default function App() {
                           ))}
                         </div>
                       )}
+                      </div>{/* end swipe wrapper */}
                       </section>
                   );
                 })}
@@ -534,7 +630,7 @@ export default function App() {
                   <button
                     key={p.id}
                     onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, isSelected: !x.isSelected } : x))}
-                    className={`p-2 border-2 text-left text-sm transition-all font-bold ${p.isSelected ? 'bg-t-accent text-t-background border-t-accent' : 'bg-t-background text-ceefax-white border-white/20'}`}
+                    className={`p-2 border-2 text-left text-sm transition-all font-bold ${p.isSelected ? 'bg-t-c4 text-t-bg border-t-c4' : 'bg-t-bg text-ceefax-white border-white/20'}`}
                   >
                     {p.name}
                   </button>
@@ -543,24 +639,24 @@ export default function App() {
               <div className="flex justify-center">
                 <button
                   onClick={balanceTeams}
-                  className={`w-[300px] border-4 border-t-accent p-2 text-lg font-bold transition-all ${isGenerating ? 'bg-t-accent text-t-background' : 'text-t-accent bg-t-background'}`}
+                  className={`w-[300px] border-4 border-t-c4 p-2 text-lg font-bold transition-all ${isGenerating ? 'bg-t-c4 text-t-bg' : 'text-t-c4 bg-t-bg'}`}
                 >
                   GENERATE TEAMS
                 </button>
               </div>
               {teams && (
                 <div className="flex justify-center">
-                  <div className="flex w-[300px] border-4 border-t-tertiary text-lg font-bold">
-                    <button onClick={() => setShowPlayerDetails(false)} className={`flex-1 p-2 transition-all ${!showPlayerDetails ? 'bg-t-tertiary text-t-background' : 'bg-t-background text-t-tertiary'}`}>HIDE INFO</button>
-                    <button onClick={() => setShowPlayerDetails(true)} className={`flex-1 p-2 transition-all ${showPlayerDetails ? 'bg-t-tertiary text-t-background' : 'bg-t-background text-t-tertiary'}`}>SHOW INFO</button>
+                  <div className="flex w-[300px] border-4 border-t-c1 text-lg font-bold">
+                    <button onClick={() => setShowPlayerDetails(false)} className={`flex-1 p-2 transition-all ${!showPlayerDetails ? 'bg-t-c1 text-t-bg' : 'bg-t-bg text-t-c1'}`}>HIDE INFO</button>
+                    <button onClick={() => setShowPlayerDetails(true)} className={`flex-1 p-2 transition-all ${showPlayerDetails ? 'bg-t-c1 text-t-bg' : 'bg-t-bg text-t-c1'}`}>SHOW INFO</button>
                   </div>
                 </div>
               )}
               {teams && (
                 <div ref={teamsContainerRef} className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
                   {[
-                    { data: teams.team1, color: 'text-t-primary', border: 'border-t-primary' },
-                    { data: teams.team2, color: 'text-t-secondary', border: 'border-t-secondary' }
+                    { data: teams.team1, color: 'text-t-c2', border: 'border-t-c2' },
+                    { data: teams.team2, color: 'text-t-c3', border: 'border-t-c3' }
                   ].map(t => (
                     <div key={t.data.name} className={`border-4 ${t.border} p-4`}>
                       <div className="flex items-end border-b-2 border-white mb-4 pb-2">
@@ -568,7 +664,7 @@ export default function App() {
                         {showPlayerDetails && (
                           <>
                             <span className="w-12 md:w-16 text-white text-base md:text-xl font-bold">RTG</span>
-                            <span className="w-8 md:w-10 text-t-accent text-base md:text-xl font-bold">{t.data.totalRating % 1 === 0 ? t.data.totalRating : t.data.totalRating.toFixed(1)}</span>
+                            <span className="w-8 md:w-10 text-t-c4 text-base md:text-xl font-bold">{t.data.totalRating % 1 === 0 ? t.data.totalRating : t.data.totalRating.toFixed(1)}</span>
                           </>
                         )}
                       </div>
@@ -578,7 +674,7 @@ export default function App() {
                           {showPlayerDetails && (
                             <>
                               <span className="w-12 md:w-16 text-white">{getEffectivePosition(p).substring(0, 3)}</span>
-                              <span className="w-8 md:w-10 text-t-accent">{getEffectiveRating(p) % 1 === 0 ? getEffectiveRating(p) : getEffectiveRating(p).toFixed(1)}</span>
+                              <span className="w-8 md:w-10 text-t-c4">{getEffectiveRating(p) % 1 === 0 ? getEffectiveRating(p) : getEffectiveRating(p).toFixed(1)}</span>
                             </>
                           )}
                         </div>
@@ -591,7 +687,7 @@ export default function App() {
                 <div className="flex justify-center mt-8 pb-4">
                   <button
                     onClick={handleShareTeams}
-                    className={`w-[300px] border-4 border-t-tertiary p-2 text-lg font-bold transition-all ${isSharing ? 'bg-t-tertiary text-t-background' : 'text-t-tertiary bg-t-background'}`}
+                    className={`w-[300px] border-4 border-t-c1 p-2 text-lg font-bold transition-all ${isSharing ? 'bg-t-c1 text-t-bg' : 'text-t-c1 bg-t-bg'}`}
                   >
                     SHARE TEAMS
                   </button>
@@ -602,11 +698,11 @@ export default function App() {
 
           {/* ── PAYMENT VIEW ── */}
           {view === 'payment' && (
-            <div className="border-4 border-t-accent p-6 space-y-6 bg-t-background mb-12">
-              <h2 className="text-3xl text-t-accent font-bold text-center">SECURE PAYMENT</h2>
-              <div className="border-2 border-t-primary p-4 text-center">
-                <p className="text-t-tertiary text-sm mb-1">ITEM: GAFFER 2.0 LICENSE</p>
-                <p className="text-t-secondary text-xl font-bold">PRICE: £1.99</p>
+            <div className="border-4 border-t-c4 p-6 space-y-6 bg-t-bg mb-12">
+              <h2 className="text-3xl text-t-c4 font-bold text-center">SECURE PAYMENT</h2>
+              <div className="border-2 border-t-c2 p-4 text-center">
+                <p className="text-t-c1 text-sm mb-1">ITEM: GAFFER 2.0 LICENSE</p>
+                <p className="text-t-c3 text-xl font-bold">PRICE: £1.99</p>
               </div>
               <div className="bg-white p-4 rounded-md w-full max-w-sm mx-auto min-h-[150px] flex flex-col justify-center">
                 <PayPalScriptProvider options={{ clientId: import.meta.env.VITE_PAYPAL_CLIENT_ID || "test", currency: "GBP", intent: "capture" }}>
@@ -617,20 +713,20 @@ export default function App() {
                   />
                 </PayPalScriptProvider>
               </div>
-              <button onClick={handlePurchase} className="w-full bg-t-primary text-t-background py-2 text-lg font-bold border-4 border-t-primary transition-all">SIMULATE PAYMENT (DEV TEST)</button>
-              <button onClick={() => setView('squad')} className="w-full text-t-secondary text-center underline pt-4">CANCEL</button>
+              <button onClick={handlePurchase} className="w-full bg-t-c2 text-t-bg py-2 text-lg font-bold border-4 border-t-c2 transition-all">SIMULATE PAYMENT (DEV TEST)</button>
+              <button onClick={() => setView('squad')} className="w-full text-t-c3 text-center underline pt-4">CANCEL</button>
             </div>
           )}
 
         </div>
       </main>
 
-      <div className="shrink-0 bg-t-background p-4 flex flex-col gap-4">
+      <div className="shrink-0 bg-t-bg p-4 flex flex-col gap-4">
         <nav className="flex w-full font-bold text-xl gap-4">
-          <button onClick={() => setView('squad')} className={`flex-1 py-2 transition-all border-4 border-t-primary ${view === 'squad' ? 'bg-t-primary text-t-background' : 'bg-t-background text-t-primary'}`}>SQUAD</button>
-          <button onClick={() => setView('selection')} className={`flex-1 py-2 transition-all border-4 border-t-secondary ${view === 'selection' ? 'bg-t-secondary text-t-background' : 'bg-t-background text-t-secondary'}`}>GAFFER</button>
+          <button onClick={() => setView('squad')} className={`flex-1 py-2 transition-all border-4 border-t-c2 ${view === 'squad' ? 'bg-t-c2 text-t-bg' : 'bg-t-bg text-t-c2'}`}>SQUAD</button>
+          <button onClick={() => setView('selection')} className={`flex-1 py-2 transition-all border-4 border-t-c3 ${view === 'selection' ? 'bg-t-c3 text-t-bg' : 'bg-t-bg text-t-c3'}`}>GAFFER</button>
         </nav>
-        <div className="text-center text-xs font-normal text-white bg-t-background normal-case" style={{ fontFamily: 'Courier New, monospace' }}>Copyright - Gary Neill Limited</div>
+        <div className="text-center text-xs font-normal text-white bg-t-bg normal-case" style={{ fontFamily: 'Courier New, monospace' }}>Copyright - Gary Neill Limited</div>
       </div>
     </div>
     </ErrorBoundary>
