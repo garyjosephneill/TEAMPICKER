@@ -97,7 +97,7 @@ function TapZone({ value, onChange, color }: { value: number; onChange: (v: numb
   return (
     <div
       ref={containerRef}
-      style={{ display: 'flex', flexDirection: 'row', width: '100%', gap: '3px' }}
+      style={{ display: 'flex', flexDirection: 'row', width: '100%', maxWidth: '100%', gap: '3px', overflow: 'hidden' }}
     >
       {Array.from({ length: 10 }).map((_, i) => (
         <div
@@ -507,15 +507,17 @@ export default function App() {
 
                       {/* MM2: expanded tap zones */}
                       {appMode === 'MM2' && isExpanded && (
-                        <div className="mt-3 space-y-[6px] w-full">
+                        <div className="mt-3 space-y-[6px]" style={{ width: '100%', maxWidth: '100%', overflow: 'hidden' }}>
                           {MM2_STATS.map(stat => (
-                            <div key={stat.key} className="flex items-center w-full">
-                              <span className={`w-8 flex-shrink-0 mr-1 font-bold ${stat.textColor}`} style={{ fontSize: '0.805rem' }}>{stat.label}</span>
-                              <TapZone
-                                value={p.ratings[stat.key]}
-                                onChange={v => updateStat(p.id, stat.key, v)}
-                                color={stat.fillColor}
-                              />
+                            <div key={stat.key} style={{ display: 'flex', alignItems: 'center', width: '100%', maxWidth: '100%', overflow: 'hidden' }}>
+                              <span className={`flex-shrink-0 font-bold ${stat.textColor}`} style={{ fontSize: '0.805rem', width: 32, marginRight: 8 }}>{stat.label}</span>
+                              <div style={{ flex: 1, minWidth: 0, overflow: 'hidden' }}>
+                                <TapZone
+                                  value={p.ratings[stat.key]}
+                                  onChange={v => updateStat(p.id, stat.key, v)}
+                                  color={stat.fillColor}
+                                />
+                              </div>
                             </div>
                           ))}
                         </div>
