@@ -349,7 +349,7 @@ export default function App() {
                 >ADD</button>
               </div>
 
-              <div className="grid grid-cols-1 gap-y-0">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-0">
                 {players.map((p) => {
                   const isExpanded = expandedPlayers.has(p.id);
                   const overallRating = appMode === 'MM2'
@@ -362,7 +362,7 @@ export default function App() {
                       {/* MM1 stars */}
                       {appMode === 'MM1' && (
                         <div className="flex justify-end mb-1 pt-4">
-                          <div className="flex justify-between text-[13px] leading-none" style={{ width: 144 }}>
+                          <div className="flex justify-between text-[15px] leading-none" style={{ width: 146 }}>
                             {Array.from({ length: 10 }).map((_, idx) => (
                               <span key={idx} className={idx < p.ratings[p.position] ? 'text-ceefax-yellow' : 'text-white/20'}>★</span>
                             ))}
