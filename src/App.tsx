@@ -106,13 +106,6 @@ export default function App() {
 
   const playerCardRefs = useRef<Record<string, HTMLElement | null>>({});
 
-  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
-
-  const deletePlayer = (id: string) => {
-    setPlayers(players.filter(p => p.id !== id));
-    setConfirmDeleteId(null);
-  };
-
   const toggleExpanded = (id: string) => {
     setExpandedPlayers(prev => {
       const next = new Set(prev);
@@ -344,11 +337,16 @@ export default function App() {
                 <input
                   value={newPlayerName}
                   onChange={e => setNewPlayerName(e.target.value.toUpperCase())}
-                  placeholder="NAME..."
-                  className="input-field text-xl uppercase"
+                  placeholder="NAME . . ."
                   onKeyDown={e => e.key === 'Enter' && addPlayer()}
+                  className="flex-1 bg-black border-2 border-ceefax-cyan text-white placeholder-white/30 uppercase outline-none px-2 font-bold"
+                  style={{ height: 36, fontFamily: "'Bebas Neue', sans-serif", fontSize: '16px', letterSpacing: '2px' }}
                 />
-                <button onClick={addPlayer} className="px-6 text-xl font-bold border-2 transition-all bg-ceefax-green text-black border-ceefax-green hover:bg-black hover:text-ceefax-green">ADD</button>
+                <button
+                  onClick={addPlayer}
+                  className="flex-shrink-0 bg-black border-2 border-ceefax-green text-ceefax-green font-bold tracking-widest text-sm active:bg-ceefax-green active:text-black transition-colors"
+                  style={{ width: 72, height: 36 }}
+                >ADD</button>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-0">
@@ -390,18 +388,6 @@ export default function App() {
                             style={{ height: 36 }}
                           >
                             <span className="flex-1 truncate px-2" style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: '16px', letterSpacing: '2px' }}>{p.name}</span>
-                            <button
-                              onClick={e => { e.stopPropagation(); setConfirmDeleteId(p.id); }}
-                              className="flex items-center justify-center flex-shrink-0 border-l-2 border-ceefax-cyan text-ceefax-red"
-                              style={{ width: 36, height: '100%' }}
-                            >
-                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                <polyline points="3 6 5 6 21 6"/>
-                                <path d="M19 6l-1 14H6L5 6"/>
-                                <path d="M10 11v6M14 11v6"/>
-                                <path d="M9 6V4h6v2"/>
-                              </svg>
-                            </button>
                           </div>
                         )}
 
@@ -606,21 +592,6 @@ export default function App() {
         <div className="text-center text-xs font-normal text-white bg-black normal-case">Copyright - Gary Neill Limited</div>
       </div>
     </div>
-      {/* ── DELETE CONFIRMATION MODAL ── */}
-      {confirmDeleteId && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.75)' }} onClick={() => setConfirmDeleteId(null)}>
-          <div className="flex gap-3 px-6 w-full max-w-sm" onClick={e => e.stopPropagation()}>
-            <button
-              onClick={() => setConfirmDeleteId(null)}
-              className="flex-1 h-11 border-2 border-ceefax-white bg-black text-ceefax-white font-bold tracking-widest text-sm"
-            >Cancel</button>
-            <button
-              onClick={() => deletePlayer(confirmDeleteId)}
-              className="flex-1 h-11 border-2 border-ceefax-red bg-ceefax-red text-black font-bold tracking-widest text-sm"
-            >Remove</button>
-          </div>
-        </div>
-      )}
     </ErrorBoundary>
   );
 }
