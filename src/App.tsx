@@ -53,16 +53,18 @@ const FAMOUS_PLAYERS = [
 ];
 
 
-// Generates randomised MM2 ratings: GKP=10%, ATT/MID/DEF=30% each of total points
+// Generates randomised MM2 ratings with fully independent values per stat
+// GKP is always the lowest (keeper shouldn't dominate outfield stats)
 const RANDOM_MM2_RATINGS = (): Record<StatKey, number> => {
-  const total = Math.floor(Math.random() * 20) + 30; // total pool 30-50 points
-  const gkp  = Math.max(1, Math.min(10, Math.round(total * 0.10 + (Math.random() * 2 - 1))));
-  const def  = Math.max(1, Math.min(10, Math.round(total * 0.30 + (Math.random() * 2 - 1))));
-  const mid  = Math.max(1, Math.min(10, Math.round(total * 0.30 + (Math.random() * 2 - 1))));
-  const att  = Math.max(1, Math.min(10, Math.round(total * 0.30 + (Math.random() * 2 - 1))));
-  const nrg  = Math.floor(Math.random() * 5) + 4;
-  const spd  = Math.floor(Math.random() * 5) + 4;
-  return { [Position.GKP]: gkp, [Position.DEFENCE]: def, [Position.MIDFIELD]: mid, [Position.ATTACK]: att, NRG: nrg, SPD: spd };
+  const rnd = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
+  return {
+    [Position.GKP]:      rnd(1, 4),   // always low — 10% feel
+    [Position.DEFENCE]:  rnd(3, 10),  // independent
+    [Position.MIDFIELD]: rnd(3, 10),  // independent
+    [Position.ATTACK]:   rnd(3, 10),  // independent
+    NRG: rnd(3, 9),
+    SPD: rnd(3, 9),
+  };
 };
 
 const GET_RANDOM_16 = (): Player[] => {
@@ -78,13 +80,13 @@ const GET_RANDOM_16 = (): Player[] => {
 // Tap Zone component for MM2
 function TapZone({ value, onChange, color }: { value: number; onChange: (v: number) => void; color: string }) {
   return (
-    <div className="flex items-stretch w-full" style={{ gap: '4px', height: '24px' }}>
+    <div className="flex w-full" style={{ gap: '3px' }}>
       {Array.from({ length: 10 }).map((_, i) => (
-        <button
+        <div
           key={i}
           onClick={() => onChange(i + 1)}
-          className={`flex-1 ${i < value ? color : 'bg-white/10'}`}
-          style={{ height: '24px', minWidth: 0, WebkitTapHighlightColor: 'transparent', border: 'none', padding: 0, display: 'block' }}
+          className={`${i < value ? color : 'bg-white/10'}`}
+          style={{ flex: '1 1 0', aspectRatio: '1 / 1', cursor: 'pointer', minWidth: 0, minHeight: 0 }}
         />
       ))}
     </div>
