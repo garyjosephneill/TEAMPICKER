@@ -10,10 +10,17 @@
   --color-ceefax-blue: #0000ff;
   --color-ceefax-cyan: #00ffff;
   --color-ceefax-white: #ffffff;
+
+  /* ── Theme tokens — swap these five to change colourway ── */
+  --color-t-background: #000000;  /* black  — page background                          */
+  --color-t-primary:    #00ffff;  /* cyan   — name borders, SQUAD, Team 1, header line */
+  --color-t-secondary:  #ff0000;  /* red    — GAFFER, Team 2, odd tap zones            */
+  --color-t-accent:     #ffff00;  /* yellow — title, stars, ratings                    */
+  --color-t-tertiary:   #ffffff;  /* white  — toggle, borders, player count, SHARE     */
 }
 
 body {
-  background-color: black;
+  background-color: var(--color-t-background);
   color: white;
   margin: 0;
   padding: 0;
@@ -31,7 +38,7 @@ input[type="range"]::-webkit-slider-thumb {
   appearance: none;
   width: 16px;
   height: 16px;
-  background: #ffff00;
+  background: #ffffff;
   cursor: pointer;
   border-radius: 0;
 }
@@ -39,9 +46,10 @@ input[type="range"]::-webkit-slider-thumb {
 input[type="range"]::-moz-range-thumb {
   width: 16px;
   height: 16px;
-  background: #ffff00;
+  background: #ffffff;
   cursor: pointer;
   border-radius: 0;
+  border: none;
 }
 
 @layer utilities {
