@@ -53,17 +53,15 @@ const FAMOUS_PLAYERS = [
 ];
 
 
-// Generates randomised MM2 ratings with fully independent values per stat
-// GKP is always the lowest (keeper shouldn't dominate outfield stats)
 const RANDOM_MM2_RATINGS = (): Record<StatKey, number> => {
-  const rnd = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
+  const r = () => Math.floor(Math.random() * 10) + 1;
   return {
-    [Position.GKP]:      rnd(1, 4),   // always low — 10% feel
-    [Position.DEFENCE]:  rnd(3, 10),  // independent
-    [Position.MIDFIELD]: rnd(3, 10),  // independent
-    [Position.ATTACK]:   rnd(3, 10),  // independent
-    NRG: rnd(3, 9),
-    SPD: rnd(3, 9),
+    [Position.GKP]: r(),
+    [Position.DEFENCE]: r(),
+    [Position.MIDFIELD]: r(),
+    [Position.ATTACK]: r(),
+    NRG: r(),
+    SPD: r(),
   };
 };
 
@@ -77,16 +75,29 @@ const GET_RANDOM_16 = (): Player[] => {
   return selected16.map(p => ({ ...p, id: crypto.randomUUID(), isSelected: selectedIds.has(p.name), ratings: RANDOM_MM2_RATINGS() }));
 };
 
-// Tap Zone component for MM2
+// Tap Zone component for MM2 — squares calculated from container width
 function TapZone({ value, onChange, color }: { value: number; onChange: (v: number) => void; color: string }) {
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const [size, setSize] = React.useState(20);
+  React.useEffect(() => {
+    const update = () => {
+      if (containerRef.current) {
+        const w = containerRef.current.offsetWidth;
+        setSize(Math.floor((w - 9 * 3) / 10)); // 10 squares, 9 gaps of 3px
+      }
+    };
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
   return (
-    <div className="flex w-full" style={{ gap: '3px' }}>
+    <div ref={containerRef} className="flex w-full" style={{ gap: '3px' }}>
       {Array.from({ length: 10 }).map((_, i) => (
         <div
           key={i}
           onClick={() => onChange(i + 1)}
-          className={`${i < value ? color : 'bg-white/10'}`}
-          style={{ flex: '1 1 0', aspectRatio: '1 / 1', cursor: 'pointer', minWidth: 0, minHeight: 0 }}
+          className={i < value ? color : 'bg-white/10'}
+          style={{ width: size, height: size, flexShrink: 0, cursor: 'pointer' }}
         />
       ))}
     </div>
