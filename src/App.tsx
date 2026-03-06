@@ -387,7 +387,7 @@ export default function App() {
                 <button
                   onClick={addPlayer}
                   className="flex-shrink-0 bg-black border-2 border-ceefax-green text-ceefax-green font-bold tracking-widest text-lg active:bg-ceefax-green active:text-black transition-colors"
-                  style={{ width: 72, height: 36 }}
+                  style={{ width: 88, height: 36 }}
                 >ADD</button>
               </div>
 
@@ -458,7 +458,8 @@ export default function App() {
                         {appMode === 'MM2' && (
                           <button
                             onClick={() => toggleExpanded(p.id)}
-                            className="flex items-center gap-2 border-2 border-ceefax-white px-3 h-[36px] flex-shrink-0"
+                            className="flex items-center justify-between border-2 border-ceefax-white px-3 h-[36px] flex-shrink-0"
+                            style={{ width: 88 }}
                           >
                             <span className="text-ceefax-yellow font-bold text-sm">{overallRating}</span>
                             <span className="text-white/50 text-xs">{isExpanded ? '▲' : '▼'}</span>
