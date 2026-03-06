@@ -510,13 +510,12 @@ export default function App() {
                         <div className="mt-3 space-y-[6px] w-full">
                           {MM2_STATS.map(stat => (
                             <div key={stat.key} className="flex items-center w-full">
-                              <span className={`w-8 text-xs font-bold flex-shrink-0 mr-2 ${stat.textColor}`}>{stat.label}</span>
+                              <span className={`w-8 flex-shrink-0 mr-1 font-bold ${stat.textColor}`} style={{ fontSize: '0.805rem' }}>{stat.label}</span>
                               <TapZone
                                 value={p.ratings[stat.key]}
                                 onChange={v => updateStat(p.id, stat.key, v)}
                                 color={stat.fillColor}
                               />
-                              <span className="text-ceefax-yellow font-bold text-sm flex-shrink-0" style={{ marginLeft: '10px' }}>{p.ratings[stat.key]}</span>
                             </div>
                           ))}
                         </div>
