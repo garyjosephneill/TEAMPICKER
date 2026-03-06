@@ -308,7 +308,7 @@ export default function App() {
 
   return (
     <ErrorBoundary>
-    <div className="flex flex-col h-[100dvh] max-w-5xl mx-auto overflow-hidden bg-black text-white font-mono uppercase">
+    <div className="flex flex-col h-[100dvh] max-w-5xl mx-auto overflow-hidden bg-black text-white uppercase" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
       <main ref={mainRef} className="flex-grow overflow-y-auto relative" onScroll={handleScroll}>
         <header ref={headerRef} className="sticky top-0 z-10 bg-black p-4 pt-8 shrink-0">
           <div className="mb-[11px]">
@@ -317,7 +317,7 @@ export default function App() {
             </div>
           </div>
           <div className="flex justify-between items-center text-sm font-bold border-b-4 border-ceefax-cyan pb-2">
-            <div className="flex border-2 border-ceefax-white text-sm font-bold">
+            <div className="flex border-2 border-ceefax-white text-base font-bold">
               <button onClick={() => setAppMode('MM1')} className={`px-3 py-1 tracking-[0.2em] ${appMode === 'MM1' ? 'bg-ceefax-white text-black' : 'bg-black text-ceefax-white'}`}>PARK</button>
               <button onClick={() => setAppMode('MM2')} className={`px-3 py-1 border-l-2 border-ceefax-white tracking-[0.2em] ${appMode === 'MM2' ? 'bg-ceefax-white text-black' : 'bg-black text-ceefax-white'}`}>PRO</button>
             </div>
@@ -340,11 +340,11 @@ export default function App() {
                   placeholder="NAME . . ."
                   onKeyDown={e => e.key === 'Enter' && addPlayer()}
                   className="flex-1 bg-black border-2 border-ceefax-cyan text-white placeholder-white/30 uppercase outline-none px-2 font-bold"
-                  style={{ height: 36, fontFamily: "'Bebas Neue', sans-serif", fontSize: '16px', letterSpacing: '2px' }}
+                  style={{ height: 36, fontSize: '16px', letterSpacing: '2px' }}
                 />
                 <button
                   onClick={addPlayer}
-                  className="flex-shrink-0 bg-black border-2 border-ceefax-green text-ceefax-green font-bold tracking-widest text-sm active:bg-ceefax-green active:text-black transition-colors"
+                  className="flex-shrink-0 bg-black border-2 border-ceefax-green text-ceefax-green font-bold tracking-widest text-lg active:bg-ceefax-green active:text-black transition-colors"
                   style={{ width: 72, height: 36 }}
                 >ADD</button>
               </div>
@@ -387,7 +387,7 @@ export default function App() {
                             className="border-2 border-ceefax-cyan flex-1 text-sm text-ceefax-white truncate uppercase cursor-text font-bold flex items-center"
                             style={{ height: 36 }}
                           >
-                            <span className="flex-1 truncate px-2" style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: '16px', letterSpacing: '2px' }}>{p.name}</span>
+                            <span className="flex-1 truncate px-2" style={{ fontSize: '16px', letterSpacing: '2px' }}>{p.name}</span>
                           </div>
                         )}
 
@@ -399,7 +399,7 @@ export default function App() {
                                 key={pos}
                                 onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: pos } : x))}
                                 style={{ width: 36, height: 36, lineHeight: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                                className={`text-[11px] md:text-[8px] font-bold tracking-wide flex-shrink-0 ${i < arr.length - 1 ? 'border-r-2 border-ceefax-white' : ''} ${p.position === pos
+                                className={`text-[14px] md:text-[12px] font-bold tracking-wide flex-shrink-0 ${i < arr.length - 1 ? 'border-r-2 border-ceefax-white' : ''} ${p.position === pos
                                   ? pos === Position.GKP ? 'bg-ceefax-green text-black'
                                     : pos === Position.DEFENCE ? 'bg-ceefax-cyan text-black'
                                     : pos === Position.MIDFIELD ? 'bg-ceefax-red text-black'
@@ -585,11 +585,11 @@ export default function App() {
       </main>
 
       <div className="shrink-0 bg-black p-4 flex flex-col gap-4">
-        <nav className="flex w-full font-bold text-sm gap-4">
+        <nav className="flex w-full font-bold text-xl gap-4">
           <button onClick={() => setView('squad')} className={`flex-1 py-2 transition-all border-4 border-ceefax-cyan ${view === 'squad' ? 'bg-ceefax-cyan text-black' : 'bg-black text-ceefax-cyan'}`}>SQUAD</button>
           <button onClick={() => setView('selection')} className={`flex-1 py-2 transition-all border-4 border-ceefax-red ${view === 'selection' ? 'bg-ceefax-red text-black' : 'bg-black text-ceefax-red'}`}>GAFFER</button>
         </nav>
-        <div className="text-center text-xs font-normal text-white bg-black normal-case">Copyright - Gary Neill Limited</div>
+        <div className="text-center text-xs font-normal text-white bg-black normal-case" style={{ fontFamily: 'Courier New, monospace' }}>Copyright - Gary Neill Limited</div>
       </div>
     </div>
     </ErrorBoundary>
