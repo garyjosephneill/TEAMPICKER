@@ -349,7 +349,7 @@ export default function App() {
                 >ADD</button>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-0">
+              <div className="grid grid-cols-1 gap-y-0">
                 {players.map((p) => {
                   const isExpanded = expandedPlayers.has(p.id);
                   const overallRating = appMode === 'MM2'
@@ -362,7 +362,7 @@ export default function App() {
                       {/* MM1 stars */}
                       {appMode === 'MM1' && (
                         <div className="flex justify-end mb-1 pt-4">
-                          <div className="flex justify-between text-[20px] leading-none w-[148px]">
+                          <div className="flex justify-between text-[13px] leading-none" style={{ width: 144 }}>
                             {Array.from({ length: 10 }).map((_, idx) => (
                               <span key={idx} className={idx < p.ratings[p.position] ? 'text-ceefax-yellow' : 'text-white/20'}>★</span>
                             ))}
@@ -526,13 +526,13 @@ export default function App() {
                         <h3 className={`flex-1 text-2xl font-bold truncate pr-2 ${t.color}`}>{t.data.name}</h3>
                         {showPlayerDetails && (
                           <>
-                            <span className="w-12 md:w-16 text-white text-sm md:text-xl font-bold">RTG</span>
-                            <span className="w-8 md:w-10 text-ceefax-yellow text-sm md:text-xl font-bold">{t.data.totalRating % 1 === 0 ? t.data.totalRating : t.data.totalRating.toFixed(1)}</span>
+                            <span className="w-12 md:w-16 text-white text-base md:text-xl font-bold">RTG</span>
+                            <span className="w-8 md:w-10 text-ceefax-yellow text-base md:text-xl font-bold">{t.data.totalRating % 1 === 0 ? t.data.totalRating : t.data.totalRating.toFixed(1)}</span>
                           </>
                         )}
                       </div>
                       {t.data.players.map(p => (
-                        <div key={p.id} className="flex text-sm md:text-xl">
+                        <div key={p.id} className="flex text-base md:text-xl">
                           <span className="flex-1 truncate pr-2">{p.name}</span>
                           {showPlayerDetails && (
                             <>
