@@ -75,29 +75,23 @@ const GET_RANDOM_16 = (): Player[] => {
   return selected16.map(p => ({ ...p, id: crypto.randomUUID(), isSelected: selectedIds.has(p.name), ratings: RANDOM_MM2_RATINGS() }));
 };
 
-// Tap Zone component for MM2 — squares calculated from container width
+// Tap Zone — CSS-only squares using padding-bottom trick, works in all browsers
 function TapZone({ value, onChange, color }: { value: number; onChange: (v: number) => void; color: string }) {
-  const containerRef = React.useRef<HTMLDivElement>(null);
-  const [size, setSize] = React.useState(20);
-  React.useEffect(() => {
-    const update = () => {
-      if (containerRef.current) {
-        const w = containerRef.current.offsetWidth;
-        setSize(Math.floor((w - 9 * 3) / 10)); // 10 squares, 9 gaps of 3px
-      }
-    };
-    update();
-    window.addEventListener('resize', update);
-    return () => window.removeEventListener('resize', update);
-  }, []);
   return (
-    <div ref={containerRef} className="flex w-full" style={{ gap: '3px' }}>
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(10, 1fr)', gap: '3px', width: '100%' }}>
       {Array.from({ length: 10 }).map((_, i) => (
         <div
           key={i}
           onClick={() => onChange(i + 1)}
-          className={i < value ? color : 'bg-white/10'}
-          style={{ width: size, height: size, flexShrink: 0, cursor: 'pointer' }}
+          style={{
+            position: 'relative',
+            width: '100%',
+            paddingBottom: '100%', // forces square
+            cursor: 'pointer',
+            backgroundColor: i < value ? undefined : 'rgba(255,255,255,0.15)',
+            flexShrink: 0,
+          }}
+          className={i < value ? color : ''}
         />
       ))}
     </div>
