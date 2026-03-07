@@ -597,6 +597,24 @@ export default function App() {
                   );
                 })}
               </div>
+
+              {/* NAME / ADD — sits below last player, scrolls with list */}
+              <div className="flex gap-2 pt-2 pb-4">
+                <input
+                  value={newPlayerName}
+                  onChange={e => setNewPlayerName(e.target.value.toUpperCase())}
+                  placeholder="NAME . . ."
+                  onKeyDown={e => e.key === 'Enter' && addPlayer()}
+                  className="flex-1 bg-t-bg border-2 border-t-c2 text-white placeholder-white/30 uppercase outline-none px-2 font-bold"
+                  style={{ height: 36, fontSize: '16px', letterSpacing: '2px' }}
+                />
+                <button
+                  onClick={addPlayer}
+                  className="flex-shrink-0 bg-t-bg border-2 border-t-c3 text-t-c3 font-bold tracking-widest text-lg active:bg-t-c3 active:text-t-bg transition-colors"
+                  style={{ width: 88, height: 36 }}
+                >ADD</button>
+              </div>
+
             </div>
           )}
 
@@ -741,23 +759,6 @@ export default function App() {
 
       {view !== 'settings' && (
       <div className="shrink-0 bg-t-bg p-4 flex flex-col gap-4">
-        {view === 'squad' && (
-          <div className="flex gap-2">
-            <input
-              value={newPlayerName}
-              onChange={e => setNewPlayerName(e.target.value.toUpperCase())}
-              placeholder="NAME . . ."
-              onKeyDown={e => e.key === 'Enter' && addPlayer()}
-              className="flex-1 bg-t-bg border-2 border-t-c2 text-white placeholder-white/30 uppercase outline-none px-2 font-bold"
-              style={{ height: 36, fontSize: '16px', letterSpacing: '2px' }}
-            />
-            <button
-              onClick={addPlayer}
-              className="flex-shrink-0 bg-t-bg border-2 border-t-c3 text-t-c3 font-bold tracking-widest text-lg active:bg-t-c3 active:text-t-bg transition-colors"
-              style={{ width: 88, height: 36 }}
-            >ADD</button>
-          </div>
-        )}
         <nav className="flex w-full font-bold text-xl gap-4">
           <button onClick={() => setView('squad')} className={`flex-1 py-2 transition-all border-4 border-t-c2 ${view === 'squad' ? 'bg-t-c2 text-t-bg' : 'bg-t-bg text-t-c2'}`}>SQUAD</button>
           <button onClick={() => setView('selection')} className={`flex-1 py-2 transition-all border-4 border-t-c3 ${view === 'selection' ? 'bg-t-c3 text-t-bg' : 'bg-t-bg text-t-c3'}`}>GAFFER</button>
