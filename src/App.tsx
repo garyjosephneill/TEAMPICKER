@@ -180,7 +180,7 @@ export default function App() {
     { name: 'SOUTHAMPTON',      bg: '#D71920', c1: '#ffffff', c2: '#ffffff', c3: '#FFC20E', c4: '#FFC20E' },
     { name: 'SPURS',            bg: '#132257', c1: '#ffffff', c2: '#bcbec0', c3: '#BCBEC0', c4: '#ffffff' },
     { name: 'WEST HAM',         bg: '#7A263A', c1: '#ffffff', c2: '#1BB1E7', c3: '#1BB1E7', c4: '#F3D459' },
-    { name: 'WOLVES',           bg: '#e27c2f', c1: '#000000', c2: '#231F20', c3: '#FFFFFF', c4: '#231F20' },
+    { name: 'WOLVES',           bg: '#e27c2f', c1: '#000000', c2: '#ffffff', c3: '#FFFFFF', c4: '#231F20' },
   ];
 
   const applyKit = (kit: typeof KITS[0]) => {
@@ -445,7 +445,7 @@ export default function App() {
             </button>
           </div>
           {/* Toggle row — no ball here */}
-          <div className="flex justify-between items-center text-sm font-bold border-b-4 border-t-c2 pb-2">
+          <div className="flex justify-between items-end text-sm font-bold border-b-4 border-t-c2 pb-2">
             <div className="flex border-2 border-t-c1 text-base font-bold">
               <button onClick={() => setAppMode('MM1')} className={`px-3 py-1 tracking-[0.2em] ${appMode === 'MM1' ? 'bg-t-c1 text-t-bg' : 'bg-t-bg text-t-c1'}`}>MM1</button>
               <button onClick={() => setAppMode('MM2')} className={`px-3 py-1 border-l-2 border-t-c1 tracking-[0.2em] ${appMode === 'MM2' ? 'bg-t-c1 text-t-bg' : 'bg-t-bg text-t-c1'}`}>MM2</button>
