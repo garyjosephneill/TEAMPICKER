@@ -469,7 +469,7 @@ export default function App() {
                 style={{ background: appMode === 'MM2' ? 'var(--color-t-c1)' : 'var(--color-t-bg)', color: appMode === 'MM2' ? 'var(--color-t-bg)' : 'var(--color-t-c1)' }}
               >V2</button>
             </div>
-            <span className="text-t-c1 text-sm leading-none" style={{ marginBottom: '9px' }}>
+            <span className="text-t-c1 text-sm tracking-[0.2em]" style={{ marginBottom: '12px', lineHeight: 1 }}>
               {view === 'selection'
                 ? `SELECTED ${players.filter(x => x.isSelected).length}/${players.length}`
                 : `PLAYERS: ${players.length}`}
