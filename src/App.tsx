@@ -447,22 +447,6 @@ export default function App() {
           {/* ── SQUAD VIEW ── */}
           {view === 'squad' && (
             <div className="space-y-6">
-              <div className="flex gap-2">
-                <input
-                  value={newPlayerName}
-                  onChange={e => setNewPlayerName(e.target.value.toUpperCase())}
-                  placeholder="NAME . . ."
-                  onKeyDown={e => e.key === 'Enter' && addPlayer()}
-                  className="flex-1 bg-t-bg border-2 border-t-c2 text-white placeholder-white/30 uppercase outline-none px-2 font-bold"
-                  style={{ height: 36, fontSize: '16px', letterSpacing: '2px' }}
-                />
-                <button
-                  onClick={addPlayer}
-                  className="flex-shrink-0 bg-t-bg border-2 border-t-c3 text-t-c3 font-bold tracking-widest text-lg active:bg-t-c3 active:text-t-bg transition-colors"
-                  style={{ width: 88, height: 36 }}
-                >ADD</button>
-              </div>
-
               <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-0">
                 {players.map((p) => {
                   const isExpanded = expandedPlayers.has(p.id);
@@ -714,13 +698,20 @@ export default function App() {
 
           {/* ── SETTINGS VIEW ── */}
           {view === 'settings' && !kitsView && (
-            <div className="flex flex-col items-center justify-center gap-4 py-16">
+            <div className="flex flex-col items-center gap-4 py-16">
               <button
                 onClick={() => setKitsView(true)}
-                className="w-full border-4 border-t-c1 py-2 text-xl font-bold bg-t-bg text-t-c1"
+                className="border-4 border-t-c1 py-2 text-xl font-bold bg-t-bg text-t-c1"
+                style={{ width: 'calc(50% - 8px)' }}
               >KITS</button>
-              <button className="w-full border-4 border-t-c1 py-2 text-xl font-bold bg-t-bg text-t-c1">TRANSFERS</button>
-              <button className="w-full border-4 border-t-c1 py-2 text-xl font-bold bg-t-bg text-t-c1">T&amp;C'S</button>
+              <button
+                className="border-4 border-t-c1 py-2 text-xl font-bold bg-t-bg text-t-c1"
+                style={{ width: 'calc(50% - 8px)' }}
+              >TRANSFERS</button>
+              <button
+                className="border-4 border-t-c1 py-2 text-xl font-bold bg-t-bg text-t-c1"
+                style={{ width: 'calc(50% - 8px)' }}
+              >T&amp;C'S</button>
             </div>
           )}
 
@@ -738,11 +729,6 @@ export default function App() {
                     onClick={() => { applyKit(kit); setKitsView(false); setView('squad'); }}
                     className="p-2 border-2 text-left text-sm font-bold border-t-c1 bg-t-bg text-t-c1"
                   >
-                    <div className="flex gap-1 mb-1">
-                      {[kit.bg, kit.c2, kit.c4].map((col, i) => (
-                        <span key={i} style={{ background: col, width: 12, height: 12, display: 'inline-block', border: '1px solid rgba(255,255,255,0.4)', flexShrink: 0 }} />
-                      ))}
-                    </div>
                     {kit.name}
                   </button>
                 ))}
@@ -755,6 +741,23 @@ export default function App() {
 
       {view !== 'settings' && (
       <div className="shrink-0 bg-t-bg p-4 flex flex-col gap-4">
+        {view === 'squad' && (
+          <div className="flex gap-2">
+            <input
+              value={newPlayerName}
+              onChange={e => setNewPlayerName(e.target.value.toUpperCase())}
+              placeholder="NAME . . ."
+              onKeyDown={e => e.key === 'Enter' && addPlayer()}
+              className="flex-1 bg-t-bg border-2 border-t-c2 text-white placeholder-white/30 uppercase outline-none px-2 font-bold"
+              style={{ height: 36, fontSize: '16px', letterSpacing: '2px' }}
+            />
+            <button
+              onClick={addPlayer}
+              className="flex-shrink-0 bg-t-bg border-2 border-t-c3 text-t-c3 font-bold tracking-widest text-lg active:bg-t-c3 active:text-t-bg transition-colors"
+              style={{ width: 88, height: 36 }}
+            >ADD</button>
+          </div>
+        )}
         <nav className="flex w-full font-bold text-xl gap-4">
           <button onClick={() => setView('squad')} className={`flex-1 py-2 transition-all border-4 border-t-c2 ${view === 'squad' ? 'bg-t-c2 text-t-bg' : 'bg-t-bg text-t-c2'}`}>SQUAD</button>
           <button onClick={() => setView('selection')} className={`flex-1 py-2 transition-all border-4 border-t-c3 ${view === 'selection' ? 'bg-t-c3 text-t-bg' : 'bg-t-bg text-t-c3'}`}>GAFFER</button>
