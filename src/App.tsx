@@ -446,7 +446,7 @@ export default function App() {
           )}
         </header>
 
-        <div className="px-4 pb-4" style={{ paddingTop: '16px' }}>
+        <div className="px-4 pb-4" style={{ paddingTop: '0px' }}>
 
           {/* ── SQUAD VIEW ── */}
           {view === 'squad' && (
@@ -462,7 +462,7 @@ export default function App() {
                     <section
                       key={p.id}
                       ref={el => { playerCardRefs.current[p.id] = el; }}
-                      className="border-b border-t-c2 pb-3 relative overflow-hidden"
+                      className="border-b border-t-c2 pt-2 pb-3 relative overflow-hidden"
                       onTouchStart={e => handleSwipeStart(p.id, e.touches[0].clientX)}
                       onTouchMove={e => { if (swipingId === p.id) handleSwipeMove(e.touches[0].clientX); }}
                       onTouchEnd={handleSwipeEnd}
