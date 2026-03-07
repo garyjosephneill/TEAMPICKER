@@ -446,7 +446,7 @@ export default function App() {
           )}
         </header>
 
-        <div className="p-4 space-y-6">
+        <div className="p-4 pt-8 space-y-6">
 
           {/* ── SQUAD VIEW ── */}
           {view === 'squad' && (
