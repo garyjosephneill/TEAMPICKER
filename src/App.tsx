@@ -428,7 +428,7 @@ export default function App() {
     <ErrorBoundary>
     <div className="flex flex-col h-[100dvh] w-screen overflow-hidden bg-t-bg text-white uppercase" style={{ fontFamily: "'Bebas Neue', sans-serif", maxWidth: '1024px' }}>
       <main ref={mainRef} className="flex-grow overflow-y-auto overflow-x-hidden relative" onScroll={handleScroll}>
-        <header ref={headerRef} className="sticky top-0 z-10 bg-t-bg p-4 pt-8 shrink-0 overflow-x-hidden">
+        <header ref={headerRef} className="sticky top-0 z-10 bg-t-bg pt-8 pb-4 shrink-0 overflow-x-hidden" style={{ paddingLeft: 'max(16px, env(safe-area-inset-left))', paddingRight: 'max(16px, env(safe-area-inset-right))' }}>
           {/* Title row with ball right-aligned */}
           <div className="mb-[11px] flex items-center justify-between">
             <div className="text-t-c4 font-title font-normal tracking-normal uppercase leading-none" style={{ fontSize: 'clamp(32px, 11vw, 50px)' }}>
@@ -458,7 +458,7 @@ export default function App() {
           )}
         </header>
 
-        <div className="px-4 pb-4 w-full overflow-x-hidden" style={{ paddingTop: '0px' }}>
+        <div className="pb-4 w-full overflow-x-hidden" style={{ paddingTop: '0px', paddingLeft: 'max(16px, env(safe-area-inset-left))', paddingRight: 'max(16px, env(safe-area-inset-right))' }}>
 
           {/* ── SQUAD VIEW ── */}
           {view === 'squad' && (
@@ -527,7 +527,7 @@ export default function App() {
                               <button
                                 key={pos}
                                 onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: pos } : x))}
-                                style={{ width: 36, height: 36, lineHeight: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                style={{ width: 32, height: 36, lineHeight: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                                 className={`text-[14px] md:text-[12px] font-bold tracking-wide flex-shrink-0 ${i < arr.length - 1 ? 'border-r-2 border-t-c1' : ''} ${p.position === pos
                                   ? 'bg-t-c1 text-t-bg'
                                   : 'bg-t-bg text-white/75'}`}
@@ -826,7 +826,7 @@ export default function App() {
       </main>
 
       {view !== 'settings' && (
-      <div className="shrink-0 bg-t-bg p-4 flex flex-col gap-4">
+      <div className="shrink-0 bg-t-bg pt-4 pb-4 flex flex-col gap-4" style={{ paddingLeft: 'max(16px, env(safe-area-inset-left))', paddingRight: 'max(16px, env(safe-area-inset-right))' }}>
         <nav className="flex w-full font-bold text-xl gap-4">
           <button onClick={() => setView('squad')} className={`flex-1 py-2 transition-all border-4 border-t-c2 ${view === 'squad' ? 'bg-t-c2 text-t-bg' : 'bg-t-bg text-t-c2'}`}>SQUAD</button>
           <button onClick={() => setView('selection')} className={`flex-1 py-2 transition-all border-4 border-t-c3 ${view === 'selection' ? 'bg-t-c3 text-t-bg' : 'bg-t-bg text-t-c3'}`}>GAFFER</button>
