@@ -276,23 +276,7 @@ export default function App() {
     return () => clearTimeout(timer);
   }, [players, squadId]);
 
-  // Prevent iOS Safari zoom on input focus
-  useEffect(() => {
-    const viewport = document.querySelector('meta[name="viewport"]') as HTMLMetaElement;
-    if (!viewport) return;
-    const prevent = () => {
-      viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0');
-    };
-    const restore = () => {
-      viewport.setAttribute('content', 'width=device-width, initial-scale=1.0');
-    };
-    document.addEventListener('focusin', prevent, true);
-    document.addEventListener('focusout', restore, true);
-    return () => {
-      document.removeEventListener('focusin', prevent, true);
-      document.removeEventListener('focusout', restore, true);
-    };
-  }, []);
+  // iOS zoom prevention handled via index.html viewport meta tag
 
   const getEffectivePosition = (p: Player): Position => {
     if (appMode === 'MM2') {
