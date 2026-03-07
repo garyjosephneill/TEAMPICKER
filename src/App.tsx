@@ -446,8 +446,7 @@ export default function App() {
           )}
         </header>
 
-        <div className="p-4" style={{ paddingTop: 0 }}>
-            <div className="space-y-6" style={{ paddingTop: 0 }}>
+        <div className="px-4 pb-4">
 
           {/* ── SQUAD VIEW ── */}
           {view === 'squad' && (
@@ -759,7 +758,6 @@ export default function App() {
             </div>
           )}
 
-        </div>
         </div>
       </main>
 
