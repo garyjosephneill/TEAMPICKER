@@ -421,10 +421,10 @@ export default function App() {
     <ErrorBoundary>
     <div className="flex flex-col h-[100dvh] w-full max-w-5xl mx-auto overflow-hidden bg-t-bg text-white uppercase" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
       <main ref={mainRef} className="flex-grow overflow-y-auto relative" onScroll={handleScroll}>
-        <header ref={headerRef} className="sticky top-0 z-10 bg-t-bg p-4 pt-8 shrink-0">
+        <header ref={headerRef} className="sticky top-0 z-10 bg-t-bg p-4 pt-8 shrink-0 overflow-x-hidden">
           {/* Title row with ball right-aligned */}
           <div className="mb-[11px] flex items-center justify-between">
-            <div className="text-t-c4 font-title font-normal text-[50px] tracking-normal uppercase leading-none">
+            <div className="text-t-c4 font-title font-normal tracking-normal uppercase leading-none" style={{ fontSize: 'clamp(32px, 11vw, 50px)' }}>
               {appMode === 'MM1' ? 'MAN MANAGER' : 'MICRO MANAGER'}
             </div>
             <button
