@@ -569,6 +569,7 @@ export default function App() {
                             type="range" min="1" max="10"
                             value={p.ratings[p.position]}
                             key={`${p.id}-${p.position}`}
+                            style={{ fontSize: '16px' }}
                             onChange={e => {
                               const val = parseInt(e.target.value);
                               setPlayers(prev => prev.map(x => x.id === p.id ? {
@@ -666,14 +667,6 @@ export default function App() {
                 </button>
               </div>
               {teams && (
-                <div className="flex justify-center">
-                  <div className="flex w-[300px] border-4 border-t-c1 text-lg font-bold">
-                    <button onClick={() => setShowPlayerDetails(false)} className={`flex-1 p-2 transition-all ${!showPlayerDetails ? 'bg-t-c1 text-t-bg' : 'bg-t-bg text-t-c1'}`}>HIDE INFO</button>
-                    <button onClick={() => setShowPlayerDetails(true)} className={`flex-1 p-2 transition-all ${showPlayerDetails ? 'bg-t-c1 text-t-bg' : 'bg-t-bg text-t-c1'}`}>SHOW INFO</button>
-                  </div>
-                </div>
-              )}
-              {teams && (
                 <div ref={teamsContainerRef} className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
                   {[
                     { data: teams.team1, color: 'text-t-c1', border: 'border-t-c1', ratingColor: 'text-t-c1' },
@@ -705,7 +698,15 @@ export default function App() {
                 </div>
               )}
               {teams && (
-                <div className="flex justify-center mt-8 pb-4">
+                <div className="flex justify-center mt-8">
+                  <div className="flex w-[300px] border-4 border-t-c1 text-lg font-bold">
+                    <button onClick={() => setShowPlayerDetails(false)} className={`flex-1 p-2 transition-all ${!showPlayerDetails ? 'bg-t-c1 text-t-bg' : 'bg-t-bg text-t-c1'}`}>HIDE INFO</button>
+                    <button onClick={() => setShowPlayerDetails(true)} className={`flex-1 p-2 transition-all ${showPlayerDetails ? 'bg-t-c1 text-t-bg' : 'bg-t-bg text-t-c1'}`}>SHOW INFO</button>
+                  </div>
+                </div>
+              )}
+              {teams && (
+                <div className="flex justify-center mt-4 pb-4">
                   <button
                     onClick={handleShareTeams}
                     className={`w-[300px] border-4 border-t-c1 p-2 text-lg font-bold transition-all ${isSharing ? 'bg-t-c1 text-t-bg' : 'text-t-c1 bg-t-bg'}`}
@@ -812,7 +813,7 @@ export default function App() {
                 const p = players.find(x => x.id === transferCandidate);
                 return p ? (
                   <div className="fixed inset-0 flex flex-col items-center justify-center gap-4 pointer-events-none" style={{ zIndex: 50 }}>
-                    <div className="text-t-c4 font-bold text-center text-lg tracking-widest">{p.name}</div>
+                    <div className="text-t-c4 font-bold text-center text-xl tracking-widest">{p.name}</div>
                     <button
                       onClick={() => setTransferCandidate(null)}
                       className="border-4 border-t-c2 py-2 text-xl font-bold bg-t-bg text-t-c2 pointer-events-auto"
