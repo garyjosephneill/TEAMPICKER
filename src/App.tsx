@@ -447,8 +447,16 @@ export default function App() {
           {/* Toggle row — no ball here */}
           <div className="flex justify-between items-end text-sm font-bold border-b-4 border-t-c2">
             <div className="flex border-2 border-t-c1 text-base font-bold mb-2">
-              <button onClick={() => setAppMode('MM1')} className={`px-3 py-1 tracking-[0.2em] ${appMode === 'MM1' ? 'bg-t-c1 text-t-bg' : 'bg-t-bg text-t-c1'}`}>V1</button>
-              <button onClick={() => setAppMode('MM2')} className={`px-3 py-1 border-l-2 border-t-c1 tracking-[0.2em] ${appMode === 'MM2' ? 'bg-t-c1 text-t-bg' : 'bg-t-bg text-t-c1'}`}>V2</button>
+              <button
+                onClick={() => setAppMode('MM1')}
+                className="px-3 py-1 tracking-[0.2em]"
+                style={{ background: appMode === 'MM1' ? 'var(--color-t-c1)' : 'var(--color-t-bg)', color: appMode === 'MM1' ? 'var(--color-t-bg)' : 'var(--color-t-c1)' }}
+              >V1</button>
+              <button
+                onClick={() => setAppMode('MM2')}
+                className="px-3 py-1 border-l-2 border-t-c1 tracking-[0.2em]"
+                style={{ background: appMode === 'MM2' ? 'var(--color-t-c1)' : 'var(--color-t-bg)', color: appMode === 'MM2' ? 'var(--color-t-bg)' : 'var(--color-t-c1)' }}
+              >V2</button>
             </div>
             <span className="text-t-c1 text-sm mb-2 leading-none">
               {view === 'selection'
@@ -530,10 +538,8 @@ export default function App() {
                               <button
                                 key={pos}
                                 onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, position: pos } : x))}
-                                style={{ width: 32, height: 36, lineHeight: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                                className={`text-[14px] md:text-[12px] font-bold tracking-wide flex-shrink-0 ${i < arr.length - 1 ? 'border-r-2 border-t-c1' : ''} ${p.position === pos
-                                  ? 'bg-t-c1 text-t-bg'
-                                  : 'bg-t-bg text-t-c1/75'}`}
+                                style={{ width: 32, height: 36, lineHeight: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', background: p.position === pos ? 'var(--color-t-c1)' : 'var(--color-t-bg)', color: p.position === pos ? 'var(--color-t-bg)' : 'var(--color-t-c1)', borderRight: i < arr.length - 1 ? '2px solid var(--color-t-c1)' : 'none' }}
+                                className="text-[14px] md:text-[12px] font-bold tracking-wide flex-shrink-0"
                               >
                                 {pos === Position.DEFENCE ? 'DEF' : pos === Position.MIDFIELD ? 'MID' : pos === Position.ATTACK ? 'ATT' : pos}
                               </button>
@@ -644,7 +650,8 @@ export default function App() {
                   <button
                     key={p.id}
                     onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, isSelected: !x.isSelected } : x))}
-                    className={`p-2 border-2 text-left text-sm transition-all font-bold ${p.isSelected ? 'bg-t-c4 text-t-bg border-t-c4' : 'bg-t-bg text-t-c1 border-t-c1/20'}`}
+                    className="p-2 border-2 text-left text-sm transition-all font-bold"
+                    style={{ background: p.isSelected ? 'var(--color-t-c4)' : 'var(--color-t-bg)', color: p.isSelected ? 'var(--color-t-bg)' : 'var(--color-t-c1)', borderColor: p.isSelected ? 'var(--color-t-c4)' : 'rgba(var(--color-t-c1-rgb, 255,255,255), 0.2)' }}
                   >
                     {p.name}
                   </button>
@@ -653,7 +660,8 @@ export default function App() {
               <div className="flex justify-center">
                 <button
                   onClick={balanceTeams}
-                  className={`w-[300px] border-4 border-t-c4 p-2 text-lg font-bold transition-all ${isGenerating ? 'bg-t-c4 text-t-bg' : 'text-t-c4 bg-t-bg'}`}
+                  className="w-[300px] border-4 border-t-c4 p-2 text-lg font-bold transition-all"
+                  style={{ background: isGenerating ? 'var(--color-t-c4)' : 'var(--color-t-bg)', color: isGenerating ? 'var(--color-t-bg)' : 'var(--color-t-c4)' }}
                 >
                   GENERATE TEAMS
                 </button>
@@ -692,8 +700,8 @@ export default function App() {
               {teams && (
                 <div className="flex justify-center mt-8">
                   <div className="flex w-[300px] border-4 border-t-c1 text-lg font-bold">
-                    <button onClick={() => setShowPlayerDetails(false)} className={`flex-1 p-2 transition-all ${!showPlayerDetails ? 'bg-t-c1 text-t-bg' : 'bg-t-bg text-t-c1'}`}>HIDE INFO</button>
-                    <button onClick={() => setShowPlayerDetails(true)} className={`flex-1 p-2 transition-all ${showPlayerDetails ? 'bg-t-c1 text-t-bg' : 'bg-t-bg text-t-c1'}`}>SHOW INFO</button>
+                    <button onClick={() => setShowPlayerDetails(false)} className="flex-1 p-2 transition-all" style={{ background: !showPlayerDetails ? 'var(--color-t-c1)' : 'var(--color-t-bg)', color: !showPlayerDetails ? 'var(--color-t-bg)' : 'var(--color-t-c1)' }}>HIDE INFO</button>
+                    <button onClick={() => setShowPlayerDetails(true)} className="flex-1 p-2 transition-all" style={{ background: showPlayerDetails ? 'var(--color-t-c1)' : 'var(--color-t-bg)', color: showPlayerDetails ? 'var(--color-t-bg)' : 'var(--color-t-c1)' }}>SHOW INFO</button>
                   </div>
                 </div>
               )}
@@ -701,7 +709,8 @@ export default function App() {
                 <div className="flex justify-center mt-4 pb-4">
                   <button
                     onClick={handleShareTeams}
-                    className={`w-[300px] border-4 border-t-c4 p-2 text-lg font-bold transition-all ${isSharing ? 'bg-t-c4 text-t-bg' : 'text-t-c4 bg-t-bg'}`}
+                    className="w-[300px] border-4 border-t-c4 p-2 text-lg font-bold transition-all"
+                    style={{ background: isSharing ? 'var(--color-t-c4)' : 'var(--color-t-bg)', color: isSharing ? 'var(--color-t-bg)' : 'var(--color-t-c4)' }}
                   >
                     SHARE TEAMS
                   </button>
@@ -831,8 +840,8 @@ export default function App() {
       {view !== 'settings' && (
       <div className="shrink-0 bg-t-bg pt-4 pb-4 flex flex-col gap-4" style={{ paddingLeft: 'max(16px, env(safe-area-inset-left))', paddingRight: 'max(16px, env(safe-area-inset-right))' }}>
         <nav className="flex w-full font-bold text-xl gap-4">
-          <button onClick={() => setView('squad')} className={`flex-1 py-2 transition-all border-4 border-t-c2 ${view === 'squad' ? 'bg-t-c2 text-t-bg' : 'bg-t-bg text-t-c2'}`}>SQUAD</button>
-          <button onClick={() => setView('selection')} className={`flex-1 py-2 transition-all border-4 border-t-c3 ${view === 'selection' ? 'bg-t-c3 text-t-bg' : 'bg-t-bg text-t-c3'}`}>GAFFER</button>
+          <button onClick={() => setView('squad')} className="flex-1 py-2 transition-all border-4 border-t-c2 font-bold text-xl" style={{ background: view === 'squad' ? 'var(--color-t-c2)' : 'var(--color-t-bg)', color: view === 'squad' ? 'var(--color-t-bg)' : 'var(--color-t-c2)' }}>SQUAD</button>
+          <button onClick={() => setView('selection')} className="flex-1 py-2 transition-all border-4 border-t-c3 font-bold text-xl" style={{ background: view === 'selection' ? 'var(--color-t-c3)' : 'var(--color-t-bg)', color: view === 'selection' ? 'var(--color-t-bg)' : 'var(--color-t-c3)' }}>GAFFER</button>
         </nav>
         <div className="text-center text-xs font-normal text-t-c1 bg-t-bg normal-case" style={{ fontFamily: 'Courier New, monospace' }}>Copyright - Gary Neill Limited</div>
       </div>
