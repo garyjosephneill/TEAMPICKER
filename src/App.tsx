@@ -498,7 +498,8 @@ export default function App() {
                             onBlur={() => setEditingPlayerId(null)}
                             onKeyDown={e => e.key === 'Enter' && setEditingPlayerId(null)}
                             onChange={e => setPlayers(players.map(x => x.id === p.id ? { ...x, name: e.target.value.toUpperCase() } : x))}
-                            className="border-2 border-t-c4 p-2 flex-1 text-sm bg-t-bg text-ceefax-white uppercase outline-none font-bold h-[36px]"
+                            className="border-2 border-t-c4 p-2 flex-1 bg-t-bg text-ceefax-white uppercase outline-none font-bold h-[36px]"
+                            style={{ fontSize: '16px', letterSpacing: '2px' }}
                           />
                         ) : (
                           <div
