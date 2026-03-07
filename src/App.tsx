@@ -166,12 +166,12 @@ export default function App() {
     { name: 'BRENTFORD',        bg: '#e30613', c1: '#ffffff', c2: '#ffffff', c3: '#000000', c4: '#000000' },
     { name: 'BRIGHTON',         bg: '#0057B8', c1: '#ffffff', c2: '#ffffff', c3: '#ffcd00', c4: '#ffcd00' },
     { name: 'CHELSEA',          bg: '#034694', c1: '#ffffff', c2: '#ffffff', c3: '#DBA111', c4: '#DBA111' },
-    { name: 'CRYSTAL PALACE',   bg: '#1B458F', c1: '#ffffff', c2: '#C4122E', c3: '#ffffff', c4: '#C4122E' },
+    { name: 'CRYSTAL PALACE',   bg: '#1B458F', c1: '#ffffff', c2: '#d4d1d2', c3: '#ffffff', c4: '#C4122E' },
     { name: 'EVERTON',          bg: '#003399', c1: '#ffffff', c2: '#ffffff', c3: '#BFA980', c4: '#BFA980' },
-    { name: 'FULHAM',           bg: '#000000', c1: '#ffffff', c2: '#ffffff', c3: '#CC0000', c4: '#CC0000' },
+    { name: 'FULHAM',           bg: '#ffffff', c1: '#030000', c2: '#ce0007', c3: '#CC0000', c4: '#ce0007' },
     { name: 'IPSWICH',          bg: '#0044A9', c1: '#ffffff', c2: '#ffffff', c3: '#de2d26', c4: '#de2d26' },
     { name: 'LEICESTER',        bg: '#003090', c1: '#ffffff', c2: '#FDBE11', c3: '#ffffff', c4: '#FDBE11' },
-    { name: 'LIVERPOOL',        bg: '#C8102E', c1: '#ffffff', c2: '#00B2A9', c3: '#F6EB61', c4: '#F6EB61' },
+    { name: 'LIVERPOOL',        bg: '#C8102E', c1: '#ffffff', c2: '#f8e86a', c3: '#F6EB61', c4: '#F6EB61' },
     { name: 'MAN CITY',         bg: '#6CABDD', c1: '#ffffff', c2: '#1C2C5B', c3: '#ffffff', c4: '#1C2C5B' },
     { name: 'MAN UTD',          bg: '#DA291C', c1: '#ffffff', c2: '#FBE122', c3: '#ffffff', c4: '#FBE122' },
     { name: 'NEWCASTLE',        bg: '#241F20', c1: '#ffffff', c2: '#ffffff', c3: '#41B0E4', c4: '#41B0E4' },
@@ -426,7 +426,7 @@ export default function App() {
 
   return (
     <ErrorBoundary>
-    <div className="flex flex-col h-[100dvh] w-screen overflow-hidden bg-t-bg text-white uppercase" style={{ fontFamily: "'Bebas Neue', sans-serif", maxWidth: '1024px' }}>
+    <div className="flex flex-col h-[100dvh] overflow-hidden bg-t-bg text-white uppercase" style={{ fontFamily: "'Bebas Neue', sans-serif", width: '100%', maxWidth: '1024px', marginLeft: 'auto', marginRight: 'auto' }}>
       <main ref={mainRef} className="flex-grow overflow-y-auto overflow-x-hidden relative" onScroll={handleScroll}>
         <header ref={headerRef} className="sticky top-0 z-10 bg-t-bg pt-8 pb-4 shrink-0 overflow-x-hidden" style={{ paddingLeft: 'max(16px, env(safe-area-inset-left))', paddingRight: 'max(16px, env(safe-area-inset-right))' }}>
           {/* Title row with ball right-aligned */}
