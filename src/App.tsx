@@ -162,7 +162,7 @@ export default function App() {
   // ── KIT THEMES — ALL 20 PREMIER LEAGUE CLUBS ──
   const KITS = [
     { name: 'ARSENAL',          bg: '#EF0107', c1: '#ffffff', c2: '#ffffff', c3: '#9C824A', c4: '#9C824A' },
-    { name: 'ASTON VILLA',      bg: '#95BFE5', c1: '#ffffff', c2: '#670E36', c3: '#ffd600', c4: '#670E36' },
+    { name: 'ASTON VILLA',      bg: '#7ab4e3', c1: '#ffffff', c2: '#670E36', c3: '#ffd600', c4: '#670E36' },
     { name: 'BOURNEMOUTH',      bg: '#DA291C', c1: '#ffffff', c2: '#000000', c3: '#000000', c4: '#000000' },
     { name: 'BRENTFORD',        bg: '#e30613', c1: '#ffffff', c2: '#ffffff', c3: '#000000', c4: '#000000' },
     { name: 'BRIGHTON',         bg: '#0057B8', c1: '#ffffff', c2: '#ffffff', c3: '#ffcd00', c4: '#ffcd00' },
@@ -180,7 +180,7 @@ export default function App() {
     { name: 'SOUTHAMPTON',      bg: '#D71920', c1: '#ffffff', c2: '#ffffff', c3: '#FFC20E', c4: '#FFC20E' },
     { name: 'SPURS',            bg: '#132257', c1: '#ffffff', c2: '#bcbec0', c3: '#BCBEC0', c4: '#ffffff' },
     { name: 'WEST HAM',         bg: '#7A263A', c1: '#ffffff', c2: '#1BB1E7', c3: '#1BB1E7', c4: '#F3D459' },
-    { name: 'WOLVES',           bg: '#ed8f2f', c1: '#000000', c2: '#231F20', c3: '#FFFFFF', c4: '#231F20' },
+    { name: 'WOLVES',           bg: '#e27c2f', c1: '#000000', c2: '#231F20', c3: '#FFFFFF', c4: '#231F20' },
   ];
 
   const applyKit = (kit: typeof KITS[0]) => {
@@ -588,7 +588,7 @@ export default function App() {
                                 }
                               } : x));
                             }}
-                            className="w-full h-1 bg-white/75 appearance-none cursor-pointer"
+                            className="w-full h-1 bg-t-c1/50 appearance-none cursor-pointer"
                           />
                         </div>
                       )}
