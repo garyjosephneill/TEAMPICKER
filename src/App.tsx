@@ -144,6 +144,7 @@ export default function App() {
   const swipeStartX = useRef(0);
   const headerRef = useRef<HTMLElement>(null);
   const lastScrollY = useRef(0);
+  const addRowRef = useRef<HTMLDivElement>(null);
   const translateY = useRef(0);
   const teamsContainerRef = useRef<HTMLDivElement>(null);
   const mainRef = useRef<HTMLDivElement>(null);
@@ -307,6 +308,9 @@ export default function App() {
       isSelected: true
     }]);
     setNewPlayerName('');
+    setTimeout(() => {
+      addRowRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }, 50);
   };
 
   const balanceTeams = () => {
@@ -599,7 +603,7 @@ export default function App() {
               </div>
 
               {/* NAME / ADD — sits below last player, scrolls with list */}
-              <div className="flex gap-2 pt-2 pb-4">
+              <div ref={addRowRef} className="flex gap-2 pt-2 pb-4">
                 <input
                   value={newPlayerName}
                   onChange={e => setNewPlayerName(e.target.value.toUpperCase())}
@@ -651,26 +655,26 @@ export default function App() {
               {teams && (
                 <div ref={teamsContainerRef} className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
                   {[
-                    { data: teams.team1, color: 'text-t-c2', border: 'border-t-c2' },
-                    { data: teams.team2, color: 'text-t-c3', border: 'border-t-c3' }
+                    { data: teams.team1, color: 'text-t-c1', border: 'border-t-c1', ratingColor: 'text-t-c1' },
+                    { data: teams.team2, color: 'text-t-c4', border: 'border-t-c4', ratingColor: 'text-t-c4' }
                   ].map(t => (
                     <div key={t.data.name} className={`border-4 ${t.border} p-4`}>
-                      <div className="flex items-end border-b-2 border-white mb-4 pb-2">
+                      <div className={`flex items-end border-b-2 ${t.border} mb-4 pb-2`}>
                         <h3 className={`flex-1 text-2xl font-bold truncate pr-2 ${t.color}`}>{t.data.name}</h3>
                         {showPlayerDetails && (
                           <>
-                            <span className="w-12 md:w-16 text-white text-base md:text-xl font-bold">RTG</span>
-                            <span className="w-8 md:w-10 text-t-c4 text-base md:text-xl font-bold">{t.data.totalRating % 1 === 0 ? t.data.totalRating : t.data.totalRating.toFixed(1)}</span>
+                            <span className={`w-12 md:w-16 text-base md:text-xl font-bold ${t.color}`}>RTG</span>
+                            <span className={`w-8 md:w-10 text-base md:text-xl font-bold ${t.ratingColor}`}>{t.data.totalRating % 1 === 0 ? t.data.totalRating : t.data.totalRating.toFixed(1)}</span>
                           </>
                         )}
                       </div>
                       {t.data.players.map(p => (
-                        <div key={p.id} className="flex text-base md:text-xl">
+                        <div key={p.id} className={`flex text-base md:text-xl ${t.color}`}>
                           <span className="flex-1 truncate pr-2">{p.name}</span>
                           {showPlayerDetails && (
                             <>
-                              <span className="w-12 md:w-16 text-white">{getEffectivePosition(p).substring(0, 3)}</span>
-                              <span className="w-8 md:w-10 text-t-c4">{getEffectiveRating(p) % 1 === 0 ? getEffectiveRating(p) : getEffectiveRating(p).toFixed(1)}</span>
+                              <span className={`w-12 md:w-16 ${t.color}`}>{getEffectivePosition(p).substring(0, 3)}</span>
+                              <span className={`w-8 md:w-10 ${t.ratingColor}`}>{getEffectiveRating(p) % 1 === 0 ? getEffectiveRating(p) : getEffectiveRating(p).toFixed(1)}</span>
                             </>
                           )}
                         </div>
