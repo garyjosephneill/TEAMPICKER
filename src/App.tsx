@@ -426,7 +426,7 @@ export default function App() {
 
   return (
     <ErrorBoundary>
-    <div className="flex flex-col h-[100dvh] overflow-hidden bg-t-bg text-white uppercase" style={{ fontFamily: "'Bebas Neue', sans-serif", width: '100%', maxWidth: '1024px', marginLeft: 'auto', marginRight: 'auto' }}>
+    <div className="flex flex-col h-[100dvh] overflow-hidden bg-t-bg text-t-c1 uppercase" style={{ fontFamily: "'Bebas Neue', sans-serif", width: '100%', maxWidth: '1024px', marginLeft: 'auto', marginRight: 'auto' }}>
       <main ref={mainRef} className="flex-grow overflow-y-auto overflow-x-hidden relative" onScroll={handleScroll}>
         <header ref={headerRef} className="sticky top-0 z-10 bg-t-bg pt-8 pb-4 shrink-0 overflow-x-hidden" style={{ paddingLeft: 'max(16px, env(safe-area-inset-left))', paddingRight: 'max(16px, env(safe-area-inset-right))' }}>
           {/* Title row with ball right-aligned */}
@@ -495,7 +495,7 @@ export default function App() {
                         <div className="flex justify-end mb-1">
                           <div className="flex justify-between leading-none" style={{ width: 148, fontSize: '15px' }}>
                             {Array.from({ length: 10 }).map((_, idx) => (
-                              <span key={idx} className={idx < p.ratings[p.position] ? 'text-t-c4' : 'text-white/20'}>★</span>
+                              <span key={idx} className={idx < p.ratings[p.position] ? 'text-t-c4' : 'text-t-c1/20'}>★</span>
                             ))}
                           </div>
                         </div>
@@ -511,7 +511,7 @@ export default function App() {
                           onBlur={() => setEditingPlayerId(null)}
                           onKeyDown={e => e.key === 'Enter' && (e.target as HTMLInputElement).blur()}
                           onChange={e => setPlayers(players.map(x => x.id === p.id ? { ...x, name: e.target.value.toUpperCase() } : x))}
-                          className="border-2 flex-1 bg-t-bg text-ceefax-white uppercase outline-none font-bold h-[36px] p-2 cursor-text"
+                          className="border-2 flex-1 bg-t-bg text-t-c1 uppercase outline-none font-bold h-[36px] p-2 cursor-text"
                           style={{
                             fontSize: '16px',
                             letterSpacing: '2px',
@@ -530,7 +530,7 @@ export default function App() {
                                 style={{ width: 32, height: 36, lineHeight: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                                 className={`text-[14px] md:text-[12px] font-bold tracking-wide flex-shrink-0 ${i < arr.length - 1 ? 'border-r-2 border-t-c1' : ''} ${p.position === pos
                                   ? 'bg-t-c1 text-t-bg'
-                                  : 'bg-t-bg text-white/75'}`}
+                                  : 'bg-t-bg text-t-c1/75'}`}
                               >
                                 {pos === Position.DEFENCE ? 'DEF' : pos === Position.MIDFIELD ? 'MID' : pos === Position.ATTACK ? 'ATT' : pos}
                               </button>
@@ -546,7 +546,7 @@ export default function App() {
                             style={{ width: 88 }}
                           >
                             <span className="text-t-c4 font-bold text-sm">{overallRating}</span>
-                            <span className="text-white/50 text-xs">{isExpanded ? '▲' : '▼'}</span>
+                            <span className="text-t-c1/50 text-xs">{isExpanded ? '▲' : '▼'}</span>
                           </button>
                         )}
                       </div>
@@ -620,7 +620,7 @@ export default function App() {
                   onChange={e => setNewPlayerName(e.target.value.toUpperCase())}
                   placeholder="NAME . . ."
                   onKeyDown={e => e.key === 'Enter' && addPlayer()}
-                  className="flex-1 bg-t-bg border-2 border-t-c2 text-white placeholder-white/30 uppercase outline-none px-2 font-bold"
+                  className="flex-1 bg-t-bg border-2 border-t-c2 text-t-c1 placeholder-t-c1/30 uppercase outline-none px-2 font-bold"
                   style={{ height: 36, fontSize: '16px', letterSpacing: '2px' }}
                 />
                 <button
@@ -641,7 +641,7 @@ export default function App() {
                   <button
                     key={p.id}
                     onClick={() => setPlayers(players.map(x => x.id === p.id ? { ...x, isSelected: !x.isSelected } : x))}
-                    className={`p-2 border-2 text-left text-sm transition-all font-bold ${p.isSelected ? 'bg-t-c4 text-t-bg border-t-c4' : 'bg-t-bg text-ceefax-white border-white/20'}`}
+                    className={`p-2 border-2 text-left text-sm transition-all font-bold ${p.isSelected ? 'bg-t-c4 text-t-bg border-t-c4' : 'bg-t-bg text-t-c1 border-t-c1/20'}`}
                   >
                     {p.name}
                   </button>
@@ -831,7 +831,7 @@ export default function App() {
           <button onClick={() => setView('squad')} className={`flex-1 py-2 transition-all border-4 border-t-c2 ${view === 'squad' ? 'bg-t-c2 text-t-bg' : 'bg-t-bg text-t-c2'}`}>SQUAD</button>
           <button onClick={() => setView('selection')} className={`flex-1 py-2 transition-all border-4 border-t-c3 ${view === 'selection' ? 'bg-t-c3 text-t-bg' : 'bg-t-bg text-t-c3'}`}>GAFFER</button>
         </nav>
-        <div className="text-center text-xs font-normal text-white bg-t-bg normal-case" style={{ fontFamily: 'Courier New, monospace' }}>Copyright - Gary Neill Limited</div>
+        <div className="text-center text-xs font-normal text-t-c1 bg-t-bg normal-case" style={{ fontFamily: 'Courier New, monospace' }}>Copyright - Gary Neill Limited</div>
       </div>
       )}
     </div>
