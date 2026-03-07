@@ -173,7 +173,7 @@ export default function App() {
     { name: 'SOUTHAMPTON',      bg: '#D71920', c1: '#ffffff', c2: '#ffffff', c3: '#FFC20E', c4: '#FFC20E' },
     { name: 'SPURS',            bg: '#132257', c1: '#ffffff', c2: '#ffffff', c3: '#ffffff', c4: '#ffffff' },
     { name: 'WEST HAM',         bg: '#7A263A', c1: '#ffffff', c2: '#1BB1E7', c3: '#ffffff', c4: '#F3D459' },
-    { name: 'WOLVES',           bg: '#FDB913', c1: '#231F20', c2: '#231F20', c3: '#231F20', c4: '#231F20' },
+    { name: 'WOLVES',           bg: '#F7A51E', c1: '#231F20', c2: '#231F20', c3: '#231F20', c4: '#231F20' },
   ];
 
   const applyKit = (kit: typeof KITS[0]) => {
@@ -419,8 +419,8 @@ export default function App() {
 
   return (
     <ErrorBoundary>
-    <div className="flex flex-col h-[100dvh] w-full max-w-5xl mx-auto overflow-hidden bg-t-bg text-white uppercase" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
-      <main ref={mainRef} className="flex-grow overflow-y-auto relative" onScroll={handleScroll}>
+    <div className="flex flex-col h-[100dvh] w-full max-w-5xl mx-auto overflow-hidden bg-t-bg text-white uppercase" style={{ fontFamily: "'Bebas Neue', sans-serif", contain: 'layout size' }}>
+      <main ref={mainRef} className="flex-grow overflow-y-auto overflow-x-hidden relative" onScroll={handleScroll}>
         <header ref={headerRef} className="sticky top-0 z-10 bg-t-bg p-4 pt-8 shrink-0 overflow-x-hidden">
           {/* Title row with ball right-aligned */}
           <div className="mb-[11px] flex items-center justify-between">
@@ -451,7 +451,7 @@ export default function App() {
           )}
         </header>
 
-        <div className="px-4 pb-4" style={{ paddingTop: '0px' }}>
+        <div className="px-4 pb-4 w-full overflow-x-hidden" style={{ paddingTop: '0px' }}>
 
           {/* ── SQUAD VIEW ── */}
           {view === 'squad' && (
