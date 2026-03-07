@@ -446,12 +446,12 @@ export default function App() {
           )}
         </header>
 
-        <div className="px-4 pb-4">
+        <div className="px-4 pb-4" style={{ paddingTop: '32px' }}>
 
           {/* ── SQUAD VIEW ── */}
           {view === 'squad' && (
             <div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-0" style={{ paddingTop: '32px' }}>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-0">
                 {players.map((p) => {
                   const isExpanded = expandedPlayers.has(p.id);
                   const overallRating = appMode === 'MM2'
@@ -462,7 +462,7 @@ export default function App() {
                     <section
                       key={p.id}
                       ref={el => { playerCardRefs.current[p.id] = el; }}
-                      className="border-b border-t-c2 py-3 relative overflow-hidden"
+                      className="border-b border-t-c2 pt-4 pb-3 relative overflow-hidden"
                       onTouchStart={e => handleSwipeStart(p.id, e.touches[0].clientX)}
                       onTouchMove={e => { if (swipingId === p.id) handleSwipeMove(e.touches[0].clientX); }}
                       onTouchEnd={handleSwipeEnd}
@@ -480,7 +480,7 @@ export default function App() {
 
                       {/* MM1 stars */}
                       {appMode === 'MM1' && (
-                        <div className="flex justify-end mb-1 pt-4">
+                        <div className="flex justify-end mb-1">
                           <div className="flex justify-between leading-none" style={{ width: 148, fontSize: '15px' }}>
                             {Array.from({ length: 10 }).map((_, idx) => (
                               <span key={idx} className={idx < p.ratings[p.position] ? 'text-t-c4' : 'text-white/20'}>★</span>
