@@ -249,6 +249,17 @@ export default function App() {
   };
 
   useEffect(() => {
+    const root = document.documentElement;
+    if (!root.style.getPropertyValue('--color-t-bg')) {
+      root.style.setProperty('--color-t-bg', '#7A263A');
+      root.style.setProperty('--color-t-c1', '#ffffff');
+      root.style.setProperty('--color-t-c2', '#1BB1E7');
+      root.style.setProperty('--color-t-c3', '#1BB1E7');
+      root.style.setProperty('--color-t-c4', '#F3D459');
+    }
+  }, []);
+
+  useEffect(() => {
     if (mainRef.current) mainRef.current.scrollTo({ top: 0, behavior: 'smooth' });
     if (headerRef.current) { translateY.current = 0; headerRef.current.style.transform = `translateY(0px)`; }
   }, [appMode, view]);
@@ -458,7 +469,7 @@ export default function App() {
                 style={{ background: appMode === 'MM2' ? 'var(--color-t-c1)' : 'var(--color-t-bg)', color: appMode === 'MM2' ? 'var(--color-t-bg)' : 'var(--color-t-c1)' }}
               >V2</button>
             </div>
-            <span className="text-t-c1 text-sm mb-2 leading-none">
+            <span className="text-t-c1 text-sm leading-none" style={{ marginBottom: '9px' }}>
               {view === 'selection'
                 ? `SELECTED ${players.filter(x => x.isSelected).length}/${players.length}`
                 : `PLAYERS: ${players.length}`}
