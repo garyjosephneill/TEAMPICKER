@@ -419,7 +419,17 @@ export default function App() {
 
   return (
     <ErrorBoundary>
-    <div className="flex flex-col h-[100dvh] w-full max-w-5xl mx-auto overflow-hidden bg-t-bg text-white uppercase" style={{ fontFamily: "'Bebas Neue', sans-serif", contain: 'layout size' }}>
+    <div style={{
+      position: 'fixed',
+      top: 0, left: 0, right: 0, bottom: 0,
+      width: '100%',
+      maxWidth: '1024px',
+      margin: '0 auto',
+      overflow: 'hidden',
+      display: 'flex',
+      flexDirection: 'column',
+      fontFamily: "'Bebas Neue', sans-serif",
+    }} className="bg-t-bg text-white uppercase">
       <main ref={mainRef} className="flex-grow overflow-y-auto overflow-x-hidden relative" onScroll={handleScroll}>
         <header ref={headerRef} className="sticky top-0 z-10 bg-t-bg p-4 pt-8 shrink-0 overflow-x-hidden">
           {/* Title row with ball right-aligned */}
@@ -497,18 +507,19 @@ export default function App() {
                       {/* Name row */}
                       <div className="flex gap-2 items-center">
                         <input
-                          ref={editingPlayerId === p.id ? (el => el && el.focus()) : undefined}
                           value={p.name}
-                          readOnly={editingPlayerId !== p.id}
+                          inputMode="text"
                           onClick={() => setEditingPlayerId(p.id)}
+                          onFocus={() => setEditingPlayerId(p.id)}
                           onBlur={() => setEditingPlayerId(null)}
-                          onKeyDown={e => e.key === 'Enter' && setEditingPlayerId(null)}
+                          onKeyDown={e => e.key === 'Enter' && (e.target as HTMLInputElement).blur()}
                           onChange={e => setPlayers(players.map(x => x.id === p.id ? { ...x, name: e.target.value.toUpperCase() } : x))}
                           className="border-2 flex-1 bg-t-bg text-ceefax-white uppercase outline-none font-bold h-[36px] p-2 cursor-text"
                           style={{
                             fontSize: '16px',
                             letterSpacing: '2px',
                             borderColor: editingPlayerId === p.id ? 'var(--color-t-c4)' : 'var(--color-t-c2)',
+                            WebkitUserSelect: 'text',
                           }}
                         />
 
