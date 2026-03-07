@@ -17,25 +17,5 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
-    <script>
-      eruda.init();
-      window.addEventListener('load', function() {
-        var wrapper = document.querySelector('#root > div');
-        var cs = getComputedStyle(wrapper);
-        var info = [
-          'VIEWPORT: ' + window.innerWidth + 'x' + window.innerHeight,
-          'DEVICE PIXEL RATIO: ' + window.devicePixelRatio,
-          'WRAPPER W: ' + wrapper.offsetWidth,
-          'WRAPPER SCROLL W: ' + wrapper.scrollWidth,
-          'WRAPPER MAX-W: ' + cs.maxWidth,
-          'WRAPPER POSITION: ' + cs.position,
-          'BODY SCROLL W: ' + document.body.scrollWidth,
-          'HTML SCROLL W: ' + document.documentElement.scrollWidth,
-          'OVERFLOW-X: ' + cs.overflowX,
-        ];
-        info.forEach(function(line) { console.log(line); });
-      });
-    </script>
   </body>
 </html>
