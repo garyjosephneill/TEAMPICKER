@@ -450,7 +450,7 @@ export default function App() {
               <button onClick={() => setAppMode('MM1')} className={`px-3 py-1 tracking-[0.2em] ${appMode === 'MM1' ? 'bg-t-c1 text-t-bg' : 'bg-t-bg text-t-c1'}`}>MM1</button>
               <button onClick={() => setAppMode('MM2')} className={`px-3 py-1 border-l-2 border-t-c1 tracking-[0.2em] ${appMode === 'MM2' ? 'bg-t-c1 text-t-bg' : 'bg-t-bg text-t-c1'}`}>MM2</button>
             </div>
-            <span className="text-t-c1 text-sm">
+            <span className="text-t-c1 text-sm py-1">
               {view === 'selection'
                 ? `SELECTED ${players.filter(x => x.isSelected).length}/${players.length}`
                 : `PLAYERS: ${players.length}`}
