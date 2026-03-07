@@ -435,7 +435,7 @@ export default function App() {
           {/* Title row with ball right-aligned */}
           <div className="mb-[11px] flex items-center justify-between">
             <div className="text-t-c4 font-title font-normal tracking-normal uppercase leading-none" style={{ fontSize: 'clamp(32px, 11vw, 50px)' }}>
-              {appMode === 'MM1' ? 'LAZY GAFFER' : 'CRAZY GAFFER'}
+              {appMode === 'MM1' ? 'LAZY GAFFER' : 'LAZY GAFFER'}
             </div>
             <button
               onClick={() => { setView(v => v === 'settings' ? 'squad' : 'settings'); setKitsView(false); setTransfersView(false); setTransferCandidate(null); }}
@@ -447,10 +447,10 @@ export default function App() {
           {/* Toggle row — no ball here */}
           <div className="flex justify-between items-end text-sm font-bold border-b-4 border-t-c2 pb-2">
             <div className="flex border-2 border-t-c1 text-base font-bold">
-              <button onClick={() => setAppMode('MM1')} className={`px-3 py-1 tracking-[0.2em] ${appMode === 'MM1' ? 'bg-t-c1 text-t-bg' : 'bg-t-bg text-t-c1'}`}>LG</button>
-              <button onClick={() => setAppMode('MM2')} className={`px-3 py-1 border-l-2 border-t-c1 tracking-[0.2em] ${appMode === 'MM2' ? 'bg-t-c1 text-t-bg' : 'bg-t-bg text-t-c1'}`}>CG</button>
+              <button onClick={() => setAppMode('MM1')} className={`px-3 py-1 tracking-[0.2em] ${appMode === 'MM1' ? 'bg-t-c1 text-t-bg' : 'bg-t-bg text-t-c1'}`}>V1</button>
+              <button onClick={() => setAppMode('MM2')} className={`px-3 py-1 border-l-2 border-t-c1 tracking-[0.2em] ${appMode === 'MM2' ? 'bg-t-c1 text-t-bg' : 'bg-t-bg text-t-c1'}`}>V2</button>
             </div>
-            <span className="text-t-c1 text-sm" style={{ lineHeight: 1, paddingBottom: '6px' }}>
+            <span className="text-t-c1 text-sm self-end leading-none pb-[3px]">
               {view === 'selection'
                 ? `SELECTED ${players.filter(x => x.isSelected).length}/${players.length}`
                 : `PLAYERS: ${players.length}`}
