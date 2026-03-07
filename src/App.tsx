@@ -496,25 +496,21 @@ export default function App() {
 
                       {/* Name row */}
                       <div className="flex gap-2 items-center">
-                        {editingPlayerId === p.id ? (
-                          <input
-                            autoFocus
-                            value={p.name}
-                            onBlur={() => setEditingPlayerId(null)}
-                            onKeyDown={e => e.key === 'Enter' && setEditingPlayerId(null)}
-                            onChange={e => setPlayers(players.map(x => x.id === p.id ? { ...x, name: e.target.value.toUpperCase() } : x))}
-                            className="border-2 border-t-c4 p-2 flex-1 bg-t-bg text-ceefax-white uppercase outline-none font-bold h-[36px]"
-                            style={{ fontSize: '16px', letterSpacing: '2px' }}
-                          />
-                        ) : (
-                          <div
-                            onClick={() => setEditingPlayerId(p.id)}
-                            className="border-2 border-t-c2 flex-1 text-sm text-ceefax-white truncate uppercase cursor-text font-bold flex items-center"
-                            style={{ height: 36 }}
-                          >
-                            <span className="flex-1 truncate px-2" style={{ fontSize: '16px', letterSpacing: '2px' }}>{p.name}</span>
-                          </div>
-                        )}
+                        <input
+                          ref={editingPlayerId === p.id ? (el => el && el.focus()) : undefined}
+                          value={p.name}
+                          readOnly={editingPlayerId !== p.id}
+                          onClick={() => setEditingPlayerId(p.id)}
+                          onBlur={() => setEditingPlayerId(null)}
+                          onKeyDown={e => e.key === 'Enter' && setEditingPlayerId(null)}
+                          onChange={e => setPlayers(players.map(x => x.id === p.id ? { ...x, name: e.target.value.toUpperCase() } : x))}
+                          className="border-2 flex-1 bg-t-bg text-ceefax-white uppercase outline-none font-bold h-[36px] p-2 cursor-text"
+                          style={{
+                            fontSize: '16px',
+                            letterSpacing: '2px',
+                            borderColor: editingPlayerId === p.id ? 'var(--color-t-c4)' : 'var(--color-t-c2)',
+                          }}
+                        />
 
                         {/* MM1: position toggle */}
                         {appMode === 'MM1' && (
