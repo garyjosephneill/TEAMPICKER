@@ -419,7 +419,7 @@ export default function App() {
 
   return (
     <ErrorBoundary>
-    <div className="flex flex-col h-[100dvh] max-w-5xl mx-auto overflow-hidden bg-t-bg text-white uppercase" style={{ fontFamily: "'Bebas Neue', sans-serif", width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
+    <div className="flex flex-col h-[100dvh] w-full max-w-5xl mx-auto overflow-hidden bg-t-bg text-white uppercase" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
       <main ref={mainRef} className="flex-grow overflow-y-auto relative" onScroll={handleScroll}>
         <header ref={headerRef} className="sticky top-0 z-10 bg-t-bg p-4 pt-8 shrink-0">
           {/* Title row with ball right-aligned */}
