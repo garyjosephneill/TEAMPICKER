@@ -85,7 +85,7 @@ function TapZone({ value, onChange, color }: { value: number; onChange: (v: numb
     if (!el) return;
     const calc = () => {
       const w = el.getBoundingClientRect().width;
-      const gap = 3 * 9; // 9 gaps of 3px
+      const gap = 3 * 9;
       setCellSize(Math.floor((w - gap) / 10));
     };
     calc();
@@ -103,13 +103,13 @@ function TapZone({ value, onChange, color }: { value: number; onChange: (v: numb
         <div
           key={i}
           onClick={() => onChange(i + 1)}
-          className={i < value ? color : 'bg-white/15'}
           style={{
             width: cellSize,
             height: cellSize,
             flexShrink: 0,
             flexGrow: 0,
             cursor: 'pointer',
+            backgroundColor: i < value ? `var(--color-${color})` : 'rgba(255,255,255,0.15)',
           }}
         />
       ))}
@@ -418,12 +418,12 @@ export default function App() {
 
   // MM2 stat definitions — tap zones alternate secondary / tertiary
   const MM2_STATS: { key: StatKey; label: string; textColor: string; fillColor: string }[] = [
-    { key: Position.GKP,     label: 'GKP', textColor: 'text-t-c3', fillColor: 'bg-t-c3' },
-    { key: Position.DEFENCE, label: 'DEF', textColor: 'text-t-c1',  fillColor: 'bg-t-c1'  },
-    { key: Position.MIDFIELD,label: 'MID', textColor: 'text-t-c3', fillColor: 'bg-t-c3' },
-    { key: Position.ATTACK,  label: 'ATT', textColor: 'text-t-c1',  fillColor: 'bg-t-c1'  },
-    { key: 'SPD',            label: 'SPD', textColor: 'text-t-c3', fillColor: 'bg-t-c3' },
-    { key: 'NRG',            label: 'NRG', textColor: 'text-t-c1',  fillColor: 'bg-t-c1'  },
+    { key: Position.GKP,     label: 'GKP', textColor: 'text-t-c3', fillColor: 't-c3' },
+    { key: Position.DEFENCE, label: 'DEF', textColor: 'text-t-c1', fillColor: 't-c1' },
+    { key: Position.MIDFIELD,label: 'MID', textColor: 'text-t-c3', fillColor: 't-c3' },
+    { key: Position.ATTACK,  label: 'ATT', textColor: 'text-t-c1', fillColor: 't-c1' },
+    { key: 'SPD',            label: 'SPD', textColor: 'text-t-c3', fillColor: 't-c3' },
+    { key: 'NRG',            label: 'NRG', textColor: 'text-t-c1', fillColor: 't-c1' },
   ];
 
   return (
@@ -445,12 +445,12 @@ export default function App() {
             </button>
           </div>
           {/* Toggle row — no ball here */}
-          <div className="flex justify-between items-end text-sm font-bold border-b-4 border-t-c2 pb-2">
-            <div className="flex border-2 border-t-c1 text-base font-bold">
+          <div className="flex justify-between items-end text-sm font-bold border-b-4 border-t-c2">
+            <div className="flex border-2 border-t-c1 text-base font-bold mb-2">
               <button onClick={() => setAppMode('MM1')} className={`px-3 py-1 tracking-[0.2em] ${appMode === 'MM1' ? 'bg-t-c1 text-t-bg' : 'bg-t-bg text-t-c1'}`}>V1</button>
               <button onClick={() => setAppMode('MM2')} className={`px-3 py-1 border-l-2 border-t-c1 tracking-[0.2em] ${appMode === 'MM2' ? 'bg-t-c1 text-t-bg' : 'bg-t-bg text-t-c1'}`}>V2</button>
             </div>
-            <span className="text-t-c1 text-sm self-end leading-none pb-[3px]">
+            <span className="text-t-c1 text-sm mb-2 leading-none">
               {view === 'selection'
                 ? `SELECTED ${players.filter(x => x.isSelected).length}/${players.length}`
                 : `PLAYERS: ${players.length}`}
