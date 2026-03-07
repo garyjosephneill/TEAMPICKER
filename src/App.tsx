@@ -278,16 +278,19 @@ export default function App() {
 
   // Prevent iOS Safari zoom on input focus
   useEffect(() => {
-    const viewport = document.querySelector('meta[name="viewport"]');
+    const viewport = document.querySelector('meta[name="viewport"]') as HTMLMetaElement;
     if (!viewport) return;
-    const original = viewport.getAttribute('content') || '';
-    const disableZoom = () => viewport.setAttribute('content', original + ', maximum-scale=1, user-scalable=0');
-    const restoreZoom = () => viewport.setAttribute('content', original);
-    document.addEventListener('focusin', disableZoom);
-    document.addEventListener('focusout', restoreZoom);
+    const prevent = () => {
+      viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0');
+    };
+    const restore = () => {
+      viewport.setAttribute('content', 'width=device-width, initial-scale=1.0');
+    };
+    document.addEventListener('focusin', prevent, true);
+    document.addEventListener('focusout', restore, true);
     return () => {
-      document.removeEventListener('focusin', disableZoom);
-      document.removeEventListener('focusout', restoreZoom);
+      document.removeEventListener('focusin', prevent, true);
+      document.removeEventListener('focusout', restore, true);
     };
   }, []);
 
@@ -759,10 +762,6 @@ export default function App() {
           {/* ── KITS VIEW ── */}
           {view === 'settings' && kitsView && (
             <div className="space-y-2">
-              <button
-                onClick={() => setKitsView(false)}
-                className="w-full border-2 border-t-c1/50 py-1 text-sm font-bold bg-t-bg text-t-c1/60 mb-2"
-              >← BACK</button>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                 {KITS.map(kit => (
                   <button
@@ -780,10 +779,6 @@ export default function App() {
           {/* ── TRANSFERS VIEW ── */}
           {view === 'settings' && transfersView && (
             <div className="space-y-2">
-              <button
-                onClick={() => { setTransfersView(false); setTransferCandidate(null); }}
-                className="w-full border-2 border-t-c1/50 py-1 text-sm font-bold bg-t-bg text-t-c1/60 mb-2"
-              >← BACK</button>
 
               {/* Player grid with overlay when candidate selected */}
               <div className="relative">
@@ -812,15 +807,15 @@ export default function App() {
                 )}
               </div>
 
-              {/* Confirm transfer */}
+              {/* KEEP / SELL — fixed, centred vertically and horizontally */}
               {transferCandidate && (() => {
                 const p = players.find(x => x.id === transferCandidate);
                 return p ? (
-                  <div className="flex flex-col items-center gap-4 pt-6">
+                  <div className="fixed inset-0 flex flex-col items-center justify-center gap-4 pointer-events-none" style={{ zIndex: 50 }}>
                     <div className="text-t-c4 font-bold text-center text-lg tracking-widest">{p.name}</div>
                     <button
                       onClick={() => setTransferCandidate(null)}
-                      className="border-4 border-t-c2 py-2 text-xl font-bold bg-t-bg text-t-c2"
+                      className="border-4 border-t-c2 py-2 text-xl font-bold bg-t-bg text-t-c2 pointer-events-auto"
                       style={{ width: 'calc(50% - 8px)' }}
                     >KEEP</button>
                     <button
@@ -828,9 +823,9 @@ export default function App() {
                         setPlayers(players.filter(x => x.id !== transferCandidate));
                         setTransferCandidate(null);
                       }}
-                      className="border-4 border-t-c4 py-2 text-xl font-bold bg-t-c4 text-t-bg"
+                      className="border-4 border-t-c4 py-2 text-xl font-bold bg-t-c4 text-t-bg pointer-events-auto"
                       style={{ width: 'calc(50% - 8px)' }}
-                    >TRANSFER</button>
+                    >SELL</button>
                   </div>
                 ) : null;
               })()}
