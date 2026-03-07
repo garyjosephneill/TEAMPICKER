@@ -446,11 +446,12 @@ export default function App() {
           )}
         </header>
 
-        <div className="p-4 space-y-6" style={{ paddingTop: 0 }}>
+        <div className="p-4" style={{ paddingTop: 0 }}>
+            <div className="space-y-6" style={{ paddingTop: 0 }}>
 
           {/* ── SQUAD VIEW ── */}
           {view === 'squad' && (
-            <div className="space-y-6">
+            <div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-0" style={{ paddingTop: '32px' }}>
                 {players.map((p) => {
                   const isExpanded = expandedPlayers.has(p.id);
@@ -758,6 +759,7 @@ export default function App() {
             </div>
           )}
 
+        </div>
         </div>
       </main>
 
