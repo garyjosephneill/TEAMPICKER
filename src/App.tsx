@@ -428,10 +428,12 @@ export default function App() {
     <ErrorBoundary>
     <div style={{
       position: 'fixed',
-      top: 0, left: 0, right: 0, bottom: 0,
+      top: 0,
+      bottom: 0,
+      left: '50%',
+      transform: 'translateX(-50%)',
       width: '100%',
       maxWidth: '1024px',
-      margin: '0 auto',
       overflow: 'hidden',
       display: 'flex',
       flexDirection: 'column',
