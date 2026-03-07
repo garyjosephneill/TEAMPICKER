@@ -118,7 +118,13 @@ function TapZone({ value, onChange, color }: { value: number; onChange: (v: numb
 }
 
 export default function App() {
-  const [players, setPlayers] = useState<Player[]>([]);
+  const [players, setPlayers] = useState<Player[]>(() => {
+    try {
+      const cached = localStorage.getItem('ceefax_players_cache');
+      if (cached) return JSON.parse(cached);
+    } catch {}
+    return GET_RANDOM_16();
+  });
   const [view, setView] = useState<'selection' | 'squad' | 'payment' | 'settings'>('squad');
   const [appMode, setAppMode] = useState<'MM1' | 'MM2'>('MM1');
   const [teams, setTeams] = useState<{ team1: Team; team2: Team } | null>(null);
@@ -266,6 +272,7 @@ export default function App() {
 
   useEffect(() => {
     if (players.length === 0) return;
+    try { localStorage.setItem('ceefax_players_cache', JSON.stringify(players)); } catch {}
     const timer = setTimeout(() => {
       fetch(`/api/players/${squadId}`, {
         method: 'POST',
