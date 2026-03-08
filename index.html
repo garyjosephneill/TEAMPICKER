@@ -5,26 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#7A263A" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <link rel="manifest" href="/manifest.json" />
     <link rel="apple-touch-icon" href="https://picsum.photos/192" />
     <title>GAFFER 2.0</title>
     <style>
       *, *::before, *::after { box-sizing: border-box; }
-      html, body { margin: 0; padding: 0; }
+      html, body, #root { margin: 0; padding: 0; width: 100%; height: 100%; }
     </style>
-    <script>
-      // Set a random splash background instantly before React loads
-      var splashBgs = ['#7ab4e3','#DA291C','#0057B8','#1B458F','#ffffff','#b20622','#6CABDD','#030000','#DD0000','#132257','#7A263A','#e27c2f'];
-      var bg = splashBgs[Math.floor(Math.random() * splashBgs.length)];
-      document.documentElement.style.setProperty('background', bg, 'important');
-      document.body && (document.body.style.setProperty('background', bg, 'important'));
-      var m = document.querySelector('meta[name="theme-color"]');
-      if (m) m.setAttribute('content', bg);
-    </script>
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      // Set a random splash background instantly before React loads
+      var splashBgs = ['#7ab4e3','#DA291C','#0057B8','#1B458F','#b20622','#6CABDD','#030000','#DD0000','#132257','#7A263A','#e27c2f'];
+      var bg = splashBgs[Math.floor(Math.random() * splashBgs.length)];
+      document.documentElement.style.setProperty('background', bg, 'important');
+      document.body.style.setProperty('background', bg, 'important');
+      var m = document.querySelector('meta[name="theme-color"]');
+      if (m) m.setAttribute('content', bg);
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
