@@ -306,9 +306,9 @@ export default function App() {
       i++;
       if (i >= shuffled.length) {
         clearInterval(interval);
-        setTimeout(() => setSplashDone(true), 250);
+        setTimeout(() => setSplashDone(true), 300);
       }
-    }, 250);
+    }, 300);
     // Store shuffled for render access
     (window as any).__splashKits = shuffled;
     return () => clearInterval(interval);
@@ -509,6 +509,9 @@ export default function App() {
 
   if (!splashDone) {
     const kit = SPLASH_KITS[splashKit] || SPLASH_KITS[0];
+    // Paint html + body so Safari's overscroll/chrome areas match
+    document.documentElement.style.background = kit.bg;
+    document.body.style.background = kit.bg;
     return (
       <div style={{
         position: 'fixed', top: 0, left: 0, width: '100vw', height: '100dvh',
@@ -522,6 +525,10 @@ export default function App() {
       </div>
     );
   }
+
+  // Reset html/body background once splash done
+  document.documentElement.style.background = '';
+  document.body.style.background = '';
 
   return (
     <ErrorBoundary>
