@@ -192,6 +192,7 @@ export default function App() {
     root.style.setProperty('--color-t-c2', kit.c2);
     root.style.setProperty('--color-t-c3', kit.c3);
     root.style.setProperty('--color-t-c4', kit.c4);
+    localStorage.setItem('lazy_gaffer_kit', JSON.stringify(kit));
     setActiveKit(kit);
     setKitOpen(false);
   };
@@ -251,19 +252,39 @@ export default function App() {
   };
 
   useEffect(() => {
+    const RANDOM_KITS = [
+      { name: 'ASTON VILLA',    bg: '#7ab4e3', c1: '#ffffff', c2: '#670E36', c3: '#ffd600', c4: '#670E36' },
+      { name: 'BOURNEMOUTH',    bg: '#DA291C', c1: '#ffffff', c2: '#000000', c3: '#000000', c4: '#000000' },
+      { name: 'BRIGHTON',       bg: '#0057B8', c1: '#ffffff', c2: '#ffffff', c3: '#ffcd00', c4: '#ffcd00' },
+      { name: 'CRYSTAL PALACE', bg: '#1B458F', c1: '#ffffff', c2: '#d4d1d2', c3: '#d2d2d2', c4: '#C4122E' },
+      { name: 'FULHAM',         bg: '#ffffff', c1: '#000000', c2: '#ce0007', c3: '#CC0000', c4: '#ce0007', lightBg: true },
+      { name: 'LIVERPOOL',      bg: '#b20622', c1: '#ffffff', c2: '#0bc9b0', c3: '#F6EB61', c4: '#fced5e' },
+      { name: 'MAN CITY',       bg: '#6CABDD', c1: '#ffffff', c2: '#1C2C5B', c3: '#1C2C5B', c4: '#1C2C5B' },
+      { name: 'NEWCASTLE',      bg: '#030000', c1: '#ffffff', c2: '#ffffff', c3: '#41B0E4', c4: '#41B0E4' },
+      { name: "NOTT'M FOREST",  bg: '#DD0000', c1: '#ffffff', c2: '#030000', c3: '#000000', c4: '#000000' },
+      { name: 'SPURS',          bg: '#132257', c1: '#ffffff', c2: '#bcbec0', c3: '#BCBEC0', c4: '#ffffff' },
+      { name: 'WEST HAM',       bg: '#7A263A', c1: '#ffffff', c2: '#1BB1E7', c3: '#1BB1E7', c4: '#F3D459' },
+      { name: 'WOLVES',         bg: '#e27c2f', c1: '#000000', c2: '#ffffff', c3: '#FFFFFF', c4: '#231F20' },
+    ];
+    const saved = localStorage.getItem('lazy_gaffer_kit');
     const root = document.documentElement;
-    if (!root.style.getPropertyValue('--color-t-bg')) {
-      root.style.setProperty('--color-t-bg', '#7A263A');
-      root.style.setProperty('--color-t-c1', '#ffffff');
-      root.style.setProperty('--color-t-c2', '#1BB1E7');
-      root.style.setProperty('--color-t-c3', '#1BB1E7');
-      root.style.setProperty('--color-t-c4', '#F3D459');
+    let kit;
+    if (saved) {
+      kit = JSON.parse(saved);
+    } else {
+      kit = RANDOM_KITS[Math.floor(Math.random() * RANDOM_KITS.length)];
     }
+    root.style.setProperty('--color-t-bg', kit.bg);
+    root.style.setProperty('--color-t-c1', kit.c1);
+    root.style.setProperty('--color-t-c2', kit.c2);
+    root.style.setProperty('--color-t-c3', kit.c3);
+    root.style.setProperty('--color-t-c4', kit.c4);
+    setActiveKit(kit);
   }, []);
 
-  // Splash animation — cycle through selected kits at 400ms each
+  // Splash animation — randomised order, 250ms per club
   useEffect(() => {
-    const SPLASH_KITS = [
+    const BASE_SPLASH_KITS = [
       { bg: '#7ab4e3', c4: '#670E36' },  // Aston Villa
       { bg: '#DA291C', c4: '#000000' },  // Bournemouth
       { bg: '#0057B8', c4: '#ffcd00' },  // Brighton
@@ -277,15 +298,19 @@ export default function App() {
       { bg: '#7A263A', c4: '#F3D459' },  // West Ham
       { bg: '#e27c2f', c4: '#231F20' },  // Wolves
     ];
+    // Shuffle
+    const shuffled = [...BASE_SPLASH_KITS].sort(() => Math.random() - 0.5);
     let i = 0;
     const interval = setInterval(() => {
       setSplashKit(i);
       i++;
-      if (i >= SPLASH_KITS.length) {
+      if (i >= shuffled.length) {
         clearInterval(interval);
-        setTimeout(() => setSplashDone(true), 400);
+        setTimeout(() => setSplashDone(true), 250);
       }
-    }, 400);
+    }, 250);
+    // Store shuffled for render access
+    (window as any).__splashKits = shuffled;
     return () => clearInterval(interval);
   }, []);
 
@@ -467,30 +492,31 @@ export default function App() {
     { key: 'NRG',            label: 'NRG', textColor: 'text-t-c1', fillColor: 't-c1' },
   ];
 
-  const SPLASH_KITS = [
-    { bg: '#7ab4e3', c4: '#670E36' },  // Aston Villa
-    { bg: '#DA291C', c4: '#000000' },  // Bournemouth
-    { bg: '#0057B8', c4: '#ffcd00' },  // Brighton
-    { bg: '#1B458F', c4: '#C4122E' },  // Crystal Palace
-    { bg: '#ffffff', c4: '#ce0007' },  // Fulham
-    { bg: '#b20622', c4: '#fced5e' },  // Liverpool
-    { bg: '#6CABDD', c4: '#1C2C5B' },  // Man City
-    { bg: '#030000', c4: '#41B0E4' },  // Newcastle
-    { bg: '#DD0000', c4: '#000000' },  // Nott'm Forest
-    { bg: '#132257', c4: '#ffffff' },  // Spurs
-    { bg: '#7A263A', c4: '#F3D459' },  // West Ham
-    { bg: '#e27c2f', c4: '#231F20' },  // Wolves
+  const SPLASH_KITS = (window as any).__splashKits || [
+    { bg: '#7ab4e3', c4: '#670E36' },
+    { bg: '#DA291C', c4: '#000000' },
+    { bg: '#0057B8', c4: '#ffcd00' },
+    { bg: '#1B458F', c4: '#C4122E' },
+    { bg: '#ffffff', c4: '#ce0007' },
+    { bg: '#b20622', c4: '#fced5e' },
+    { bg: '#6CABDD', c4: '#1C2C5B' },
+    { bg: '#030000', c4: '#41B0E4' },
+    { bg: '#DD0000', c4: '#000000' },
+    { bg: '#132257', c4: '#ffffff' },
+    { bg: '#7A263A', c4: '#F3D459' },
+    { bg: '#e27c2f', c4: '#231F20' },
   ];
 
   if (!splashDone) {
     const kit = SPLASH_KITS[splashKit] || SPLASH_KITS[0];
     return (
       <div style={{
-        position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
+        position: 'fixed', top: 0, left: 0, width: '100vw', height: '100dvh',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         background: kit.bg, fontFamily: "'Bebas Neue', sans-serif",
+        margin: 0, padding: 0,
       }}>
-        <span style={{ fontSize: 'clamp(10px, 2.4vw, 16px)', letterSpacing: '0.1em', color: kit.c4, whiteSpace: 'nowrap' }}>
+        <span style={{ fontSize: 'clamp(52px, 14vw, 96px)', letterSpacing: '0.05em', color: kit.c4, whiteSpace: 'nowrap' }}>
           LAZY GAFFER
         </span>
       </div>
