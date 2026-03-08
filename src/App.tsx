@@ -301,6 +301,7 @@ export default function App() {
   // Splash animation — randomised order, 300ms per club
   useEffect(() => {
     const applyBg = (bg: string) => {
+      document.documentElement.style.setProperty('--color-t-bg', bg);
       document.documentElement.style.setProperty('background', bg, 'important');
       document.body.style.setProperty('background', bg, 'important');
       let meta = document.querySelector('meta[name="theme-color"]') as HTMLMetaElement;
@@ -510,10 +511,11 @@ export default function App() {
     const kit = splashKits[splashKit] || splashKits[0];
     return (
       <div style={{
-        position: 'fixed', top: 0, left: 0, width: '100vw', height: '100dvh',
+        position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+        zIndex: 9999,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        background: kit.bg, fontFamily: "'Bebas Neue', sans-serif",
-        margin: 0, padding: 0,
+        backgroundColor: kit.bg,
+        fontFamily: "'Bebas Neue', sans-serif",
       }}>
         <span style={{ fontSize: 'clamp(52px, 14vw, 96px)', letterSpacing: '0.05em', color: kit.c4, whiteSpace: 'nowrap' }}>
           LAZY GAFFER
