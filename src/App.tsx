@@ -267,7 +267,15 @@ export default function App() {
     lastScrollY.current = currentScrollY;
   };
 
+  // Kit init + splash — merged into one effect to avoid race condition
   useEffect(() => {
+    // Clear stale kit data if it's from an old format
+    const KIT_VERSION = 'v2';
+    if (localStorage.getItem('lazy_gaffer_kit_version') !== KIT_VERSION) {
+      localStorage.removeItem('lazy_gaffer_kit');
+      localStorage.setItem('lazy_gaffer_kit_version', KIT_VERSION);
+    }
+
     const RANDOM_KITS = [
       { name: 'ASTON VILLA',    bg: '#7ab4e3', c1: '#ffffff', c2: '#670E36', c3: '#ffd600', c4: '#670E36' },
       { name: 'BOURNEMOUTH',    bg: '#DA291C', c1: '#ffffff', c2: '#000000', c3: '#000000', c4: '#000000' },
@@ -282,35 +290,23 @@ export default function App() {
       { name: 'WEST HAM',       bg: '#7A263A', c1: '#ffffff', c2: '#1BB1E7', c3: '#1BB1E7', c4: '#F3D459' },
       { name: 'WOLVES',         bg: '#e27c2f', c1: '#000000', c2: '#ffffff', c3: '#FFFFFF', c4: '#231F20' },
     ];
-    const saved = localStorage.getItem('lazy_gaffer_kit');
-    const root = document.documentElement;
-    let kit;
-    if (saved) {
-      kit = JSON.parse(saved);
-    } else {
-      kit = RANDOM_KITS[Math.floor(Math.random() * RANDOM_KITS.length)];
-    }
-    root.style.setProperty('--color-t-bg', kit.bg);
-    root.style.setProperty('--color-t-c1', kit.c1);
-    root.style.setProperty('--color-t-c2', kit.c2);
-    root.style.setProperty('--color-t-c3', kit.c3);
-    root.style.setProperty('--color-t-c4', kit.c4);
-    setActiveKit(kit);
-  }, []);
 
-  // Splash animation — randomised order, 300ms per club
-  useEffect(() => {
+    // Determine app kit upfront
+    const saved = localStorage.getItem('lazy_gaffer_kit');
+    const appKit = saved ? JSON.parse(saved) : RANDOM_KITS[Math.floor(Math.random() * RANDOM_KITS.length)];
+    setActiveKit(appKit);
+
+    const root = document.documentElement;
+    const meta = document.querySelector('meta[name="theme-color"]') as HTMLMetaElement;
+
     const applyBg = (bg: string) => {
-      document.documentElement.style.setProperty('--color-t-bg', bg);
-      document.documentElement.style.setProperty('background', bg, 'important');
-      document.body.style.setProperty('background', bg, 'important');
-      let meta = document.querySelector('meta[name="theme-color"]') as HTMLMetaElement;
-      if (!meta) { meta = document.createElement('meta'); meta.name = 'theme-color'; document.head.appendChild(meta); }
-      meta.content = bg;
+      root.style.setProperty('--color-t-bg', bg);
+      document.body.style.setProperty('background-color', bg, 'important');
+      if (meta) meta.content = bg;
     };
 
+    // Run splash
     applyBg(splashKits[0].bg);
-
     let i = 1;
     const interval = setInterval(() => {
       if (i < splashKits.length) {
@@ -320,8 +316,14 @@ export default function App() {
       } else {
         clearInterval(interval);
         setTimeout(() => {
-          document.documentElement.style.removeProperty('background');
-          document.body.style.removeProperty('background');
+          // Hand off to app kit — all vars set together
+          root.style.setProperty('--color-t-bg', appKit.bg);
+          root.style.setProperty('--color-t-c1', appKit.c1);
+          root.style.setProperty('--color-t-c2', appKit.c2);
+          root.style.setProperty('--color-t-c3', appKit.c3);
+          root.style.setProperty('--color-t-c4', appKit.c4);
+          document.body.style.removeProperty('background-color');
+          if (meta) meta.content = appKit.bg;
           setSplashDone(true);
         }, 300);
       }
