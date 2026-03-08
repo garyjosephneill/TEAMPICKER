@@ -138,6 +138,8 @@ export default function App() {
   });
   const [squadStatus, setSquadStatus] = useState<any>(null);
   const [newPlayerName, setNewPlayerName] = useState('');
+  const [splashKit, setSplashKit] = useState(0);
+  const [splashDone, setSplashDone] = useState(false);
   const [editingPlayerId, setEditingPlayerId] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
@@ -257,6 +259,42 @@ export default function App() {
       root.style.setProperty('--color-t-c3', '#1BB1E7');
       root.style.setProperty('--color-t-c4', '#F3D459');
     }
+  }, []);
+
+  // Splash animation — cycle through all 20 kits at 100ms each
+  useEffect(() => {
+    const SPLASH_KITS = [
+      { bg: '#EF0107', c4: '#9C824A' },
+      { bg: '#7ab4e3', c4: '#670E36' },
+      { bg: '#DA291C', c4: '#000000' },
+      { bg: '#e30613', c4: '#000000' },
+      { bg: '#0057B8', c4: '#ffcd00' },
+      { bg: '#034694', c4: '#DBA111' },
+      { bg: '#1B458F', c4: '#C4122E' },
+      { bg: '#003399', c4: '#ffdf1c' },
+      { bg: '#ffffff', c4: '#ce0007' },
+      { bg: '#0044A9', c4: '#de2d26' },
+      { bg: '#003090', c4: '#FDBE11' },
+      { bg: '#b20622', c4: '#fced5e' },
+      { bg: '#6CABDD', c4: '#1C2C5B' },
+      { bg: '#DA291C', c4: '#FBE122' },
+      { bg: '#030000', c4: '#41B0E4' },
+      { bg: '#DD0000', c4: '#000000' },
+      { bg: '#D71920', c4: '#FFC20E' },
+      { bg: '#132257', c4: '#ffffff' },
+      { bg: '#7A263A', c4: '#F3D459' },
+      { bg: '#e27c2f', c4: '#231F20' },
+    ];
+    let i = 0;
+    const interval = setInterval(() => {
+      setSplashKit(i);
+      i++;
+      if (i >= SPLASH_KITS.length) {
+        clearInterval(interval);
+        setTimeout(() => setSplashDone(true), 100);
+      }
+    }, 100);
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
@@ -436,6 +474,43 @@ export default function App() {
     { key: 'SPD',            label: 'SPD', textColor: 'text-t-c3', fillColor: 't-c3' },
     { key: 'NRG',            label: 'NRG', textColor: 'text-t-c1', fillColor: 't-c1' },
   ];
+
+  const SPLASH_KITS = [
+    { bg: '#EF0107', c4: '#9C824A' },
+    { bg: '#7ab4e3', c4: '#670E36' },
+    { bg: '#DA291C', c4: '#000000' },
+    { bg: '#e30613', c4: '#000000' },
+    { bg: '#0057B8', c4: '#ffcd00' },
+    { bg: '#034694', c4: '#DBA111' },
+    { bg: '#1B458F', c4: '#C4122E' },
+    { bg: '#003399', c4: '#ffdf1c' },
+    { bg: '#ffffff', c4: '#ce0007' },
+    { bg: '#0044A9', c4: '#de2d26' },
+    { bg: '#003090', c4: '#FDBE11' },
+    { bg: '#b20622', c4: '#fced5e' },
+    { bg: '#6CABDD', c4: '#1C2C5B' },
+    { bg: '#DA291C', c4: '#FBE122' },
+    { bg: '#030000', c4: '#41B0E4' },
+    { bg: '#DD0000', c4: '#000000' },
+    { bg: '#D71920', c4: '#FFC20E' },
+    { bg: '#132257', c4: '#ffffff' },
+    { bg: '#7A263A', c4: '#F3D459' },
+    { bg: '#e27c2f', c4: '#231F20' },
+  ];
+
+  if (!splashDone) {
+    const kit = SPLASH_KITS[splashKit] || SPLASH_KITS[0];
+    return (
+      <div style={{
+        position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
+        background: kit.bg, fontFamily: "'Bebas Neue', sans-serif",
+      }}>
+        <span style={{ fontSize: 'clamp(48px, 12vw, 80px)', letterSpacing: '0.1em', color: kit.c4, whiteSpace: 'nowrap' }}>
+          LAZY GAFFER
+        </span>
+      </div>
+    );
+  }
 
   return (
     <ErrorBoundary>
