@@ -531,7 +531,7 @@ export default function App() {
     <style>{`main::-webkit-scrollbar { display: none; }`}</style>
     <div className="flex flex-col h-[100dvh] overflow-hidden bg-t-bg text-t-c1 uppercase" style={{ fontFamily: "'Bebas Neue', sans-serif", width: '100%', maxWidth: '1024px', marginLeft: 'auto', marginRight: 'auto' }}>
       <main ref={mainRef} className="flex-grow overflow-y-auto overflow-x-hidden relative" onScroll={handleScroll} style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-        <header ref={headerRef} className="sticky top-0 z-10 bg-t-bg pb-4 shrink-0 overflow-x-hidden" style={{ paddingTop: 'max(32px, env(safe-area-inset-top))', paddingLeft: 'max(16px, env(safe-area-inset-left))', paddingRight: 'max(16px, env(safe-area-inset-right))' }}>
+        <header ref={headerRef} className="sticky top-0 z-10 bg-t-bg pb-4 shrink-0 overflow-x-hidden" style={{ paddingTop: 'max(60px, env(safe-area-inset-top))', paddingLeft: 'max(16px, env(safe-area-inset-left))', paddingRight: 'max(16px, env(safe-area-inset-right))' }}>
           {/* Title row with ball right-aligned */}
           <div className="mb-[11px] flex items-center justify-between">
             <div className="text-t-c4 font-title font-normal tracking-normal uppercase leading-none" style={{ fontSize: 'clamp(32px, 11vw, 50px)' }}>
@@ -938,7 +938,7 @@ export default function App() {
       </main>
 
       {view !== 'settings' && (
-      <div className="shrink-0 bg-t-bg pt-4 flex flex-col gap-4" style={{ paddingBottom: 'max(16px, env(safe-area-inset-bottom))', paddingLeft: 'max(16px, env(safe-area-inset-left))', paddingRight: 'max(16px, env(safe-area-inset-right))' }}>
+      <div className="shrink-0 bg-t-bg pt-4 pb-4 flex flex-col gap-4" style={{ paddingLeft: 'max(16px, env(safe-area-inset-left))', paddingRight: 'max(16px, env(safe-area-inset-right))' }}>
         <nav className="flex w-full font-bold text-xl gap-4">
           <button onClick={() => setView('squad')} className="flex-1 py-2 transition-all border-4 border-t-c2 font-bold text-xl" style={{ background: view === 'squad' ? 'var(--color-t-c2)' : 'var(--color-t-bg)', color: view === 'squad' ? 'var(--color-t-bg)' : 'var(--color-t-c2)' }}>SQUAD</button>
           <button onClick={() => setView('selection')} className="flex-1 py-2 transition-all border-4 border-t-c3 font-bold text-xl" style={{ background: view === 'selection' ? 'var(--color-t-c3)' : 'var(--color-t-bg)', color: view === 'selection' ? 'var(--color-t-bg)' : 'var(--color-t-c3)' }}>GAFFER</button>
