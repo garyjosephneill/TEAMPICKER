@@ -54,7 +54,7 @@ const FAMOUS_PLAYERS = [
 
 
 const RANDOM_MM2_RATINGS = (): Record<StatKey, number> => {
-  const r = () => Math.floor(Math.random() * 10) + 1;
+  const r = () => Math.floor(Math.random() * 7) + 4;
   return {
     [Position.GKP]: r(),
     [Position.DEFENCE]: r(),
