@@ -261,29 +261,21 @@ export default function App() {
     }
   }, []);
 
-  // Splash animation — cycle through all 20 kits at 100ms each
+  // Splash animation — cycle through selected kits at 400ms each
   useEffect(() => {
     const SPLASH_KITS = [
-      { bg: '#EF0107', c4: '#9C824A' },
-      { bg: '#7ab4e3', c4: '#670E36' },
-      { bg: '#DA291C', c4: '#000000' },
-      { bg: '#e30613', c4: '#000000' },
-      { bg: '#0057B8', c4: '#ffcd00' },
-      { bg: '#034694', c4: '#DBA111' },
-      { bg: '#1B458F', c4: '#C4122E' },
-      { bg: '#003399', c4: '#ffdf1c' },
-      { bg: '#ffffff', c4: '#ce0007' },
-      { bg: '#0044A9', c4: '#de2d26' },
-      { bg: '#003090', c4: '#FDBE11' },
-      { bg: '#b20622', c4: '#fced5e' },
-      { bg: '#6CABDD', c4: '#1C2C5B' },
-      { bg: '#DA291C', c4: '#FBE122' },
-      { bg: '#030000', c4: '#41B0E4' },
-      { bg: '#DD0000', c4: '#000000' },
-      { bg: '#D71920', c4: '#FFC20E' },
-      { bg: '#132257', c4: '#ffffff' },
-      { bg: '#7A263A', c4: '#F3D459' },
-      { bg: '#e27c2f', c4: '#231F20' },
+      { bg: '#7ab4e3', c4: '#670E36' },  // Aston Villa
+      { bg: '#DA291C', c4: '#000000' },  // Bournemouth
+      { bg: '#0057B8', c4: '#ffcd00' },  // Brighton
+      { bg: '#1B458F', c4: '#C4122E' },  // Crystal Palace
+      { bg: '#ffffff', c4: '#ce0007' },  // Fulham
+      { bg: '#b20622', c4: '#fced5e' },  // Liverpool
+      { bg: '#6CABDD', c4: '#1C2C5B' },  // Man City
+      { bg: '#030000', c4: '#41B0E4' },  // Newcastle
+      { bg: '#DD0000', c4: '#000000' },  // Nott'm Forest
+      { bg: '#132257', c4: '#ffffff' },  // Spurs
+      { bg: '#7A263A', c4: '#F3D459' },  // West Ham
+      { bg: '#e27c2f', c4: '#231F20' },  // Wolves
     ];
     let i = 0;
     const interval = setInterval(() => {
@@ -291,9 +283,9 @@ export default function App() {
       i++;
       if (i >= SPLASH_KITS.length) {
         clearInterval(interval);
-        setTimeout(() => setSplashDone(true), 100);
+        setTimeout(() => setSplashDone(true), 400);
       }
-    }, 100);
+    }, 400);
     return () => clearInterval(interval);
   }, []);
 
@@ -476,36 +468,29 @@ export default function App() {
   ];
 
   const SPLASH_KITS = [
-    { bg: '#EF0107', c4: '#9C824A' },
-    { bg: '#7ab4e3', c4: '#670E36' },
-    { bg: '#DA291C', c4: '#000000' },
-    { bg: '#e30613', c4: '#000000' },
-    { bg: '#0057B8', c4: '#ffcd00' },
-    { bg: '#034694', c4: '#DBA111' },
-    { bg: '#1B458F', c4: '#C4122E' },
-    { bg: '#003399', c4: '#ffdf1c' },
-    { bg: '#ffffff', c4: '#ce0007' },
-    { bg: '#0044A9', c4: '#de2d26' },
-    { bg: '#003090', c4: '#FDBE11' },
-    { bg: '#b20622', c4: '#fced5e' },
-    { bg: '#6CABDD', c4: '#1C2C5B' },
-    { bg: '#DA291C', c4: '#FBE122' },
-    { bg: '#030000', c4: '#41B0E4' },
-    { bg: '#DD0000', c4: '#000000' },
-    { bg: '#D71920', c4: '#FFC20E' },
-    { bg: '#132257', c4: '#ffffff' },
-    { bg: '#7A263A', c4: '#F3D459' },
-    { bg: '#e27c2f', c4: '#231F20' },
+    { bg: '#7ab4e3', c4: '#670E36' },  // Aston Villa
+    { bg: '#DA291C', c4: '#000000' },  // Bournemouth
+    { bg: '#0057B8', c4: '#ffcd00' },  // Brighton
+    { bg: '#1B458F', c4: '#C4122E' },  // Crystal Palace
+    { bg: '#ffffff', c4: '#ce0007' },  // Fulham
+    { bg: '#b20622', c4: '#fced5e' },  // Liverpool
+    { bg: '#6CABDD', c4: '#1C2C5B' },  // Man City
+    { bg: '#030000', c4: '#41B0E4' },  // Newcastle
+    { bg: '#DD0000', c4: '#000000' },  // Nott'm Forest
+    { bg: '#132257', c4: '#ffffff' },  // Spurs
+    { bg: '#7A263A', c4: '#F3D459' },  // West Ham
+    { bg: '#e27c2f', c4: '#231F20' },  // Wolves
   ];
 
   if (!splashDone) {
     const kit = SPLASH_KITS[splashKit] || SPLASH_KITS[0];
     return (
       <div style={{
-        position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
+        position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
         background: kit.bg, fontFamily: "'Bebas Neue', sans-serif",
       }}>
-        <span style={{ fontSize: 'clamp(48px, 12vw, 80px)', letterSpacing: '0.1em', color: kit.c4, whiteSpace: 'nowrap' }}>
+        <span style={{ fontSize: 'clamp(10px, 2.4vw, 16px)', letterSpacing: '0.1em', color: kit.c4, whiteSpace: 'nowrap' }}>
           LAZY GAFFER
         </span>
       </div>
