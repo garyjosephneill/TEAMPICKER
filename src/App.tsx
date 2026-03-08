@@ -594,7 +594,7 @@ export default function App() {
                       {/* MM1 stars */}
                       {appMode === 'MM1' && (
                         <div className="flex justify-end mb-1">
-                          <div className="flex justify-between leading-none" style={{ width: 148, fontSize: '15px' }}>
+                          <div className="flex justify-between leading-none" style={{ width: '100%', maxWidth: 180, fontSize: '15px' }}>
                             {Array.from({ length: 10 }).map((_, idx) => (
                               <span key={idx} className={idx < p.ratings[p.position] ? 'text-t-c4' : 'text-t-c1/20'}>★</span>
                             ))}
@@ -657,7 +657,7 @@ export default function App() {
                             type="range" min="1" max="10"
                             value={p.ratings[p.position]}
                             key={`${p.id}-${p.position}`}
-                            style={{ fontSize: '16px' }}
+                            style={{ fontSize: '16px', accentColor: activeKit?.lightBg ? '#000000' : 'var(--color-t-c1)' }}
                             onChange={e => {
                               const val = parseInt(e.target.value);
                               setPlayers(prev => prev.map(x => x.id === p.id ? {
