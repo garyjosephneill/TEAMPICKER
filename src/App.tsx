@@ -313,9 +313,9 @@ export default function App() {
           document.body.style.removeProperty('background-color');
           if (meta) meta.content = appKit.bg;
           setSplashDone(true);
-        }, 300);
+        }, 200);
       }
-    }, 300);
+    }, 200);
     return () => clearInterval(interval);
   }, []);
 
@@ -521,7 +521,7 @@ export default function App() {
       {/* Fixed status bar cover — always sits over the top, matches kit colour */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-t-bg" style={{ height: 'env(safe-area-inset-top, 10px)' }} />
       <main ref={mainRef} className="flex-grow overflow-y-auto overflow-x-hidden relative" onScroll={handleScroll} style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', marginTop: 'env(safe-area-inset-top, 10px)' }}>
-        <header ref={headerRef} className="sticky top-0 z-10 bg-t-bg pb-4 shrink-0 overflow-x-hidden" style={{ paddingTop: 'max(60px, env(safe-area-inset-top))', paddingLeft: 'max(16px, env(safe-area-inset-left))', paddingRight: 'max(16px, env(safe-area-inset-right))' }}>
+        <header ref={headerRef} className="sticky top-0 z-10 bg-t-bg pb-4 shrink-0 overflow-x-hidden" style={{ paddingLeft: 'max(16px, env(safe-area-inset-left))', paddingRight: 'max(16px, env(safe-area-inset-right))' }}>
           {/* Title row with ball right-aligned */}
           <div className="mb-[11px] flex items-center justify-between">
             <div className="text-t-c4 font-title font-normal tracking-normal uppercase leading-none" style={{ fontSize: 'clamp(32px, 11vw, 50px)' }}>
