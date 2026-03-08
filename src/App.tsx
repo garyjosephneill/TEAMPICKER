@@ -282,7 +282,7 @@ export default function App() {
     setActiveKit(kit);
   }, []);
 
-  // Splash animation — randomised order, 250ms per club
+  // Splash animation — randomised order, 300ms per club
   useEffect(() => {
     const BASE_SPLASH_KITS = [
       { bg: '#7ab4e3', c4: '#670E36' },  // Aston Villa
@@ -298,19 +298,36 @@ export default function App() {
       { bg: '#7A263A', c4: '#F3D459' },  // West Ham
       { bg: '#e27c2f', c4: '#231F20' },  // Wolves
     ];
-    // Shuffle
     const shuffled = [...BASE_SPLASH_KITS].sort(() => Math.random() - 0.5);
-    let i = 0;
+    (window as any).__splashKits = shuffled;
+
+    const applyBg = (bg: string) => {
+      document.documentElement.style.setProperty('background', bg, 'important');
+      document.body.style.setProperty('background', bg, 'important');
+      // Update theme-color meta so Safari status bar matches
+      let meta = document.querySelector('meta[name="theme-color"]') as HTMLMetaElement;
+      if (!meta) { meta = document.createElement('meta'); meta.name = 'theme-color'; document.head.appendChild(meta); }
+      meta.content = bg;
+    };
+
+    // Set first frame immediately before first render
+    applyBg(shuffled[0].bg);
+    setSplashKit(0);
+
+    let i = 1;
     const interval = setInterval(() => {
+      applyBg(shuffled[i]?.bg || shuffled[0].bg);
       setSplashKit(i);
       i++;
       if (i >= shuffled.length) {
         clearInterval(interval);
-        setTimeout(() => setSplashDone(true), 300);
+        setTimeout(() => {
+          document.documentElement.style.removeProperty('background');
+          document.body.style.removeProperty('background');
+          setSplashDone(true);
+        }, 300);
       }
     }, 300);
-    // Store shuffled for render access
-    (window as any).__splashKits = shuffled;
     return () => clearInterval(interval);
   }, []);
 
@@ -509,9 +526,6 @@ export default function App() {
 
   if (!splashDone) {
     const kit = SPLASH_KITS[splashKit] || SPLASH_KITS[0];
-    // Paint html + body so Safari's overscroll/chrome areas match
-    document.documentElement.style.background = kit.bg;
-    document.body.style.background = kit.bg;
     return (
       <div style={{
         position: 'fixed', top: 0, left: 0, width: '100vw', height: '100dvh',
@@ -526,9 +540,6 @@ export default function App() {
     );
   }
 
-  // Reset html/body background once splash done
-  document.documentElement.style.background = '';
-  document.body.style.background = '';
 
   return (
     <ErrorBoundary>
