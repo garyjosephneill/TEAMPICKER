@@ -163,6 +163,7 @@ export default function App() {
   const [kitOpen, setKitOpen] = useState(false);
   const [activeKit, setActiveKit] = useState<typeof KITS[0] | null>(null);
   const [kitsView, setKitsView] = useState(false);
+  const [kitLeague, setKitLeague] = useState<'PL' | 'INTL'>('PL');
   const [transfersView, setTransfersView] = useState(false);
   const [transferCandidate, setTransferCandidate] = useState<string | null>(null);
   const [deleteMode, setDeleteMode] = useState(false);
@@ -199,6 +200,31 @@ export default function App() {
     { name: 'SPURS',            bg: '#132257', c1: '#ffffff', c2: '#bcbec0', c3: '#BCBEC0', c4: '#ffffff' },
     { name: 'WEST HAM',         bg: '#7A263A', c1: '#ffffff', c2: '#1BB1E7', c3: '#1BB1E7', c4: '#F3D459' },
     { name: 'WOLVES',           bg: '#e27c2f', c1: '#000000', c2: '#ffffff', c3: '#FFFFFF', c4: '#231F20' },
+  ];
+
+  // ── KIT THEMES — INTERNATIONAL NATIONS ──
+  const INTL_KITS = [
+    { name: 'ARGENTINA',     bg: '#74ACDF', c1: '#ffffff', c2: '#ffffff', c3: '#F6B40E', c4: '#F6B40E' },
+    { name: 'AUSTRALIA',     bg: '#00843D', c1: '#ffffff', c2: '#FFD700', c3: '#FFD700', c4: '#FFD700' },
+    { name: 'BELGIUM',       bg: '#000000', c1: '#ffffff', c2: '#FFD700', c3: '#EF3340', c4: '#FFD700' },
+    { name: 'BRAZIL',        bg: '#009C3B', c1: '#ffffff', c2: '#FFDF00', c3: '#002776', c4: '#FFDF00' },
+    { name: 'CROATIA',       bg: '#FF0000', c1: '#ffffff', c2: '#003DA5', c3: '#003DA5', c4: '#003DA5' },
+    { name: 'ENGLAND',       bg: '#CE1124', c1: '#ffffff', c2: '#ffffff', c3: '#00247D', c4: '#00247D' },
+    { name: 'FRANCE',        bg: '#002395', c1: '#ffffff', c2: '#ED2939', c3: '#ED2939', c4: '#ED2939' },
+    { name: 'GERMANY',       bg: '#ffffff', c1: '#000000', c2: '#D00000', c3: '#FFCE00', c4: '#D00000', lightBg: true },
+    { name: 'ITALY',         bg: '#003DA5', c1: '#ffffff', c2: '#CE2B37', c3: '#ffffff', c4: '#CE2B37' },
+    { name: 'IVORY COAST',   bg: '#F77F00', c1: '#ffffff', c2: '#009A44', c3: '#ffffff', c4: '#009A44' },
+    { name: 'JAPAN',         bg: '#003DA5', c1: '#ffffff', c2: '#BC002D', c3: '#ffffff', c4: '#BC002D' },
+    { name: 'MEXICO',        bg: '#006847', c1: '#ffffff', c2: '#CE1126', c3: '#ffffff', c4: '#CE1126' },
+    { name: 'MOROCCO',       bg: '#C1272D', c1: '#ffffff', c2: '#006233', c3: '#ffffff', c4: '#006233' },
+    { name: 'NETHERLANDS',   bg: '#FF4F00', c1: '#ffffff', c2: '#003DA5', c3: '#ffffff', c4: '#003DA5' },
+    { name: 'PORTUGAL',      bg: '#006600', c1: '#ffffff', c2: '#FF0000', c3: '#FFD700', c4: '#FF0000' },
+    { name: 'SCOTLAND',      bg: '#003DA5', c1: '#ffffff', c2: '#FFD700', c3: '#ffffff', c4: '#FFD700' },
+    { name: 'SENEGAL',       bg: '#00853F', c1: '#ffffff', c2: '#FDEF42', c3: '#E31B23', c4: '#FDEF42' },
+    { name: 'SPAIN',         bg: '#AA151B', c1: '#ffffff', c2: '#F1BF00', c3: '#F1BF00', c4: '#F1BF00' },
+    { name: 'TURKEY',        bg: '#E30A17', c1: '#ffffff', c2: '#ffffff', c3: '#ffffff', c4: '#ffffff' },
+    { name: 'URUGUAY',       bg: '#5EB6E4', c1: '#ffffff', c2: '#000000', c3: '#ffffff', c4: '#000000' },
+    { name: 'WALES',         bg: '#C8102E', c1: '#ffffff', c2: '#FFD700', c3: '#004B87', c4: '#FFD700' },
   ];
 
   const applyKit = (kit: typeof KITS[0]) => {
@@ -858,8 +884,21 @@ export default function App() {
           {/* ── KITS VIEW ── */}
           {view === 'settings' && kitsView && (
             <div className="space-y-2">
+              {/* PL / INTL toggle */}
+              <div className="flex mb-3" style={{ width: 'fit-content' }}>
+                <button
+                  onClick={() => setKitLeague('PL')}
+                  className="font-bold text-sm border-2 border-t-c1 px-3 py-1"
+                  style={{ background: kitLeague === 'PL' ? 'var(--color-t-c1)' : 'var(--color-t-bg)', color: kitLeague === 'PL' ? 'var(--color-t-bg)' : 'var(--color-t-c1)' }}
+                >PL</button>
+                <button
+                  onClick={() => setKitLeague('INTL')}
+                  className="font-bold text-sm border-2 border-l-0 border-t-c1 px-3 py-1"
+                  style={{ background: kitLeague === 'INTL' ? 'var(--color-t-c1)' : 'var(--color-t-bg)', color: kitLeague === 'INTL' ? 'var(--color-t-bg)' : 'var(--color-t-c1)' }}
+                >INTL</button>
+              </div>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                {KITS.map(kit => (
+                {(kitLeague === 'PL' ? KITS : INTL_KITS).map(kit => (
                   <button
                     key={kit.name}
                     onClick={() => { applyKit(kit); setKitsView(false); setView('squad'); }}
