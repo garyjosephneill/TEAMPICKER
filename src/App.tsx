@@ -516,7 +516,11 @@ export default function App() {
 
   return (
     <ErrorBoundary>
-    <style>{`main::-webkit-scrollbar { display: none; }`}</style>
+    <style>{`
+      main::-webkit-scrollbar { display: none; }
+      input[type=range]::-webkit-slider-thumb { background: ${activeKit?.lightBg ? '#000000' : 'var(--color-t-c1)'}; }
+      input[type=range]::-moz-range-thumb { background: ${activeKit?.lightBg ? '#000000' : 'var(--color-t-c1)'}; border: none; }
+    `}</style>
     <div className="flex flex-col h-[100dvh] overflow-hidden bg-t-bg text-t-c1 uppercase" style={{ fontFamily: "'Bebas Neue', sans-serif", width: '100%', maxWidth: '1024px', marginLeft: 'auto', marginRight: 'auto' }}>
       {/* Fixed status bar cover — always sits over the top, matches kit colour */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-t-bg" style={{ height: window.innerWidth >= 768 ? '50px' : 'env(safe-area-inset-top, 15px)' }} />
