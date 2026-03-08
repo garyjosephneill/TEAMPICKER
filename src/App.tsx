@@ -138,8 +138,24 @@ export default function App() {
   });
   const [squadStatus, setSquadStatus] = useState<any>(null);
   const [newPlayerName, setNewPlayerName] = useState('');
+  const SPLASH_KITS_DATA = [
+    { bg: '#7ab4e3', c4: '#670E36' },
+    { bg: '#DA291C', c4: '#000000' },
+    { bg: '#0057B8', c4: '#ffcd00' },
+    { bg: '#1B458F', c4: '#C4122E' },
+    { bg: '#ffffff', c4: '#ce0007' },
+    { bg: '#b20622', c4: '#fced5e' },
+    { bg: '#6CABDD', c4: '#1C2C5B' },
+    { bg: '#030000', c4: '#41B0E4' },
+    { bg: '#DD0000', c4: '#000000' },
+    { bg: '#132257', c4: '#ffffff' },
+    { bg: '#7A263A', c4: '#F3D459' },
+    { bg: '#e27c2f', c4: '#231F20' },
+  ];
+
   const [splashKit, setSplashKit] = useState(0);
   const [splashDone, setSplashDone] = useState(false);
+  const [splashKits] = useState(() => [...SPLASH_KITS_DATA].sort(() => Math.random() - 0.5));
   const [editingPlayerId, setEditingPlayerId] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
@@ -284,42 +300,23 @@ export default function App() {
 
   // Splash animation — randomised order, 300ms per club
   useEffect(() => {
-    const BASE_SPLASH_KITS = [
-      { bg: '#7ab4e3', c4: '#670E36' },  // Aston Villa
-      { bg: '#DA291C', c4: '#000000' },  // Bournemouth
-      { bg: '#0057B8', c4: '#ffcd00' },  // Brighton
-      { bg: '#1B458F', c4: '#C4122E' },  // Crystal Palace
-      { bg: '#ffffff', c4: '#ce0007' },  // Fulham
-      { bg: '#b20622', c4: '#fced5e' },  // Liverpool
-      { bg: '#6CABDD', c4: '#1C2C5B' },  // Man City
-      { bg: '#030000', c4: '#41B0E4' },  // Newcastle
-      { bg: '#DD0000', c4: '#000000' },  // Nott'm Forest
-      { bg: '#132257', c4: '#ffffff' },  // Spurs
-      { bg: '#7A263A', c4: '#F3D459' },  // West Ham
-      { bg: '#e27c2f', c4: '#231F20' },  // Wolves
-    ];
-    const shuffled = [...BASE_SPLASH_KITS].sort(() => Math.random() - 0.5);
-    (window as any).__splashKits = shuffled;
-
     const applyBg = (bg: string) => {
       document.documentElement.style.setProperty('background', bg, 'important');
       document.body.style.setProperty('background', bg, 'important');
-      // Update theme-color meta so Safari status bar matches
       let meta = document.querySelector('meta[name="theme-color"]') as HTMLMetaElement;
       if (!meta) { meta = document.createElement('meta'); meta.name = 'theme-color'; document.head.appendChild(meta); }
       meta.content = bg;
     };
 
-    // Set first frame immediately before first render
-    applyBg(shuffled[0].bg);
-    setSplashKit(0);
+    applyBg(splashKits[0].bg);
 
     let i = 1;
     const interval = setInterval(() => {
-      applyBg(shuffled[i]?.bg || shuffled[0].bg);
-      setSplashKit(i);
-      i++;
-      if (i >= shuffled.length) {
+      if (i < splashKits.length) {
+        applyBg(splashKits[i].bg);
+        setSplashKit(i);
+        i++;
+      } else {
         clearInterval(interval);
         setTimeout(() => {
           document.documentElement.style.removeProperty('background');
@@ -509,23 +506,8 @@ export default function App() {
     { key: 'NRG',            label: 'NRG', textColor: 'text-t-c1', fillColor: 't-c1' },
   ];
 
-  const SPLASH_KITS = (window as any).__splashKits || [
-    { bg: '#7ab4e3', c4: '#670E36' },
-    { bg: '#DA291C', c4: '#000000' },
-    { bg: '#0057B8', c4: '#ffcd00' },
-    { bg: '#1B458F', c4: '#C4122E' },
-    { bg: '#ffffff', c4: '#ce0007' },
-    { bg: '#b20622', c4: '#fced5e' },
-    { bg: '#6CABDD', c4: '#1C2C5B' },
-    { bg: '#030000', c4: '#41B0E4' },
-    { bg: '#DD0000', c4: '#000000' },
-    { bg: '#132257', c4: '#ffffff' },
-    { bg: '#7A263A', c4: '#F3D459' },
-    { bg: '#e27c2f', c4: '#231F20' },
-  ];
-
   if (!splashDone) {
-    const kit = SPLASH_KITS[splashKit] || SPLASH_KITS[0];
+    const kit = splashKits[splashKit] || splashKits[0];
     return (
       <div style={{
         position: 'fixed', top: 0, left: 0, width: '100vw', height: '100dvh',
@@ -539,7 +521,6 @@ export default function App() {
       </div>
     );
   }
-
 
   return (
     <ErrorBoundary>
