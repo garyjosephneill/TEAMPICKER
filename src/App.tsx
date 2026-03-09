@@ -270,7 +270,7 @@ export default function App() {
             const headerHeight = header.getBoundingClientRect().height;
             const cardTop = card.getBoundingClientRect().top - main.getBoundingClientRect().top + main.scrollTop;
             // Pull card up by 1px so its top edge covers the thin separator line
-            main.scrollTo({ top: cardTop - headerHeight + 1, behavior: 'smooth' });
+            main.scrollTo({ top: cardTop - headerHeight - 9, behavior: 'smooth' });
           }
         }, 50);
       }
@@ -599,7 +599,7 @@ export default function App() {
                   style={{ width: 88, height: 36 }}
                 >ADD</button>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '0 2rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '0' }}>
                 {players.map((p) => {
                   const isExpanded = expandedPlayers.has(p.id);
                   const overallRating = appMode === 'MM2'
