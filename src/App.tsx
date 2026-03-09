@@ -270,7 +270,7 @@ export default function App() {
             const headerHeight = header.getBoundingClientRect().height;
             const cardTop = card.getBoundingClientRect().top - main.getBoundingClientRect().top + main.scrollTop;
             // Pull card up by 1px so its top edge covers the thin separator line
-            main.scrollTo({ top: cardTop - headerHeight - 9, behavior: 'smooth' });
+            main.scrollTo({ top: cardTop - headerHeight - 2, behavior: 'smooth' });
           }
         }, 50);
       }
@@ -552,7 +552,7 @@ export default function App() {
       {/* Fixed status bar cover — always sits over the top, matches kit colour */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-t-bg" style={{ height: window.innerWidth >= 768 ? '50px' : 'env(safe-area-inset-top, 15px)' }} />
       <main ref={mainRef} className="flex-grow overflow-y-auto overflow-x-hidden relative" onScroll={handleScroll} style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', marginTop: window.innerWidth >= 768 ? '50px' : 'env(safe-area-inset-top, 15px)' }}>
-        <header ref={headerRef} className="sticky top-0 z-10 bg-t-bg pb-4 shrink-0 overflow-x-hidden" style={{ paddingLeft: 'max(16px, env(safe-area-inset-left))', paddingRight: 'max(16px, env(safe-area-inset-right))' }}>
+        <header ref={headerRef} className="sticky top-0 z-10 bg-t-bg pb-2 shrink-0 overflow-x-hidden" style={{ paddingLeft: 'max(16px, env(safe-area-inset-left))', paddingRight: 'max(16px, env(safe-area-inset-right))' }}>
           {/* Title row with ball right-aligned */}
           <div className="mb-[10px] flex items-center justify-between">
             <div className="text-t-c4 font-title font-normal tracking-normal uppercase leading-none" style={{ fontSize: '60px' }}>
@@ -570,7 +570,7 @@ export default function App() {
             <span className="text-t-c1 tracking-[0.2em]" style={{ marginBottom: '6px', lineHeight: 1, fontSize: 14 }}>
               {view === 'selection'
                 ? `SELECTED ${players.filter(x => x.isSelected).length}/${players.length}`
-                : `PLAYERS: ${players.length}`}
+                : `${players.length}/99`}
             </span>
           </div>
           {deleteMode && (
@@ -599,7 +599,7 @@ export default function App() {
                   style={{ width: 88, height: 36 }}
                 >ADD</button>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '0' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 400px), 1fr))', gap: '0 2rem' }}>
                 {players.map((p) => {
                   const isExpanded = expandedPlayers.has(p.id);
                   const overallRating = appMode === 'MM2'
@@ -729,7 +729,7 @@ export default function App() {
                         <div className="mt-3 space-y-[6px]" style={{ width: '100%', maxWidth: '100%', overflow: 'hidden' }}>
                           {MM2_STATS.map(stat => (
                             <div key={stat.key} style={{ display: 'flex', alignItems: 'center', width: '100%', maxWidth: '100%', overflow: 'hidden' }}>
-                              <span className={`flex-shrink-0 font-bold ${stat.textColor}`} style={{ fontSize: '0.805rem', width: 32, marginRight: 4 }}>{stat.label}</span>
+                              <span className={`flex-shrink-0 font-bold ${stat.textColor}`} style={{ fontSize: '15px', width: 32, marginRight: 4 }}>{stat.label}</span>
                               <div style={{ flex: 1, minWidth: 0, overflow: 'hidden' }}>
                                 <TapZone
                                   value={p.ratings[stat.key]}
