@@ -575,13 +575,13 @@ export default function App() {
       input[type=range]::-moz-range-thumb { background: ${activeKit?.lightBg ? '#000000' : 'var(--color-t-c1)'}; border: none; }
     `}</style>
     <div className="flex flex-col h-[100dvh] overflow-hidden bg-t-bg text-t-c1 uppercase" style={{ fontFamily: "'Bebas Neue', sans-serif", width: '100%', maxWidth: '1024px', marginLeft: 'auto', marginRight: 'auto' }}>
-      <style>{`.lazy-placeholder::placeholder { color: rgba(255,255,255,0.5); }`}</style>
+      <style>{`.lazy-placeholder::placeholder { color: var(--color-t-c1); opacity: 0.5; }`}</style>
       {/* Fixed status bar cover — always sits over the top, matches kit colour */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-t-bg" style={{ height: window.innerWidth >= 768 ? '50px' : 'env(safe-area-inset-top, 15px)' }} />
       <main ref={mainRef} className="flex-grow overflow-y-auto overflow-x-hidden relative" onScroll={handleScroll} style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', marginTop: window.innerWidth >= 768 ? '50px' : 'env(safe-area-inset-top, 15px)' }}>
         <header ref={headerRef} className="sticky top-0 z-10 bg-t-bg pb-4 shrink-0 overflow-x-hidden" style={{ paddingLeft: 'max(16px, env(safe-area-inset-left))', paddingRight: 'max(16px, env(safe-area-inset-right))' }}>
           {/* Title row — title left, counter + ball right */}
-          <div className="flex items-center justify-between" style={{ marginBottom: '4px' }}>
+          <div className="flex items-end justify-between" style={{ marginBottom: '4px' }}>
             <div className="text-t-c4 font-title font-normal tracking-normal uppercase leading-none" style={{ fontSize: '60px' }}>
               LAZY GAFFER
             </div>
