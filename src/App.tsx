@@ -166,10 +166,6 @@ export default function App() {
   const [kitLeague, setKitLeague] = useState<'PL' | 'INTL'>('PL');
   const [transfersView, setTransfersView] = useState(false);
   const [transferCandidate, setTransferCandidate] = useState<string | null>(null);
-  const [deleteMode, setDeleteMode] = useState(false);
-  const [swipingId, setSwipingId] = useState<string | null>(null);
-  const [swipeX, setSwipeX] = useState(0);
-  const swipeStartX = useRef(0);
   const headerRef = useRef<HTMLElement>(null);
   const lastScrollY = useRef(0);
   const addRowRef = useRef<HTMLDivElement>(null);
@@ -262,25 +258,7 @@ export default function App() {
   };
 
   // ── SWIPE TO DELETE ──
-  const handleSwipeStart = (id: string, x: number) => {
-    if (!deleteMode) return;
-    setSwipingId(id);
-    setSwipeX(0);
-    swipeStartX.current = x;
-  };
-  const handleSwipeMove = (x: number) => {
-    if (!swipingId) return;
-    const delta = swipeStartX.current - x;
-    setSwipeX(Math.max(0, delta));
-  };
-  const handleSwipeEnd = () => {
-    if (!swipingId) return;
-    if (swipeX > 80) {
-      setPlayers(prev => prev.filter(p => p.id !== swipingId));
-    }
-    setSwipingId(null);
-    setSwipeX(0);
-  };
+
 
   const toggleExpanded = (id: string) => {
     setExpandedPlayers(prev => {
@@ -290,13 +268,11 @@ export default function App() {
       if (isOpening) {
         setTimeout(() => {
           const card = playerCardRefs.current[id];
-          const main = mainRef.current;
           const header = headerRef.current;
-          if (card && main && header) {
+          if (card && header) {
             const headerHeight = header.getBoundingClientRect().height;
-            const cardTop = card.getBoundingClientRect().top - main.getBoundingClientRect().top + main.scrollTop;
-            // Pull card up by 1px so its top edge covers the thin separator line
-            main.scrollTo({ top: cardTop - headerHeight - 2, behavior: 'smooth' });
+            const cardTop = card.getBoundingClientRect().top + window.scrollY;
+            window.scrollTo({ top: cardTop - headerHeight - 2, behavior: 'smooth' });
           }
         }, 50);
       }
@@ -304,9 +280,6 @@ export default function App() {
     });
   };
 
-  const handleScroll = (_e: React.UIEvent<HTMLDivElement>) => {
-    // header always visible — no hide on scroll
-  };
 
   // Kit init + splash — merged into one effect to avoid race condition
   useEffect(() => {
@@ -373,7 +346,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (mainRef.current) mainRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     if (headerRef.current) { translateY.current = 0; headerRef.current.style.transform = `translateY(0px)`; }
   }, [appMode, view]);
 
@@ -574,18 +547,18 @@ export default function App() {
       input[type=range]::-webkit-slider-thumb { background: ${activeKit?.lightBg ? '#000000' : 'var(--color-t-c1)'}; }
       input[type=range]::-moz-range-thumb { background: ${activeKit?.lightBg ? '#000000' : 'var(--color-t-c1)'}; border: none; }
     `}</style>
-    <div className="flex flex-col h-[100dvh] overflow-hidden bg-t-bg text-t-c1 uppercase" style={{ fontFamily: "'Bebas Neue', sans-serif", width: '100%', maxWidth: '1024px', marginLeft: 'auto', marginRight: 'auto' }}>
+    <div className="flex flex-col min-h-[100dvh] overflow-x-hidden bg-t-bg text-t-c1 uppercase" style={{ fontFamily: "'Bebas Neue', sans-serif", width: '100%', maxWidth: '1024px', marginLeft: 'auto', marginRight: 'auto' }}>
       <style>{`.lazy-placeholder::placeholder { color: var(--color-t-c1); opacity: 0.5; }`}</style>
       {/* Fixed status bar cover — always sits over the top, matches kit colour */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-t-bg" style={{ height: window.innerWidth >= 768 ? '50px' : 'env(safe-area-inset-top, 15px)' }} />
-      <main ref={mainRef} className="flex-grow overflow-y-auto overflow-x-hidden relative" onScroll={handleScroll} style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', marginTop: window.innerWidth >= 768 ? '50px' : 'env(safe-area-inset-top, 15px)' }}>
-        <header ref={headerRef} className="sticky top-0 z-10 bg-t-bg pb-4 shrink-0 overflow-x-hidden" style={{ paddingLeft: 'max(16px, env(safe-area-inset-left))', paddingRight: 'max(16px, env(safe-area-inset-right))' }}>
+      <main ref={mainRef} className="flex-grow relative" style={{ marginTop: window.innerWidth >= 768 ? '50px' : 'env(safe-area-inset-top, 15px)' }}>
+        <header ref={headerRef} className="sticky top-0 z-10 bg-t-bg pb-4 shrink-0 overflow-x-hidden" style={{ paddingLeft: 'max(16px, env(safe-area-inset-left))', paddingRight: 'max(16px, env(safe-area-inset-right))', paddingTop: '20px' }}>
           {/* Title row — title left, counter + ball right */}
           <div className="flex items-end justify-between" style={{ marginBottom: '4px' }}>
             <div className="text-t-c4 font-title font-normal tracking-normal uppercase leading-none" style={{ fontSize: '60px' }}>
               LAZY GAFFER
             </div>
-            <div className="flex items-center gap-2" style={{ marginBottom: '4px' }}>
+            <div className="flex items-center gap-2" style={{ marginBottom: '10px' }}>
 
               <button
                 onClick={() => { setView(v => v === 'settings' ? 'squad' : 'settings'); setKitsView(false); setTransfersView(false); setTransferCandidate(null); }}
@@ -600,9 +573,7 @@ export default function App() {
           </div>
           {/* Thick dividing line */}
           <div className="border-b-4 border-t-c2" style={{ marginBottom: 0 }} />
-          {deleteMode && (
-            <div className="text-t-c3 text-xs font-bold tracking-widest mt-2 text-center">SWIPE LEFT TO DELETE</div>
-          )}
+
         </header>
 
         <div className="pb-4 w-full overflow-x-hidden" style={{ paddingTop: '0px', paddingLeft: 'max(16px, env(safe-area-inset-left))', paddingRight: 'max(16px, env(safe-area-inset-right))' }}>
@@ -637,21 +608,9 @@ export default function App() {
                     <section
                       key={p.id}
                       ref={el => { playerCardRefs.current[p.id] = el; }}
-                      className="border-b border-t-c2 pt-2 pb-3 relative overflow-hidden"
-                      onTouchStart={e => handleSwipeStart(p.id, e.touches[0].clientX)}
-                      onTouchMove={e => { if (swipingId === p.id) handleSwipeMove(e.touches[0].clientX); }}
-                      onTouchEnd={handleSwipeEnd}
-                      onMouseDown={e => handleSwipeStart(p.id, e.clientX)}
-                      onMouseMove={e => { if (swipingId === p.id && e.buttons === 1) handleSwipeMove(e.clientX); }}
-                      onMouseUp={handleSwipeEnd}
+                      className="border-b border-t-c2 pt-2 pb-3"
                     >
-                      {/* Delete reveal zone */}
-                      {deleteMode && swipingId === p.id && swipeX > 20 && (
-                        <div className="absolute right-0 top-0 bottom-0 flex items-center justify-center bg-t-c3 text-t-bg font-bold text-sm px-4" style={{ width: Math.min(swipeX, 120) }}>
-                          {swipeX > 80 ? '✕ DELETE' : '✕'}
-                        </div>
-                      )}
-                      <div style={{ transform: deleteMode && swipingId === p.id ? `translateX(-${Math.min(swipeX, 120)}px)` : 'none', transition: swipingId === p.id ? 'none' : 'transform 0.2s' }}>
+                      <div>
 
                       {/* MM1 stars */}
                       {appMode === 'MM1' && (
@@ -768,7 +727,7 @@ export default function App() {
                           ))}
                         </div>
                       )}
-                      </div>{/* end swipe wrapper */}
+                      </div>
                       </section>
                   );
                 })}
