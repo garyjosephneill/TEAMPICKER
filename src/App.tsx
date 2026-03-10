@@ -640,7 +640,7 @@ export default function App() {
 
                   {teams && (
                     <>
-                      <div ref={teamsContainerRef} className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
+                      <div ref={teamsContainerRef} className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         {[
                           { data: teams.team1, color: 'text-t-c1', headerColor: 'text-t-c4', border: 'border-t-c1' },
                           { data: teams.team2, color: 'text-t-c4', headerColor: 'text-t-c1', border: 'border-t-c4' },
@@ -681,7 +681,7 @@ export default function App() {
                         </div>
                       </div>
 
-                      <div className="flex justify-center pt-6">
+                      <div className="flex justify-center">
                         <button
                           onClick={handleShareTeams}
                           className="w-[300px] border-4 border-t-c4 p-2 font-bold transition-all"
