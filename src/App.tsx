@@ -545,7 +545,7 @@ export default function App() {
                       placeholder={newPlayerName ? '' : placeholderText}
                       onKeyDown={e => e.key === 'Enter' && addPlayer()}
                       className="flex-1 bg-t-bg border-2 border-t-c2 text-t-c1 uppercase outline-none px-2 font-bold lazy-placeholder"
-                      style={{ height: 36, fontSize: 16, letterSpacing: 2 }}
+                      style={{ height: 36, fontSize: 18, letterSpacing: 2 }}
                     />
                     <button
                       onClick={addPlayer}
