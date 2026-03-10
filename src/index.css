@@ -26,6 +26,7 @@ body {
   padding: 0;
   font-family: var(--font-mono);
   font-weight: 400;
+  overflow-x: hidden;
 }
 
 .input-field {
