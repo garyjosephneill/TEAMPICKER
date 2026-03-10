@@ -531,7 +531,7 @@ export default function App() {
                 paddingLeft: 'max(16px, env(safe-area-inset-left))',
                 paddingRight: 'max(16px, env(safe-area-inset-right))',
                 paddingTop: 0,
-                paddingBottom: 140,
+                paddingBottom: 'max(140px, 60vh)',
               }}
             >
 
