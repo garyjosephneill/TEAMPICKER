@@ -202,52 +202,53 @@ export default function App() {
 
   // ── KIT THEMES — ALL 20 PREMIER LEAGUE CLUBS ──
   const KITS = [
-    { name: 'ARSENAL',          bg: '#EF0107', c1: '#ffffff', c2: '#ffffff', c3: '#9C824A', c4: '#9C824A' },
-    { name: 'ASTON VILLA',      bg: '#7ab4e3', c1: '#ffffff', c2: '#670E36', c3: '#ffd600', c4: '#670E36' },
-    { name: 'BOURNEMOUTH',      bg: '#DA291C', c1: '#ffffff', c2: '#000000', c3: '#000000', c4: '#000000' },
-    { name: 'BRENTFORD',        bg: '#e30613', c1: '#ffffff', c2: '#ffffff', c3: '#000000', c4: '#000000' },
-    { name: 'BRIGHTON',         bg: '#0057B8', c1: '#ffffff', c2: '#ffffff', c3: '#ffcd00', c4: '#ffcd00' },
-    { name: 'CHELSEA',          bg: '#034694', c1: '#ffffff', c2: '#ffffff', c3: '#DBA111', c4: '#DBA111' },
-    { name: 'CRYSTAL PALACE',   bg: '#1B458F', c1: '#ffffff', c2: '#d4d1d2', c3: '#d2d2d2', c4: '#C4122E' },
-    { name: 'EVERTON',          bg: '#003399', c1: '#ffffff', c2: '#ffffff', c3: '#ffdf1c', c4: '#ffdf1c' },
-    { name: 'FULHAM',           bg: '#ffffff', c1: '#000000', c2: '#ce0007', c3: '#CC0000', c4: '#ce0007', lightBg: true },
-    { name: 'IPSWICH',          bg: '#0044A9', c1: '#ffffff', c2: '#ffffff', c3: '#de2d26', c4: '#de2d26' },
-    { name: 'LEICESTER',        bg: '#003090', c1: '#ffffff', c2: '#FDBE11', c3: '#FDBE11', c4: '#FDBE11' },
-    { name: 'LIVERPOOL',        bg: '#b20622', c1: '#ffffff', c2: '#0bc9b0', c3: '#F6EB61', c4: '#fced5e' },
-    { name: 'MAN CITY',         bg: '#6CABDD', c1: '#ffffff', c2: '#1C2C5B', c3: '#1C2C5B', c4: '#1C2C5B' },
-    { name: 'MAN UTD',          bg: '#DA291C', c1: '#000000', c2: '#ffffff', c3: '#ffffff', c4: '#FBE122' },
-    { name: 'NEWCASTLE',        bg: '#030000', c1: '#ffffff', c2: '#ffffff', c3: '#41B0E4', c4: '#41B0E4' },
-    { name: 'NOTT\'M FOREST',   bg: '#DD0000', c1: '#ffffff', c2: '#030000', c3: '#000000', c4: '#000000' },
-    { name: 'SOUTHAMPTON',      bg: '#D71920', c1: '#ffffff', c2: '#ffffff', c3: '#FFC20E', c4: '#FFC20E' },
-    { name: 'SPURS',            bg: '#132257', c1: '#ffffff', c2: '#bcbec0', c3: '#BCBEC0', c4: '#ffffff' },
-    { name: 'WEST HAM',         bg: '#7A263A', c1: '#ffffff', c2: '#1BB1E7', c3: '#1BB1E7', c4: '#F3D459' },
-    { name: 'WOLVES',           bg: '#e27c2f', c1: '#000000', c2: '#ffffff', c3: '#FFFFFF', c4: '#231F20' },
+    { name: 'ARSENAL',        bg: '#EF0107', c1: '#023474', c2: '#ffffff', c3: '#F23D47', c4: '#ffffff' },
+    { name: 'ASTON VILLA',    bg: '#670E36', c1: '#7AB4E3', c2: '#ffffff', c3: '#7D1A41', c4: '#FFD600' },
+    { name: 'BOURNEMOUTH',    bg: '#DA291C', c1: '#000000', c2: '#ffffff', c3: '#E04035', c4: '#ffffff' },
+    { name: 'BRENTFORD',      bg: '#E30613', c1: '#000000', c2: '#ffffff', c3: '#E83340', c4: '#ffffff' },
+    { name: 'BRIGHTON',       bg: '#0057B8', c1: '#FFCD00', c2: '#ffffff', c3: '#1A6AC4', c4: '#ffffff' },
+    { name: 'BURNLEY',        bg: '#6C1D45', c1: '#99D6EA', c2: '#ffffff', c3: '#7D2252', c4: '#ffffff' },
+    { name: 'CHELSEA',        bg: '#034694', c1: '#DBA111', c2: '#ffffff', c3: '#1A57A0', c4: '#ffffff' },
+    { name: 'CRYSTAL PALACE', bg: '#1B458F', c1: '#C4122E', c2: '#ffffff', c3: '#2A539E', c4: '#FFD700' },
+    { name: 'EVERTON',        bg: '#003399', c1: '#FFDF1C', c2: '#ffffff', c3: '#1A46AA', c4: '#ffffff' },
+    { name: 'FULHAM',         bg: '#000000', c1: '#ffffff', c2: '#ffffff', c3: '#1A1A1A', c4: '#CE0007' },
+    { name: 'LEEDS UTD',      bg: '#FFCD00', c1: '#1D428A', c2: '#ffffff', c3: '#FFD41A', c4: '#ffffff', lightBg: true },
+    { name: 'LIVERPOOL',      bg: '#B20622', c1: '#F6EB61', c2: '#ffffff', c3: '#BE1A30', c4: '#00B2A9' },
+    { name: 'MAN CITY',       bg: '#6CABDD', c1: '#1C2C5B', c2: '#ffffff', c3: '#7DB8E4', c4: '#ffffff' },
+    { name: 'MAN UTD',        bg: '#DA291C', c1: '#000000', c2: '#ffffff', c3: '#E04035', c4: '#FFE500' },
+    { name: 'NEWCASTLE',      bg: '#030000', c1: '#ffffff', c2: '#ffffff', c3: '#1A1A1A', c4: '#41B0E4' },
+    { name: "NOTT'M FOREST",  bg: '#DD0000', c1: '#000000', c2: '#ffffff', c3: '#E31A1A', c4: '#ffffff' },
+    { name: 'SPURS',          bg: '#132257', c1: '#ffffff', c2: '#ffffff', c3: '#233069', c4: '#AAAAAA' },
+    { name: 'SUNDERLAND',     bg: '#EB172B', c1: '#000000', c2: '#ffffff', c3: '#EE3044', c4: '#ffffff' },
+    { name: 'WEST HAM',       bg: '#7A263A', c1: '#1BB1E7', c2: '#ffffff', c3: '#8A3347', c4: '#F3D459' },
+    { name: 'WOLVES',         bg: '#E27C2F', c1: '#000000', c2: '#ffffff', c3: '#E58E4D', c4: '#ffffff' },
   ];
 
   // ── INTERNATIONAL KITS ──
   const INTL_KITS = [
-    { name: 'ARGENTINA',     bg: '#74ACDF', c1: '#ffffff', c2: '#ffffff', c3: '#F6B40E', c4: '#F6B40E' },
-    { name: 'AUSTRALIA',     bg: '#00843D', c1: '#ffffff', c2: '#FFD700', c3: '#FFD700', c4: '#FFD700' },
-    { name: 'BELGIUM',       bg: '#000000', c1: '#ffffff', c2: '#FFD700', c3: '#EF3340', c4: '#FFD700' },
-    { name: 'BRAZIL',        bg: '#009C3B', c1: '#ffffff', c2: '#FFDF00', c3: '#002776', c4: '#FFDF00' },
-    { name: 'CROATIA',       bg: '#FF0000', c1: '#ffffff', c2: '#003DA5', c3: '#003DA5', c4: '#003DA5' },
-    { name: 'ENGLAND',       bg: '#CE1124', c1: '#ffffff', c2: '#ffffff', c3: '#00247D', c4: '#00247D' },
-    { name: 'FRANCE',        bg: '#002395', c1: '#ffffff', c2: '#ED2939', c3: '#ED2939', c4: '#ED2939' },
-    { name: 'GERMANY',       bg: '#ffffff', c1: '#000000', c2: '#D00000', c3: '#FFCE00', c4: '#D00000', lightBg: true },
-    { name: 'ITALY',         bg: '#003DA5', c1: '#ffffff', c2: '#CE2B37', c3: '#ffffff', c4: '#CE2B37' },
-    { name: 'IVORY COAST',   bg: '#F77F00', c1: '#ffffff', c2: '#009A44', c3: '#ffffff', c4: '#009A44' },
-    { name: 'JAPAN',         bg: '#003DA5', c1: '#ffffff', c2: '#BC002D', c3: '#ffffff', c4: '#BC002D' },
-    { name: 'MEXICO',        bg: '#006847', c1: '#ffffff', c2: '#CE1126', c3: '#ffffff', c4: '#CE1126' },
-    { name: 'MOROCCO',       bg: '#C1272D', c1: '#ffffff', c2: '#006233', c3: '#ffffff', c4: '#006233' },
-    { name: 'NETHERLANDS',   bg: '#FF4F00', c1: '#ffffff', c2: '#003DA5', c3: '#ffffff', c4: '#003DA5' },
-    { name: 'PORTUGAL',      bg: '#006600', c1: '#ffffff', c2: '#FF0000', c3: '#FFD700', c4: '#FF0000' },
-    { name: 'SCOTLAND',      bg: '#003DA5', c1: '#ffffff', c2: '#FFD700', c3: '#ffffff', c4: '#FFD700' },
-    { name: 'SENEGAL',       bg: '#00853F', c1: '#ffffff', c2: '#FDEF42', c3: '#E31B23', c4: '#FDEF42' },
-    { name: 'SPAIN',         bg: '#AA151B', c1: '#ffffff', c2: '#F1BF00', c3: '#F1BF00', c4: '#F1BF00' },
-    { name: 'TURKEY',        bg: '#E30A17', c1: '#ffffff', c2: '#ffffff', c3: '#ffffff', c4: '#ffffff' },
-    { name: 'URUGUAY',       bg: '#5EB6E4', c1: '#ffffff', c2: '#000000', c3: '#ffffff', c4: '#000000' },
-    { name: 'WALES',         bg: '#C8102E', c1: '#ffffff', c2: '#FFD700', c3: '#004B87', c4: '#FFD700' },
+    { name: 'ARGENTINA',   bg: '#74ACDF', c1: '#F6B40E', c2: '#ffffff', c3: '#88BBE5', c4: '#ffffff' },
+    { name: 'AUSTRALIA',   bg: '#00843D', c1: '#FFD700', c2: '#ffffff', c3: '#1A9650', c4: '#003DA5' },
+    { name: 'BELGIUM',     bg: '#000000', c1: '#EF3340', c2: '#ffffff', c3: '#1A1A1A', c4: '#FFD700' },
+    { name: 'BRAZIL',      bg: '#009C3B', c1: '#FFDF00', c2: '#ffffff', c3: '#1AAD51', c4: '#ffffff' },
+    { name: 'CROATIA',     bg: '#FF0000', c1: '#003DA5', c2: '#ffffff', c3: '#FF1A1A', c4: '#ffffff' },
+    { name: 'ENGLAND',     bg: '#CE1124', c1: '#00247D', c2: '#ffffff', c3: '#D52B3A', c4: '#ffffff' },
+    { name: 'FRANCE',      bg: '#002395', c1: '#ED2939', c2: '#ffffff', c3: '#1A36A0', c4: '#ffffff' },
+    { name: 'GERMANY',     bg: '#000000', c1: '#D00000', c2: '#ffffff', c3: '#1A1A1A', c4: '#FFD700' },
+    { name: 'ITALY',       bg: '#003DA5', c1: '#CE2B37', c2: '#ffffff', c3: '#1A50B0', c4: '#ffffff' },
+    { name: 'IVORY COAST', bg: '#F77F00', c1: '#009A44', c2: '#ffffff', c3: '#F88E1A', c4: '#ffffff' },
+    { name: 'JAPAN',       bg: '#003DA5', c1: '#BC002D', c2: '#ffffff', c3: '#1A50B0', c4: '#ffffff' },
+    { name: 'MEXICO',      bg: '#006847', c1: '#CE1126', c2: '#ffffff', c3: '#1A7652', c4: '#ffffff' },
+    { name: 'MOROCCO',     bg: '#C1272D', c1: '#006233', c2: '#ffffff', c3: '#C93840', c4: '#ffffff' },
+    { name: 'NETHERLANDS', bg: '#FF4F00', c1: '#003DA5', c2: '#ffffff', c3: '#FF621A', c4: '#ffffff' },
+    { name: 'PORTUGAL',    bg: '#006600', c1: '#FF0000', c2: '#ffffff', c3: '#1A7A1A', c4: '#FFD700' },
+    { name: 'SCOTLAND',    bg: '#003DA5', c1: '#FFD700', c2: '#ffffff', c3: '#1A50B0', c4: '#ffffff' },
+    { name: 'SENEGAL',     bg: '#00853F', c1: '#FDEF42', c2: '#ffffff', c3: '#1A9250', c4: '#E31B23' },
+    { name: 'SPAIN',       bg: '#AA151B', c1: '#F1BF00', c2: '#ffffff', c3: '#B52529', c4: '#000099' },
+    { name: 'TURKEY',      bg: '#E30A17', c1: '#ffffff', c2: '#ffffff', c3: '#E62428', c4: '#000000' },
+    { name: 'URUGUAY',     bg: '#5EB6E4', c1: '#000000', c2: '#ffffff', c3: '#70BEE7', c4: '#ffffff' },
+    { name: 'WALES',       bg: '#C8102E', c1: '#FFD700', c2: '#ffffff', c3: '#CF2A3E', c4: '#ffffff' },
   ];
+
 
   const applyKit = (kit: typeof KITS[0]) => {
     const root = document.documentElement;
@@ -581,14 +582,12 @@ export default function App() {
         <header ref={headerRef} className="sticky top-0 z-10 bg-t-bg pb-4 shrink-0 overflow-x-hidden" style={{ paddingLeft: 'max(16px, env(safe-area-inset-left))', paddingRight: 'max(16px, env(safe-area-inset-right))' }}>
           {/* Title row — title left, counter + ball right */}
           <div className="flex items-end justify-between" style={{ marginBottom: '4px' }}>
-            <div className="text-t-c4 font-title font-normal tracking-normal uppercase leading-none" style={{ fontSize: '60px' }}>
+            <div className="text-t-c4 font-title font-normal tracking-normal uppercase leading-none" style={{ fontSize: '50px' }}>
               LAZY GAFFER
             </div>
             <div className="flex items-center gap-2" style={{ marginBottom: '4px' }}>
               <span className="text-t-c1 font-bold tracking-[0.2em]" style={{ fontSize: 14, lineHeight: 1 }}>
-                {view === 'selection'
-                  ? `SELECTED ${players.filter(x => x.isSelected).length}/${players.length}`
-                  : `${players.length}/99`}
+                `${players.length}/99`
               </span>
               <button
                 onClick={() => { setView(v => v === 'settings' ? 'squad' : 'settings'); setKitsView(false); setTransfersView(false); setTransferCandidate(null); }}
@@ -626,7 +625,7 @@ export default function App() {
                   style={{ width: 88, height: 36 }}
                 >ADD</button>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 480px), 1fr))', gap: '0 2rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 340px), 1fr))', gap: '0 2rem' }}>
                 {players.map((p) => {
                   const isExpanded = expandedPlayers.has(p.id);
                   const overallRating = appMode === 'MM2'
