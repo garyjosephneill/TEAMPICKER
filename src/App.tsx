@@ -681,7 +681,7 @@ export default function App() {
                         </div>
                       </div>
 
-                      <div className="flex justify-center pb-4">
+                      <div className="flex justify-center pt-6">
                         <button
                           onClick={handleShareTeams}
                           className="w-[300px] border-4 border-t-c4 p-2 font-bold transition-all"
