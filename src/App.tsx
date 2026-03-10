@@ -249,7 +249,6 @@ export default function App() {
     { name: 'WALES',       bg: '#C8102E', c1: '#FFD700', c2: '#ffffff', c3: '#CF2A3E', c4: '#ffffff' },
   ];
 
-
   const applyKit = (kit: typeof KITS[0]) => {
     const root = document.documentElement;
     root.style.setProperty('--color-t-bg', kit.bg);
@@ -587,7 +586,7 @@ export default function App() {
             </div>
             <div className="flex items-center gap-2" style={{ marginBottom: '4px' }}>
               <span className="text-t-c1 font-bold tracking-[0.2em]" style={{ fontSize: 14, lineHeight: 1 }}>
-                `${players.length}/99`
+  {players.length}/99
               </span>
               <button
                 onClick={() => { setView(v => v === 'settings' ? 'squad' : 'settings'); setKitsView(false); setTransfersView(false); setTransferCandidate(null); }}
