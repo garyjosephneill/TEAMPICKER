@@ -768,8 +768,8 @@ export default function App() {
               }}
             >
               <nav className="flex w-full gap-4">
-                <button onClick={() => setView('squad')} className="flex-1 py-2 border-4 border-t-c2 font-bold transition-all" style={{ fontSize: 'clamp(22px, 6vw, 26px)', background: view === 'squad' ? 'var(--color-t-c2)' : 'var(--color-t-bg)', color: view === 'squad' ? 'var(--color-t-bg)' : 'var(--color-t-c2)' }}>SQUAD</button>
-                <button onClick={() => setView('selection')} className="flex-1 py-2 border-4 border-t-c3 font-bold transition-all" style={{ fontSize: 'clamp(22px, 6vw, 26px)', background: view === 'selection' ? 'var(--color-t-c3)' : 'var(--color-t-bg)', color: view === 'selection' ? 'var(--color-t-bg)' : 'var(--color-t-c3)' }}>GAFFER</button>
+                <button onClick={() => setView('squad')} className="flex-1 py-2 border-4 border-t-c2 font-bold transition-all" style={{ fontSize: 'clamp(20px, 5vw, 26px)', background: view === 'squad' ? 'var(--color-t-c2)' : 'var(--color-t-bg)', color: view === 'squad' ? 'var(--color-t-bg)' : 'var(--color-t-c2)' }}>SQUAD</button>
+                <button onClick={() => setView('selection')} className="flex-1 py-2 border-4 border-t-c3 font-bold transition-all" style={{ fontSize: 'clamp(20px, 5vw, 26px)', background: view === 'selection' ? 'var(--color-t-c3)' : 'var(--color-t-bg)', color: view === 'selection' ? 'var(--color-t-bg)' : 'var(--color-t-c3)' }}>GAFFER</button>
               </nav>
               <div className="text-center text-xs font-normal text-t-c1 normal-case" style={{ fontFamily: 'Courier New, monospace' }}>Copyright - Gary Neill Limited</div>
             </div>
