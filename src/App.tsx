@@ -326,7 +326,7 @@ export default function App() {
     const scrollEl = scrollRef.current;
     if (!scrollEl) return;
     const elTop = el.getBoundingClientRect().top - scrollEl.getBoundingClientRect().top + scrollEl.scrollTop;
-    scrollEl.scrollTo({ top: elTop - 2, behavior: 'smooth' });
+    scrollEl.scrollTo({ top: elTop, behavior: 'smooth' });
   };
 
   // ── Actions ──
@@ -354,7 +354,7 @@ export default function App() {
         setTimeout(() => {
           const card = playerCardRefs.current[id];
           if (card) scrollToEl(card);
-        }, 50);
+        }, 100);
       }
       return next;
     });
@@ -502,7 +502,7 @@ export default function App() {
               <div className="text-t-c4 font-title font-normal leading-none" style={{ fontSize: 60 }}>
                 LAZY GAFFER
               </div>
-              <div style={{ marginBottom: 10 }}>
+              <div>
                 <button
                   onClick={() => { setView(v => v === 'settings' ? 'squad' : 'settings'); setKitsView(false); setTransfersView(false); setTransferCandidate(null); }}
                   style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
@@ -561,11 +561,10 @@ export default function App() {
                       return (
                         <section
                           key={p.id}
-                          ref={el => { playerCardRefs.current[p.id] = el; }}
                           className="border-b border-t-c2 pt-2 pb-3"
                         >
                           {/* Name row */}
-                          <div className="flex gap-2 items-center">
+                          <div ref={el => { playerCardRefs.current[p.id] = el; }} className="flex gap-2 items-center">
                             <input
                               value={p.name}
                               inputMode="text"
@@ -574,14 +573,14 @@ export default function App() {
                               onKeyDown={e => e.key === 'Enter' && (e.target as HTMLInputElement).blur()}
                               onChange={e => setPlayers(prev => prev.map(x => x.id === p.id ? { ...x, name: e.target.value.toUpperCase() } : x))}
                               className="border-2 flex-1 bg-t-bg text-t-c1 uppercase outline-none font-bold h-[36px] p-2 cursor-text"
-                              style={{ fontSize: 16, letterSpacing: 2, borderColor: editingPlayerId === p.id ? 'var(--color-t-c4)' : 'var(--color-t-c2)', WebkitUserSelect: 'text' }}
+                              style={{ fontSize: 18, letterSpacing: 2, borderColor: editingPlayerId === p.id ? 'var(--color-t-c4)' : 'var(--color-t-c2)', WebkitUserSelect: 'text' }}
                             />
                             <button
                               onClick={() => toggleExpanded(p.id)}
                               className="flex items-center justify-between border-2 border-t-c1 px-3 h-[36px] shrink-0"
                               style={{ width: 88 }}
                             >
-                              <span className="text-t-c4 font-bold text-sm">{overall}</span>
+                              <span className="text-t-c4 font-bold" style={{ fontSize: 18 }}>{overall}</span>
                               <span className="text-t-c1/50 text-xs">{isExpanded ? '▲' : '▼'}</span>
                             </button>
                           </div>
@@ -591,8 +590,8 @@ export default function App() {
                             <div className="mt-3 space-y-[6px]">
                               {MM2_STATS.map(stat => (
                                 <div key={stat.key} className="flex items-center gap-1">
-                                  <span className={`shrink-0 font-bold ${stat.textColor}`} style={{ fontSize: '0.805rem', width: 32 }}>{stat.label}</span>
-                                  <div style={{ flex: 1, minWidth: 0 }}>
+                                  <span className={`shrink-0 font-bold ${stat.textColor}`} style={{ fontSize: 16, width: 36, paddingLeft: 5 }}>{stat.label}</span>
+                                  <div style={{ flex: 1, minWidth: 0, marginLeft: -5 }}>
                                     <TapZone
                                       value={p.ratings[stat.key]}
                                       onChange={v => updateStat(p.id, stat.key, v)}
@@ -618,8 +617,9 @@ export default function App() {
                       <button
                         key={p.id}
                         onClick={() => setPlayers(prev => prev.map(x => x.id === p.id ? { ...x, isSelected: !x.isSelected } : x))}
-                        className="p-2 border-2 text-left text-sm font-bold transition-all"
+                        className="p-2 border-2 text-left font-bold transition-all"
                         style={{
+                          fontSize: 18,
                           background: p.isSelected ? 'var(--color-t-c4)' : 'var(--color-t-bg)',
                           color: p.isSelected ? 'var(--color-t-bg)' : 'var(--color-t-c1)',
                           borderColor: p.isSelected ? 'var(--color-t-c4)' : 'rgba(255,255,255,0.2)',
@@ -633,8 +633,8 @@ export default function App() {
                   <div className="flex justify-center">
                     <button
                       onClick={balanceTeams}
-                      className="w-[300px] border-4 border-t-c4 p-2 text-lg font-bold transition-all"
-                      style={{ background: isGenerating ? 'var(--color-t-c4)' : 'var(--color-t-bg)', color: isGenerating ? 'var(--color-t-bg)' : 'var(--color-t-c4)' }}
+                      className="w-[300px] border-4 border-t-c4 p-2 font-bold transition-all"
+                      style={{ fontSize: 24, background: isGenerating ? 'var(--color-t-c4)' : 'var(--color-t-bg)', color: isGenerating ? 'var(--color-t-bg)' : 'var(--color-t-c4)' }}
                     >GENERATE TEAMS</button>
                   </div>
 
@@ -642,28 +642,28 @@ export default function App() {
                     <>
                       <div ref={teamsContainerRef} className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
                         {[
-                          { data: teams.team1, color: 'text-t-c1', border: 'border-t-c1' },
-                          { data: teams.team2, color: 'text-t-c4', border: 'border-t-c4' },
+                          { data: teams.team1, color: 'text-t-c1', headerColor: 'text-t-c4', border: 'border-t-c1' },
+                          { data: teams.team2, color: 'text-t-c4', headerColor: 'text-t-c1', border: 'border-t-c4' },
                         ].map(t => (
                           <div key={t.data.name} className={`border-4 ${t.border} p-4`}>
                             <div className={`flex items-end border-b-2 ${t.border} mb-4 pb-2`}>
-                              <h3 className={`flex-1 text-2xl font-bold truncate pr-2 ${t.color}`}>{t.data.name}</h3>
+                              <h3 className={`flex-1 text-2xl font-bold truncate pr-2 ${t.headerColor}`}>{t.data.name}</h3>
                               {showPlayerDetails && (
                                 <>
-                                  <span className={`w-12 md:w-16 text-base md:text-xl font-bold ${t.color}`}>RTG</span>
-                                  <span className={`w-8 md:w-10 text-base md:text-xl font-bold ${t.color}`}>
+                                  <span className={`w-16 font-bold ${t.headerColor}`} style={{ fontSize: 20 }}>RTG</span>
+                                  <span className={`w-10 font-bold ${t.headerColor}`} style={{ fontSize: 20 }}>
                                     {t.data.totalRating % 1 === 0 ? t.data.totalRating : t.data.totalRating.toFixed(1)}
                                   </span>
                                 </>
                               )}
                             </div>
                             {t.data.players.map(p => (
-                              <div key={p.id} className={`flex text-base md:text-xl ${t.color}`}>
+                              <div key={p.id} className={`flex ${t.color}`} style={{ fontSize: 20 }}>
                                 <span className="flex-1 truncate pr-2">{p.name}</span>
                                 {showPlayerDetails && (
                                   <>
-                                    <span className={`w-12 md:w-16 ${t.color}`}>{getEffectivePosition(p).substring(0, 3)}</span>
-                                    <span className={`w-8 md:w-10 ${t.color}`}>
+                                    <span className={`w-16 ${t.color}`}>{getEffectivePosition(p).substring(0, 3)}</span>
+                                    <span className={`w-10 ${t.color}`}>
                                       {getEffectiveRating(p) % 1 === 0 ? getEffectiveRating(p) : getEffectiveRating(p).toFixed(1)}
                                     </span>
                                   </>
@@ -676,16 +676,16 @@ export default function App() {
 
                       <div className="flex justify-center">
                         <div className="flex w-[300px] border-4 border-t-c1 text-lg font-bold">
-                          <button onClick={() => setShowPlayerDetails(false)} className="flex-1 p-2 transition-all" style={{ background: !showPlayerDetails ? 'var(--color-t-c1)' : 'var(--color-t-bg)', color: !showPlayerDetails ? 'var(--color-t-bg)' : 'var(--color-t-c1)' }}>HIDE INFO</button>
-                          <button onClick={() => setShowPlayerDetails(true)} className="flex-1 p-2 transition-all" style={{ background: showPlayerDetails ? 'var(--color-t-c1)' : 'var(--color-t-bg)', color: showPlayerDetails ? 'var(--color-t-bg)' : 'var(--color-t-c1)' }}>SHOW INFO</button>
+                          <button onClick={() => setShowPlayerDetails(false)} className="flex-1 p-2 transition-all" style={{ fontSize: 24, background: !showPlayerDetails ? 'var(--color-t-c1)' : 'var(--color-t-bg)', color: !showPlayerDetails ? 'var(--color-t-bg)' : 'var(--color-t-c1)' }}>HIDE INFO</button>
+                          <button onClick={() => setShowPlayerDetails(true)} className="flex-1 p-2 transition-all" style={{ fontSize: 24, background: showPlayerDetails ? 'var(--color-t-c1)' : 'var(--color-t-bg)', color: showPlayerDetails ? 'var(--color-t-bg)' : 'var(--color-t-c1)' }}>SHOW INFO</button>
                         </div>
                       </div>
 
                       <div className="flex justify-center pb-4">
                         <button
                           onClick={handleShareTeams}
-                          className="w-[300px] border-4 border-t-c4 p-2 text-lg font-bold transition-all"
-                          style={{ background: isSharing ? 'var(--color-t-c4)' : 'var(--color-t-bg)', color: isSharing ? 'var(--color-t-bg)' : 'var(--color-t-c4)' }}
+                          className="w-[300px] border-4 border-t-c4 p-2 font-bold transition-all"
+                          style={{ fontSize: 24, background: isSharing ? 'var(--color-t-c4)' : 'var(--color-t-bg)', color: isSharing ? 'var(--color-t-bg)' : 'var(--color-t-c4)' }}
                         >SHARE TEAMS</button>
                       </div>
                     </>
@@ -768,8 +768,8 @@ export default function App() {
               }}
             >
               <nav className="flex w-full gap-4">
-                <button onClick={() => setView('squad')} className="flex-1 py-2 border-4 border-t-c2 font-bold text-xl transition-all" style={{ background: view === 'squad' ? 'var(--color-t-c2)' : 'var(--color-t-bg)', color: view === 'squad' ? 'var(--color-t-bg)' : 'var(--color-t-c2)' }}>SQUAD</button>
-                <button onClick={() => setView('selection')} className="flex-1 py-2 border-4 border-t-c3 font-bold text-xl transition-all" style={{ background: view === 'selection' ? 'var(--color-t-c3)' : 'var(--color-t-bg)', color: view === 'selection' ? 'var(--color-t-bg)' : 'var(--color-t-c3)' }}>GAFFER</button>
+                <button onClick={() => setView('squad')} className="flex-1 py-2 border-4 border-t-c2 font-bold transition-all" style={{ fontSize: 30, background: view === 'squad' ? 'var(--color-t-c2)' : 'var(--color-t-bg)', color: view === 'squad' ? 'var(--color-t-bg)' : 'var(--color-t-c2)' }}>SQUAD</button>
+                <button onClick={() => setView('selection')} className="flex-1 py-2 border-4 border-t-c3 font-bold transition-all" style={{ fontSize: 30, background: view === 'selection' ? 'var(--color-t-c3)' : 'var(--color-t-bg)', color: view === 'selection' ? 'var(--color-t-bg)' : 'var(--color-t-c3)' }}>GAFFER</button>
               </nav>
               <div className="text-center text-xs font-normal text-t-c1 normal-case" style={{ fontFamily: 'Courier New, monospace' }}>Copyright - Gary Neill Limited</div>
             </div>
