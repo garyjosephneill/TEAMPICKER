@@ -104,25 +104,24 @@ const KITS = [
 ];
 
 const INTL_KITS = [
-  { name: 'ARGENTINA',   bg: '#74ACDF', c1: '#ffffff', c2: '#ffffff', c3: '#F6B40E', c4: '#F6B40E' },
+  { name: 'ARGENTINA',   bg: '#6AAAE5', c1: '#ffffff', c2: '#ffffff', c3: '#FAD755', c4: '#FAD755' },
   { name: 'AUSTRALIA',   bg: '#00843D', c1: '#ffffff', c2: '#FFD700', c3: '#FFD700', c4: '#FFD700' },
   { name: 'BELGIUM',     bg: '#000000', c1: '#ffffff', c2: '#FFD700', c3: '#EF3340', c4: '#FFD700' },
-  { name: 'BRAZIL',      bg: '#009C3B', c1: '#ffffff', c2: '#FFDF00', c3: '#002776', c4: '#FFDF00' },
-  { name: 'CROATIA',     bg: '#FF0000', c1: '#ffffff', c2: '#003DA5', c3: '#003DA5', c4: '#003DA5' },
-  { name: 'ENGLAND',     bg: '#CE1124', c1: '#ffffff', c2: '#ffffff', c3: '#00247D', c4: '#00247D' },
+  { name: 'BRAZIL',      bg: '#FFC700', c1: '#ffffff', c2: '#058032', c3: '#002776', c4: '#058032', lightBg: true },
+  { name: 'CROATIA',     bg: '#FF0000', c1: '#ffffff', c2: '#003389', c3: '#003389', c4: '#003389' },
+  { name: 'ENGLAND',     bg: '#E70017', c1: '#ffffff', c2: '#ffffff', c3: '#00247D', c4: '#00247D' },
   { name: 'FRANCE',      bg: '#002395', c1: '#ffffff', c2: '#ED2939', c3: '#ED2939', c4: '#ED2939' },
-  { name: 'GERMANY',     bg: '#ffffff', c1: '#000000', c2: '#D00000', c3: '#FFCE00', c4: '#D00000', lightBg: true },
-  { name: 'ITALY',       bg: '#003DA5', c1: '#ffffff', c2: '#CE2B37', c3: '#ffffff', c4: '#CE2B37' },
-  { name: 'IVORY COAST', bg: '#F77F00', c1: '#ffffff', c2: '#009A44', c3: '#ffffff', c4: '#009A44' },
-  { name: 'JAPAN',       bg: '#003DA5', c1: '#ffffff', c2: '#BC002D', c3: '#ffffff', c4: '#BC002D' },
-  { name: 'MEXICO',      bg: '#006847', c1: '#ffffff', c2: '#CE1126', c3: '#ffffff', c4: '#CE1126' },
-  { name: 'MOROCCO',     bg: '#C1272D', c1: '#ffffff', c2: '#006233', c3: '#ffffff', c4: '#006233' },
+  { name: 'GERMANY',     bg: '#ffffff', c1: '#000000', c2: '#D00000', c3: '#FFBC00', c4: '#D00000', lightBg: true },
+  { name: 'ITALY',       bg: '#0046BE', c1: '#ffffff', c2: '#CD212A', c3: '#ffffff', c4: '#CD212A' },
+  { name: 'IVORY COAST', bg: '#F77F00', c1: '#ffffff', c2: '#00723B', c3: '#ffffff', c4: '#00723B' },
+  { name: 'MEXICO',      bg: '#09914F', c1: '#ffffff', c2: '#9E1A1D', c3: '#ffffff', c4: '#9E1A1D' },
+  { name: 'MOROCCO',     bg: '#D21E28', c1: '#ffffff', c2: '#024D29', c3: '#ffffff', c4: '#024D29' },
   { name: 'NETHERLANDS', bg: '#FF4F00', c1: '#ffffff', c2: '#003DA5', c3: '#ffffff', c4: '#003DA5' },
   { name: 'PORTUGAL',    bg: '#006600', c1: '#ffffff', c2: '#FF0000', c3: '#FFD700', c4: '#FF0000' },
-  { name: 'SCOTLAND',    bg: '#003DA5', c1: '#ffffff', c2: '#FFD700', c3: '#ffffff', c4: '#FFD700' },
+  { name: 'SCOTLAND',    bg: '#1F3077', c1: '#ffffff', c2: '#FFD700', c3: '#ffffff', c4: '#FFD700' },
   { name: 'SENEGAL',     bg: '#00853F', c1: '#ffffff', c2: '#FDEF42', c3: '#E31B23', c4: '#FDEF42' },
   { name: 'SPAIN',       bg: '#AA151B', c1: '#ffffff', c2: '#F1BF00', c3: '#F1BF00', c4: '#F1BF00' },
-  { name: 'TURKEY',      bg: '#E30A17', c1: '#ffffff', c2: '#ffffff', c3: '#ffffff', c4: '#ffffff' },
+  { name: 'TURKEY',      bg: '#E30A17', c1: '#000000', c2: '#ffffff', c3: '#ffffff', c4: '#ffffff' },
   { name: 'URUGUAY',     bg: '#5EB6E4', c1: '#ffffff', c2: '#000000', c3: '#ffffff', c4: '#000000' },
   { name: 'WALES',       bg: '#C8102E', c1: '#ffffff', c2: '#FFD700', c3: '#004B87', c4: '#FFD700' },
 ];
@@ -203,6 +202,12 @@ export default function App() {
   const [kitLeague, setKitLeague] = useState<'PL' | 'INTL'>('PL');
   const [transfersView, setTransfersView] = useState(false);
   const [transferCandidate, setTransferCandidate] = useState<string | null>(null);
+  const [reorderView, setReorderView] = useState(false);
+  const [activeDrag, setActiveDrag] = useState<{ id: string; floatX: number; floatY: number; width: number; height: number; insertIndex: number; } | null>(null);
+  const activeDragRef = useRef<typeof activeDrag>(null);
+  const dragStartRef = useRef<{ startPointerX: number; startPointerY: number; startCardX: number; startCardY: number; id: string; width: number; height: number; } | null>(null);
+  const lastInsertRef = useRef<{ pointerX: number; pointerY: number; index: number } | null>(null);
+  const playersRef = useRef(players);
   const [placeholderText, setPlaceholderText] = useState('');
 
   const headerRef = useRef<HTMLElement>(null);
@@ -314,6 +319,81 @@ export default function App() {
     }, 1000);
     return () => clearTimeout(timer);
   }, [players, squadId]);
+
+  // ── Keep drag refs in sync ──
+  useEffect(() => { activeDragRef.current = activeDrag; }, [activeDrag]);
+  useEffect(() => { playersRef.current = players; }, [players]);
+
+  // ── Global pointer events for reorder drag ──
+  useEffect(() => {
+    const computeInsertIndex = (floatX: number, floatY: number, width: number, height: number, id: string): number => {
+      const cx = floatX + width / 2;
+      const cy = floatY + height / 2;
+      const cards = document.querySelectorAll('[data-reorder-id]');
+      const without = playersRef.current.filter(p => p.id !== id);
+      let bestIndex = without.length;
+      let bestDist = Infinity;
+      cards.forEach(card => {
+        const cardId = (card as HTMLElement).dataset.reorderId;
+        const idx = without.findIndex(p => p.id === cardId);
+        if (idx === -1) return;
+        const rect = card.getBoundingClientRect();
+        const cardCX = rect.left + rect.width / 2;
+        const cardCY = rect.top + rect.height / 2;
+        const dist = Math.hypot(cx - cardCX, cy - cardCY);
+        if (dist < bestDist) {
+          bestDist = dist;
+          bestIndex = cx < cardCX ? idx : idx + 1;
+        }
+      });
+      return bestIndex;
+    };
+    const handleMove = (e: PointerEvent) => {
+      const start = dragStartRef.current;
+      if (!start) return;
+      const floatX = start.startCardX + (e.clientX - start.startPointerX);
+      const floatY = start.startCardY + (e.clientY - start.startPointerY);
+      const candidate = computeInsertIndex(floatX, floatY, start.width, start.height, start.id);
+      // Hysteresis: only accept a new insertIndex once the pointer has moved
+      // at least 40% of a card width away from where the last change happened.
+      const last = lastInsertRef.current;
+      let insertIndex: number;
+      if (last === null) {
+        insertIndex = candidate;
+        lastInsertRef.current = { pointerX: e.clientX, pointerY: e.clientY, index: candidate };
+      } else if (candidate !== last.index) {
+        const moved = Math.hypot(e.clientX - last.pointerX, e.clientY - last.pointerY);
+        if (moved > start.width * 0.4) {
+          insertIndex = candidate;
+          lastInsertRef.current = { pointerX: e.clientX, pointerY: e.clientY, index: candidate };
+        } else {
+          insertIndex = last.index;
+        }
+      } else {
+        insertIndex = last.index;
+      }
+      setActiveDrag(prev => prev ? { ...prev, floatX, floatY, insertIndex } : null);
+    };
+    const handleUp = () => {
+      const ad = activeDragRef.current;
+      if (!ad) return;
+      setPlayers(prev => {
+        const without = prev.filter(p => p.id !== ad.id);
+        const idx = Math.min(ad.insertIndex, without.length);
+        const dragged = prev.find(p => p.id === ad.id)!;
+        return [...without.slice(0, idx), dragged, ...without.slice(idx)];
+      });
+      dragStartRef.current = null;
+      lastInsertRef.current = null;
+      setActiveDrag(null);
+    };
+    window.addEventListener('pointermove', handleMove);
+    window.addEventListener('pointerup', handleUp);
+    return () => {
+      window.removeEventListener('pointermove', handleMove);
+      window.removeEventListener('pointerup', handleUp);
+    };
+  }, []);
 
   // ── Helpers ──
   const getEffectivePosition = (p: Player): Position => {
@@ -455,10 +535,14 @@ export default function App() {
     window.location.href = `mailto:?subject=${encodeURIComponent(`Teams for ${new Date().toLocaleDateString()}`)}&body=${encodeURIComponent(body)}`;
   };
 
-  const resetSquad = () => {
-    const newId = Math.floor(100 + Math.random() * 900).toString();
-    localStorage.setItem('ceefax_squad_id', newId);
-    window.location.reload();
+  const handleReorderPointerDown = (e: React.PointerEvent, id: string) => {
+    e.preventDefault();
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    const index = players.findIndex(p => p.id === id);
+    const without = players.filter(p => p.id !== id);
+    dragStartRef.current = { startPointerX: e.clientX, startPointerY: e.clientY, startCardX: rect.left, startCardY: rect.top, id, width: rect.width, height: rect.height };
+    lastInsertRef.current = null;
+    setActiveDrag({ id, floatX: rect.left, floatY: rect.top, width: rect.width, height: rect.height, insertIndex: Math.min(index, without.length) });
   };
 
   // ── Splash screen ──
@@ -519,7 +603,7 @@ export default function App() {
               </div>
               <div>
                 <button
-                  onClick={() => { setView(v => v === 'settings' ? 'squad' : 'settings'); setKitsView(false); setTransfersView(false); setTransferCandidate(null); }}
+                  onClick={() => { setView(v => v === 'settings' ? 'squad' : 'settings'); setKitsView(false); setTransfersView(false); setTransferCandidate(null); setReorderView(false); }}
                   style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
                 >
                   <svg width="24" height="24" viewBox="0 0 490 490" fill="var(--color-t-c4)" style={{ display: 'block' }}>
@@ -604,7 +688,7 @@ export default function App() {
                             <div className="mt-3 space-y-[6px]">
                               {MM2_STATS.map(stat => (
                                 <div key={stat.key} className="flex items-center gap-1">
-                                  <span className={`shrink-0 font-bold ${stat.textColor}`} style={{ fontSize: 16, width: 36, paddingLeft: 5 }}>{stat.label}</span>
+                                  <span className={`shrink-0 font-bold ${stat.textColor}`} style={{ fontSize: 18, width: 36, paddingLeft: 5 }}>{stat.label}</span>
                                   <div style={{ flex: 1, minWidth: 0, marginLeft: -5 }}>
                                     <TapZone
                                       value={p.ratings[stat.key]}
@@ -708,11 +792,11 @@ export default function App() {
               )}
 
               {/* ── SETTINGS VIEW ── */}
-              {view === 'settings' && !kitsView && !transfersView && (
+              {view === 'settings' && !kitsView && !transfersView && !reorderView && (
                 <div className="flex flex-col items-center gap-4 py-16">
                   <button onClick={() => setKitsView(true)} className="border-4 border-t-c1 py-2 text-xl font-bold" style={{ width: 'calc(50% - 8px)', background: 'var(--color-t-bg)', color: 'var(--color-t-c1)' }}>KITS</button>
                   <button onClick={() => setTransfersView(true)} className="border-4 border-t-c1 py-2 text-xl font-bold" style={{ width: 'calc(50% - 8px)', background: 'var(--color-t-bg)', color: 'var(--color-t-c1)' }}>TRANSFERS</button>
-                  <button onClick={resetSquad} className="border-4 border-t-c1 py-2 text-xl font-bold" style={{ width: 'calc(50% - 8px)', background: 'var(--color-t-bg)', color: 'var(--color-t-c1)' }}>RESET SQUAD</button>
+                  <button onClick={() => setReorderView(true)} className="border-4 border-t-c1 py-2 text-xl font-bold" style={{ width: 'calc(50% - 8px)', background: 'var(--color-t-bg)', color: 'var(--color-t-c1)' }}>REORDER</button>
                 </div>
               )}
 
@@ -727,8 +811,8 @@ export default function App() {
                       <button
                         key={kit.name}
                         onClick={() => { applyKit(kit); setKitsView(false); setView('squad'); }}
-                        className="p-2 border-2 text-left text-sm font-bold border-t-c1"
-                        style={{ background: 'var(--color-t-bg)', color: 'var(--color-t-c1)' }}
+                        className="p-2 border-2 text-left font-bold border-t-c1"
+                        style={{ background: 'var(--color-t-bg)', color: 'var(--color-t-c1)', fontSize: 16 }}
                       >{kit.name}</button>
                     ))}
                   </div>
@@ -743,8 +827,9 @@ export default function App() {
                         <button
                           key={p.id}
                           onClick={() => setTransferCandidate(p.id)}
-                          className="p-2 border-2 text-left text-sm font-bold transition-all"
+                          className="p-2 border-2 text-left font-bold transition-all"
                           style={{
+                            fontSize: 18,
                             background: transferCandidate === p.id ? 'var(--color-t-c4)' : 'var(--color-t-bg)',
                             color: transferCandidate === p.id ? 'var(--color-t-bg)' : 'var(--color-t-c1)',
                             borderColor: transferCandidate === p.id ? 'var(--color-t-c4)' : 'rgba(255,255,255,0.4)',
@@ -766,6 +851,83 @@ export default function App() {
                   })()}
                 </div>
               )}
+
+              {view === 'settings' && reorderView && (() => {
+                const without = activeDrag ? players.filter(p => p.id !== activeDrag.id) : players;
+                const insertIdx = activeDrag ? Math.min(activeDrag.insertIndex, without.length) : 0;
+                const displayItems: ({ type: 'player'; player: typeof players[0] } | { type: 'ghost' })[] = activeDrag
+                  ? [
+                      ...without.slice(0, insertIdx).map(p => ({ type: 'player' as const, player: p })),
+                      { type: 'ghost' as const },
+                      ...without.slice(insertIdx).map(p => ({ type: 'player' as const, player: p })),
+                    ]
+                  : players.map(p => ({ type: 'player' as const, player: p }));
+                return (
+                  <div style={{ position: 'relative' }}>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2 pt-2">
+                      {displayItems.map((item, i) =>
+                        item.type === 'ghost' ? (
+                          <div
+                            key="ghost"
+                            style={{
+                              height: activeDrag?.height ?? 40,
+                              background: 'rgba(255,255,255,0.5)',
+                              border: '2px solid transparent',
+                            }}
+                          />
+                        ) : (
+                          <div
+                            key={item.player.id}
+                            data-reorder-id={item.player.id}
+                            onPointerDown={e => handleReorderPointerDown(e, item.player.id)}
+                            className="p-2 border-2 text-left font-bold"
+                            style={{
+                              fontSize: 18,
+                              cursor: 'grab',
+                              touchAction: 'none',
+                              background: 'var(--color-t-bg)',
+                              color: 'var(--color-t-c1)',
+                              borderColor: 'rgba(255,255,255,0.4)',
+                              userSelect: 'none',
+                              WebkitUserSelect: 'none',
+                              WebkitTouchCallout: 'none',
+                            } as React.CSSProperties}
+                          >
+                            {item.player.name}
+                          </div>
+                        )
+                      )}
+                    </div>
+                    {activeDrag && (() => {
+                      const p = players.find(x => x.id === activeDrag.id);
+                      return p ? (
+                        <div
+                          className="p-2 border-2 text-left font-bold"
+                          style={{
+                            fontSize: 18,
+                            position: 'fixed',
+                            left: activeDrag.floatX,
+                            top: activeDrag.floatY,
+                            width: activeDrag.width,
+                            height: activeDrag.height,
+                            pointerEvents: 'none',
+                            zIndex: 9999,
+                            background: 'var(--color-t-c4)',
+                            color: 'var(--color-t-bg)',
+                            borderColor: 'var(--color-t-c4)',
+                            boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
+                            transform: 'scale(1.05)',
+                            transformOrigin: 'center center',
+                            userSelect: 'none',
+                          }}
+                        >
+                          {p.name}
+                        </div>
+                      ) : null;
+                    })()}
+                  </div>
+                );
+              })()}
 
             </div>
           </div>{/* end scroll area */}
