@@ -217,7 +217,8 @@ export default function App() {
   });
   const [newPlayerName, setNewPlayerName] = useState('');
   const [splashDone, setSplashDone] = useState(false);
-  const [splashKit] = useState(() => SPLASH_KITS_DATA[Math.floor(Math.random() * SPLASH_KITS_DATA.length)]);
+  const [splashKit, setSplashKit] = useState(0);
+  const [splashKits] = useState(() => [...SPLASH_KITS_DATA].sort(() => Math.random() - 0.5));
   const [editingPlayerId, setEditingPlayerId] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
@@ -289,9 +290,24 @@ export default function App() {
       const timeout = setTimeout(applyAppKit, 3200);
       return () => clearTimeout(timeout);
     }
-    document.body.style.setProperty('background-color', splashKit.bg, 'important');
-    const timeout = setTimeout(applyAppKit, 2600);
-    return () => clearTimeout(timeout);
+    const applyBg = (bg: string) => {
+      root.style.setProperty('--color-t-bg', bg);
+      document.body.style.setProperty('background-color', bg, 'important');
+      if (meta) meta.content = bg;
+    };
+    applyBg(splashKits[0].bg);
+    let i = 1;
+    const interval = setInterval(() => {
+      if (i < splashKits.length) {
+        applyBg(splashKits[i].bg);
+        setSplashKit(i);
+        i++;
+      } else {
+        clearInterval(interval);
+        setTimeout(applyAppKit, 200);
+      }
+    }, 200);
+    return () => clearInterval(interval);
   }, []);
 
   // ── Scroll to top on view change ──
@@ -567,31 +583,11 @@ export default function App() {
         </div>
       );
     }
+    const kit = splashKits[splashKit] || splashKits[0];
     return (
-      <div style={{
-        position: 'fixed', inset: 0, zIndex: 9999,
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        backgroundColor: splashKit.bg,
-        fontFamily: "'Bebas Neue', sans-serif",
-      }}>
-        <style>{`
-          @keyframes lgPulse {
-            0%   { transform: scale(1); }
-            20%  { transform: scale(1.2); }
-            40%  { transform: scale(1); }
-            60%  { transform: scale(1.2); }
-            80%  { transform: scale(1); }
-            100% { transform: scale(1); }
-          }
-        `}</style>
-        <span style={{
-          fontSize: '93vmin',
-          lineHeight: 1,
-          color: splashKit.c4,
-          WebkitTextStroke: `4px ${splashKit.outline}`,
-          animation: 'lgPulse 2.5s ease-in-out forwards',
-        }}>
-          LG
+      <div style={{ position: 'fixed', inset: 0, zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: kit.bg, fontFamily: "'Bebas Neue', sans-serif" }}>
+        <span style={{ fontSize: 'clamp(52px, 14vw, 96px)', letterSpacing: '0.05em', color: kit.c4, whiteSpace: 'nowrap' }}>
+          LAZY GAFFER
         </span>
       </div>
     );
