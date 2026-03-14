@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Capacitor } from '@capacitor/core';
 import splashGif from './assets/splash-screen.gif';
 
-
 // ── ERROR BOUNDARY ──────────────────────────────────────────────────────────
 class ErrorBoundary extends React.Component<{children: React.ReactNode}, {error: string | null}> {
   constructor(props: any) { super(props); this.state = { error: null }; }
@@ -41,88 +40,109 @@ const TEAM_NAMES = [
 ];
 
 const FAMOUS_PLAYERS = [
-  { name: 'THE CAT',     ratings: { GKP: 7, DEFENCE: 7, MIDFIELD: 7, ATTACK: 7, NRG: 6, SPD: 5 }, position: Position.GKP },
-  { name: 'SIMMO',       ratings: { GKP: 6, DEFENCE: 6, MIDFIELD: 6, ATTACK: 6, NRG: 7, SPD: 6 }, position: Position.GKP },
-  { name: 'CHOPPER',     ratings: { GKP: 6, DEFENCE: 6, MIDFIELD: 6, ATTACK: 6, NRG: 9, SPD: 5 }, position: Position.DEFENCE },
-  { name: 'BIG JOHN',    ratings: { GKP: 6, DEFENCE: 6, MIDFIELD: 6, ATTACK: 6, NRG: 7, SPD: 4 }, position: Position.DEFENCE },
-  { name: 'FRANCO',      ratings: { GKP: 6, DEFENCE: 6, MIDFIELD: 6, ATTACK: 6, NRG: 8, SPD: 7 }, position: Position.DEFENCE },
-  { name: 'BARRY',       ratings: { GKP: 5, DEFENCE: 5, MIDFIELD: 5, ATTACK: 5, NRG: 6, SPD: 5 }, position: Position.DEFENCE },
-  { name: 'BONES',       ratings: { GKP: 5, DEFENCE: 5, MIDFIELD: 5, ATTACK: 5, NRG: 7, SPD: 6 }, position: Position.DEFENCE },
-  { name: 'LUNGS',       ratings: { GKP: 8, DEFENCE: 8, MIDFIELD: 8, ATTACK: 8, NRG: 10, SPD: 8 }, position: Position.MIDFIELD },
-  { name: 'TRICKY PETE', ratings: { GKP: 7, DEFENCE: 7, MIDFIELD: 7, ATTACK: 7, NRG: 7, SPD: 9 }, position: Position.MIDFIELD },
-  { name: 'WOR DAVE',    ratings: { GKP: 7, DEFENCE: 7, MIDFIELD: 7, ATTACK: 7, NRG: 8, SPD: 7 }, position: Position.MIDFIELD },
-  { name: 'GADGET',      ratings: { GKP: 6, DEFENCE: 6, MIDFIELD: 6, ATTACK: 6, NRG: 8, SPD: 8 }, position: Position.MIDFIELD },
-  { name: 'SWEATY',      ratings: { GKP: 6, DEFENCE: 6, MIDFIELD: 6, ATTACK: 6, NRG: 9, SPD: 6 }, position: Position.MIDFIELD },
-  { name: 'BOBBY SCORE', ratings: { GKP: 7, DEFENCE: 7, MIDFIELD: 7, ATTACK: 7, NRG: 8, SPD: 9 }, position: Position.ATTACK },
-  { name: 'GAZADONNA',   ratings: { GKP: 7, DEFENCE: 7, MIDFIELD: 7, ATTACK: 7, NRG: 7, SPD: 10 }, position: Position.ATTACK },
-  { name: 'THE POSTMAN', ratings: { GKP: 6, DEFENCE: 6, MIDFIELD: 6, ATTACK: 6, NRG: 6, SPD: 7 }, position: Position.ATTACK },
-  { name: 'SNIFFER',     ratings: { GKP: 6, DEFENCE: 6, MIDFIELD: 6, ATTACK: 6, NRG: 7, SPD: 8 }, position: Position.ATTACK },
-  { name: 'LITTLE JOHN', ratings: { GKP: 6, DEFENCE: 6, MIDFIELD: 6, ATTACK: 6, NRG: 6, SPD: 6 }, position: Position.ATTACK },
-  { name: 'GAV',         ratings: { GKP: 7, DEFENCE: 7, MIDFIELD: 7, ATTACK: 7, NRG: 7, SPD: 8 }, position: Position.ATTACK },
+  // ── Goalkeepers ──
+  { name: 'THE CAT',     ratings: { GKP: 9, DEFENCE: 5, MIDFIELD: 4, ATTACK: 3, NRG: 6, SPD: 7 }, position: Position.GKP },
+  { name: 'SIMMO',       ratings: { GKP: 8, DEFENCE: 5, MIDFIELD: 4, ATTACK: 3, NRG: 5, SPD: 5 }, position: Position.GKP },
+  { name: 'DINO',        ratings: { GKP: 8, DEFENCE: 6, MIDFIELD: 4, ATTACK: 3, NRG: 5, SPD: 4 }, position: Position.GKP },
+  { name: 'ROLANDO',     ratings: { GKP: 7, DEFENCE: 5, MIDFIELD: 4, ATTACK: 4, NRG: 7, SPD: 7 }, position: Position.GKP },
+  // ── Defenders ──
+  { name: 'CHOPPER',     ratings: { GKP: 4, DEFENCE: 9, MIDFIELD: 5, ATTACK: 4, NRG: 8, SPD: 4 }, position: Position.DEFENCE },
+  { name: 'BIG MATT',    ratings: { GKP: 5, DEFENCE: 8, MIDFIELD: 4, ATTACK: 5, NRG: 6, SPD: 4 }, position: Position.DEFENCE },
+  { name: 'THE FRIDGE',  ratings: { GKP: 5, DEFENCE: 8, MIDFIELD: 4, ATTACK: 4, NRG: 6, SPD: 3 }, position: Position.DEFENCE },
+  { name: 'BARRY',       ratings: { GKP: 4, DEFENCE: 7, MIDFIELD: 5, ATTACK: 4, NRG: 6, SPD: 5 }, position: Position.DEFENCE },
+  { name: 'VINNY',       ratings: { GKP: 4, DEFENCE: 8, MIDFIELD: 6, ATTACK: 4, NRG: 9, SPD: 5 }, position: Position.DEFENCE },
+  // ── Midfielders ──
+  { name: 'BUSTER',      ratings: { GKP: 4, DEFENCE: 6, MIDFIELD: 8, ATTACK: 6, NRG: 8, SPD: 6 }, position: Position.MIDFIELD },
+  { name: 'TRICKY PETE', ratings: { GKP: 4, DEFENCE: 5, MIDFIELD: 8, ATTACK: 7, NRG: 7, SPD: 9 }, position: Position.MIDFIELD },
+  { name: 'TIMBO',       ratings: { GKP: 4, DEFENCE: 6, MIDFIELD: 7, ATTACK: 5, NRG: 7, SPD: 6 }, position: Position.MIDFIELD },
+  { name: 'GINGE',       ratings: { GKP: 4, DEFENCE: 5, MIDFIELD: 8, ATTACK: 6, NRG: 8, SPD: 8 }, position: Position.MIDFIELD },
+  { name: 'ROBBO',       ratings: { GKP: 4, DEFENCE: 5, MIDFIELD: 7, ATTACK: 5, NRG: 9, SPD: 7 }, position: Position.MIDFIELD },
+  { name: 'PSYCHO',      ratings: { GKP: 4, DEFENCE: 7, MIDFIELD: 8, ATTACK: 5, NRG: 10, SPD: 6 }, position: Position.MIDFIELD },
+  { name: 'ROY',         ratings: { GKP: 4, DEFENCE: 6, MIDFIELD: 8, ATTACK: 5, NRG: 7, SPD: 5 }, position: Position.MIDFIELD },
+  // ── Attackers ──
+  { name: 'ERIC',        ratings: { GKP: 3, DEFENCE: 4, MIDFIELD: 7, ATTACK: 9, NRG: 6, SPD: 7 }, position: Position.ATTACK },
+  { name: 'GAZZADONNA',  ratings: { GKP: 3, DEFENCE: 4, MIDFIELD: 8, ATTACK: 9, NRG: 7, SPD: 9 }, position: Position.ATTACK },
+  { name: 'THE POSTMAN', ratings: { GKP: 3, DEFENCE: 4, MIDFIELD: 6, ATTACK: 8, NRG: 6, SPD: 7 }, position: Position.ATTACK },
+  { name: 'JEZZINHO',    ratings: { GKP: 3, DEFENCE: 4, MIDFIELD: 7, ATTACK: 8, NRG: 8, SPD: 9 }, position: Position.ATTACK },
+  { name: 'JAYJAY',      ratings: { GKP: 3, DEFENCE: 4, MIDFIELD: 6, ATTACK: 8, NRG: 8, SPD: 9 }, position: Position.ATTACK },
+  { name: 'JONNYBOY',    ratings: { GKP: 3, DEFENCE: 4, MIDFIELD: 5, ATTACK: 7, NRG: 7, SPD: 7 }, position: Position.ATTACK },
+  { name: 'GAV',         ratings: { GKP: 3, DEFENCE: 4, MIDFIELD: 6, ATTACK: 8, NRG: 7, SPD: 8 }, position: Position.ATTACK },
 ];
 
 const GET_RANDOM_16 = (): Player[] => {
-  const shuffled = [...FAMOUS_PLAYERS].sort(() => 0.5 - Math.random());
-  const defenders = shuffled.filter(p => p.position === Position.DEFENCE).slice(0, 2);
-  const midfielders = shuffled.filter(p => p.position === Position.MIDFIELD).slice(0, 2);
-  const remaining = shuffled.filter(p => !defenders.includes(p) && !midfielders.includes(p));
-  const selected16 = [...defenders, ...midfielders, ...remaining.slice(0, 12)].sort(() => 0.5 - Math.random());
-  const selectedIds = new Set(selected16.sort(() => 0.5 - Math.random()).slice(0, 10).map(p => p.name));
-  return selected16.map(p => ({ ...p, id: crypto.randomUUID(), isSelected: selectedIds.has(p.name), ratings: RANDOM_MM2_RATINGS() }));
+  const shuffle = <T,>(arr: T[]) => [...arr].sort(() => 0.5 - Math.random());
+  const pick = (pos: Position, n: number) => shuffle(FAMOUS_PLAYERS.filter(p => p.position === pos)).slice(0, n);
+  const squad = shuffle([...pick(Position.GKP, 2), ...pick(Position.DEFENCE, 4), ...pick(Position.MIDFIELD, 6), ...pick(Position.ATTACK, 4)]);
+  const selectedIds = new Set(shuffle(squad).slice(0, 10).map(p => p.name));
+  return squad.map(p => ({ ...p, id: crypto.randomUUID(), isSelected: selectedIds.has(p.name), ratings: RANDOM_MM2_RATINGS() }));
 };
 
 const SPLASH_KITS_DATA = [
-  { bg: '#7ab4e3', c4: '#670E36' }, { bg: '#DA291C', c4: '#000000' },
-  { bg: '#0057B8', c4: '#ffcd00' }, { bg: '#1B458F', c4: '#C4122E' },
-  { bg: '#ffffff', c4: '#ce0007' }, { bg: '#b20622', c4: '#fced5e' },
-  { bg: '#6CABDD', c4: '#1C2C5B' }, { bg: '#030000', c4: '#41B0E4' },
-  { bg: '#DD0000', c4: '#000000' }, { bg: '#132257', c4: '#ffffff' },
-  { bg: '#7A263A', c4: '#F3D459' }, { bg: '#e27c2f', c4: '#231F20' },
+  { bg: '#EF0107', c4: '#ffffff', outline: '#003672' }, // Arsenal        — navy outline
+  { bg: '#7ab4e3', c4: '#670E36', outline: '#ffd600' }, // Aston Villa    — gold outline
+  { bg: '#DA291C', c4: '#000000', outline: '#ffffff' }, // Bournemouth    — white outline
+  { bg: '#e30613', c4: '#000000', outline: '#ffffff' }, // Brentford      — white outline
+  { bg: '#0057B8', c4: '#ffcd00', outline: '#ffffff' }, // Brighton       — white outline
+  { bg: '#034694', c4: '#DBA111', outline: '#ffffff' }, // Chelsea        — white outline
+  { bg: '#1B458F', c4: '#C4122E', outline: '#ffffff' }, // Crystal Palace — white outline
+  { bg: '#003399', c4: '#ffdf1c', outline: '#ffffff' }, // Everton        — white outline
+  { bg: '#ffffff', c4: '#ce0007', outline: '#000000' }, // Fulham         — black outline
+  { bg: '#0044A0', c4: '#ffffff', outline: '#FF0000' }, // Ipswich        — red outline
+  { bg: '#003090', c4: '#FDBE11', outline: '#ffffff' }, // Leicester      — white outline
+  { bg: '#b20622', c4: '#fced5e', outline: '#ffffff' }, // Liverpool      — white outline
+  { bg: '#6CABDD', c4: '#ffffff', outline: '#1C2C5B' }, // Man City       — navy outline
+  { bg: '#DA291C', c4: '#ffffff', outline: '#FBE122' }, // Man Utd        — yellow outline
+  { bg: '#030000', c4: '#ffffff', outline: '#41B0E4' }, // Newcastle      — blue outline
+  { bg: '#DD0000', c4: '#ffffff', outline: '#000000' }, // Nott'm Forest  — black outline
+  { bg: '#D71920', c4: '#ffffff', outline: '#000000' }, // Southampton    — black outline
+  { bg: '#132257', c4: '#ffffff', outline: '#BCBEC0' }, // Spurs          — silver outline
+  { bg: '#7A263A', c4: '#F3D459', outline: '#1BB1E7' }, // West Ham       — blue outline
+  { bg: '#FDB913', c4: '#000000', outline: '#ffffff' }, // Wolves         — white outline
 ];
 
 const KITS = [
-  { name: 'ARSENAL',        bg: '#EF0107', c1: '#ffffff', c2: '#ffffff', c3: '#9C824A', c4: '#9C824A' },
-  { name: 'ASTON VILLA',    bg: '#7ab4e3', c1: '#ffffff', c2: '#670E36', c3: '#ffd600', c4: '#670E36' },
-  { name: 'BOURNEMOUTH',    bg: '#DA291C', c1: '#ffffff', c2: '#000000', c3: '#000000', c4: '#000000' },
+  { name: 'ARSENAL',        bg: '#EF0107', c1: '#ffffff', c2: '#003672', c3: '#003672', c4: '#003672' },
+  { name: 'ASTON VILLA',    bg: '#7ab4e3', c1: '#ffffff', c2: '#ffffff', c3: '#ffd600', c4: '#670E36' },
+  { name: 'BOURNEMOUTH',    bg: '#DA291C', c1: '#ffffff', c2: '#ffffff', c3: '#000000', c4: '#000000' },
   { name: 'BRENTFORD',      bg: '#e30613', c1: '#ffffff', c2: '#ffffff', c3: '#000000', c4: '#000000' },
   { name: 'BRIGHTON',       bg: '#0057B8', c1: '#ffffff', c2: '#ffffff', c3: '#ffcd00', c4: '#ffcd00' },
+  { name: 'BURNLEY',        bg: '#6C1D45', c1: '#ffffff', c2: '#8DC8E8', c3: '#8DC8E8', c4: '#8DC8E8' },
   { name: 'CHELSEA',        bg: '#034694', c1: '#ffffff', c2: '#ffffff', c3: '#DBA111', c4: '#DBA111' },
-  { name: 'CRYSTAL PALACE', bg: '#1B458F', c1: '#ffffff', c2: '#d4d1d2', c3: '#d2d2d2', c4: '#C4122E' },
+  { name: 'CRYSTAL PALACE', bg: '#1B458F', c1: '#ffffff', c2: '#d4d1d2', c3: '#C4122E', c4: '#C4122E' },
   { name: 'EVERTON',        bg: '#003399', c1: '#ffffff', c2: '#ffffff', c3: '#ffdf1c', c4: '#ffdf1c' },
   { name: 'FULHAM',         bg: '#ffffff', c1: '#000000', c2: '#ce0007', c3: '#CC0000', c4: '#ce0007', lightBg: true },
-  { name: 'IPSWICH',        bg: '#0044A9', c1: '#ffffff', c2: '#ffffff', c3: '#de2d26', c4: '#de2d26' },
-  { name: 'LEICESTER',      bg: '#003090', c1: '#ffffff', c2: '#FDBE11', c3: '#FDBE11', c4: '#FDBE11' },
+  { name: 'LEEDS',          bg: '#ffffff', c1: '#1D428A', c2: '#ffb016', c3: '#ffb016', c4: '#ffb016', lightBg: true, box1: '#1D428A' },
   { name: 'LIVERPOOL',      bg: '#b20622', c1: '#ffffff', c2: '#0bc9b0', c3: '#F6EB61', c4: '#fced5e' },
   { name: 'MAN CITY',       bg: '#6CABDD', c1: '#ffffff', c2: '#1C2C5B', c3: '#1C2C5B', c4: '#1C2C5B' },
-  { name: 'MAN UTD',        bg: '#DA291C', c1: '#000000', c2: '#ffffff', c3: '#ffffff', c4: '#FBE122' },
+  { name: 'MAN UTD',        bg: '#DA291C', c1: '#ffffff', c2: '#000000', c3: '#FBE122', c4: '#FBE122' },
   { name: 'NEWCASTLE',      bg: '#030000', c1: '#ffffff', c2: '#ffffff', c3: '#41B0E4', c4: '#41B0E4' },
   { name: "NOTT'M FOREST",  bg: '#DD0000', c1: '#ffffff', c2: '#030000', c3: '#000000', c4: '#000000' },
-  { name: 'SOUTHAMPTON',    bg: '#D71920', c1: '#ffffff', c2: '#ffffff', c3: '#FFC20E', c4: '#FFC20E' },
-  { name: 'SPURS',          bg: '#132257', c1: '#ffffff', c2: '#bcbec0', c3: '#BCBEC0', c4: '#ffffff' },
+  { name: 'SPURS',          bg: '#132257', c1: '#ffffff', c2: '#bcbec0', c3: '#BCBEC0', c4: '#BCBEC0' },
+  { name: 'SUNDERLAND',     bg: '#EB172B', c1: '#000000', c2: '#ffffff', c3: '#000000', c4: '#000000' },
   { name: 'WEST HAM',       bg: '#7A263A', c1: '#ffffff', c2: '#1BB1E7', c3: '#1BB1E7', c4: '#F3D459' },
-  { name: 'WOLVES',         bg: '#e27c2f', c1: '#000000', c2: '#ffffff', c3: '#FFFFFF', c4: '#231F20' },
+  { name: 'WOLVES',         bg: '#e27c2f', c1: '#000000', c2: '#ffffff', c3: '#FFFFFF', c4: '#000000' },
 ];
 
 const INTL_KITS = [
-  { name: 'ARGENTINA',   bg: '#6AAAE5', c1: '#ffffff', c2: '#ffffff', c3: '#FAD755', c4: '#FAD755' },
+  { name: 'ARGENTINA',   bg: '#6AAAE5', c1: '#ffffff', c2: '#FAD755', c3: '#FAD755', c4: '#FAD755' },
   { name: 'AUSTRALIA',   bg: '#00843D', c1: '#ffffff', c2: '#FFD700', c3: '#FFD700', c4: '#FFD700' },
   { name: 'BELGIUM',     bg: '#000000', c1: '#ffffff', c2: '#FFD700', c3: '#EF3340', c4: '#FFD700' },
-  { name: 'BRAZIL',      bg: '#FFC700', c1: '#ffffff', c2: '#058032', c3: '#002776', c4: '#058032', lightBg: true },
+  { name: 'BRAZIL',      bg: '#FFC700', c1: '#058032', c2: '#ffffff', c3: '#002776', c4: '#058032' },
   { name: 'CROATIA',     bg: '#FF0000', c1: '#ffffff', c2: '#003389', c3: '#003389', c4: '#003389' },
   { name: 'ENGLAND',     bg: '#E70017', c1: '#ffffff', c2: '#ffffff', c3: '#00247D', c4: '#00247D' },
   { name: 'FRANCE',      bg: '#002395', c1: '#ffffff', c2: '#ED2939', c3: '#ED2939', c4: '#ED2939' },
   { name: 'GERMANY',     bg: '#ffffff', c1: '#000000', c2: '#D00000', c3: '#FFBC00', c4: '#D00000', lightBg: true },
-  { name: 'ITALY',       bg: '#0046BE', c1: '#ffffff', c2: '#CD212A', c3: '#ffffff', c4: '#CD212A' },
-  { name: 'IVORY COAST', bg: '#F77F00', c1: '#ffffff', c2: '#00723B', c3: '#ffffff', c4: '#00723B' },
-  { name: 'MEXICO',      bg: '#09914F', c1: '#ffffff', c2: '#9E1A1D', c3: '#ffffff', c4: '#9E1A1D' },
-  { name: 'MOROCCO',     bg: '#D21E28', c1: '#ffffff', c2: '#024D29', c3: '#ffffff', c4: '#024D29' },
-  { name: 'NETHERLANDS', bg: '#FF4F00', c1: '#ffffff', c2: '#003DA5', c3: '#ffffff', c4: '#003DA5' },
+  { name: 'ITALY',       bg: '#0046BE', c1: '#ffffff', c2: '#CD212A', c3: '#CD212A', c4: '#CD212A' },
+  { name: 'IVORY COAST', bg: '#F77F00', c1: '#ffffff', c2: '#00723B', c3: '#00723B', c4: '#00723B' },
+  { name: 'MEXICO',      bg: '#09914F', c1: '#ffffff', c2: '#9E1A1D', c3: '#9E1A1D', c4: '#9E1A1D' },
+  { name: 'MOROCCO',     bg: '#D21E28', c1: '#ffffff', c2: '#024D29', c3: '#024D29', c4: '#024D29' },
+  { name: 'NETHERLANDS', bg: '#FF4F00', c1: '#ffffff', c2: '#003DA5', c3: '#003DA5', c4: '#003DA5' },
   { name: 'PORTUGAL',    bg: '#006600', c1: '#ffffff', c2: '#FF0000', c3: '#FFD700', c4: '#FF0000' },
-  { name: 'SCOTLAND',    bg: '#1F3077', c1: '#ffffff', c2: '#FFD700', c3: '#ffffff', c4: '#FFD700' },
+  { name: 'SCOTLAND',    bg: '#1F3077', c1: '#ffffff', c2: '#FFD700', c3: '#E32F43', c4: '#FFD700' },
   { name: 'SENEGAL',     bg: '#00853F', c1: '#ffffff', c2: '#FDEF42', c3: '#E31B23', c4: '#FDEF42' },
-  { name: 'SPAIN',       bg: '#AA151B', c1: '#ffffff', c2: '#F1BF00', c3: '#F1BF00', c4: '#F1BF00' },
-  { name: 'TURKEY',      bg: '#E30A17', c1: '#000000', c2: '#ffffff', c3: '#ffffff', c4: '#ffffff' },
-  { name: 'URUGUAY',     bg: '#5EB6E4', c1: '#ffffff', c2: '#000000', c3: '#ffffff', c4: '#000000' },
+  { name: 'SPAIN',       bg: '#8D1411', c1: '#ffffff', c2: '#F1BF00', c3: '#F1BF00', c4: '#F1BF00' },
+  { name: 'TURKEY',      bg: '#E30A17', c1: '#000000', c2: '#ffffff', c3: '#ffffff', c4: '#000000' },
+  { name: 'URUGUAY',     bg: '#5EB6E4', c1: '#ffffff', c2: '#000000', c3: '#FFC905', c4: '#000000' },
   { name: 'WALES',       bg: '#C8102E', c1: '#ffffff', c2: '#FFD700', c3: '#004B87', c4: '#FFD700' },
 ];
 
@@ -175,6 +195,12 @@ function TapZone({ value, onChange, color }: { value: number; onChange: (v: numb
 export default function App() {
   const [players, setPlayers] = useState<Player[]>(() => {
     try {
+      const PLAYERS_VERSION = 'v4';
+      if (localStorage.getItem('ceefax_players_version') !== PLAYERS_VERSION) {
+        localStorage.removeItem('ceefax_players_cache');
+        localStorage.setItem('ceefax_players_version', PLAYERS_VERSION);
+        return GET_RANDOM_16();
+      }
       const cached = localStorage.getItem('ceefax_players_cache');
       return cached ? JSON.parse(cached) : GET_RANDOM_16();
     } catch { return GET_RANDOM_16(); }
@@ -190,9 +216,8 @@ export default function App() {
     return newId;
   });
   const [newPlayerName, setNewPlayerName] = useState('');
-  const [splashKit, setSplashKit] = useState(0);
   const [splashDone, setSplashDone] = useState(false);
-  const [splashKits] = useState(() => [...SPLASH_KITS_DATA].sort(() => Math.random() - 0.5));
+  const [splashKit] = useState(() => SPLASH_KITS_DATA[Math.floor(Math.random() * SPLASH_KITS_DATA.length)]);
   const [editingPlayerId, setEditingPlayerId] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
@@ -263,26 +288,10 @@ export default function App() {
     if (Capacitor.isNativePlatform()) {
       const timeout = setTimeout(applyAppKit, 3200);
       return () => clearTimeout(timeout);
-    } else {
-      const applyBg = (bg: string) => {
-        root.style.setProperty('--color-t-bg', bg);
-        document.body.style.setProperty('background-color', bg, 'important');
-        if (meta) meta.content = bg;
-      };
-      applyBg(splashKits[0].bg);
-      let i = 1;
-      const interval = setInterval(() => {
-        if (i < splashKits.length) {
-          applyBg(splashKits[i].bg);
-          setSplashKit(i);
-          i++;
-        } else {
-          clearInterval(interval);
-          setTimeout(applyAppKit, 200);
-        }
-      }, 200);
-      return () => clearInterval(interval);
     }
+    document.body.style.setProperty('background-color', splashKit.bg, 'important');
+    const timeout = setTimeout(applyAppKit, 2600);
+    return () => clearTimeout(timeout);
   }, []);
 
   // ── Scroll to top on view change ──
@@ -545,6 +554,10 @@ export default function App() {
     setActiveDrag({ id, floatX: rect.left, floatY: rect.top, width: rect.width, height: rect.height, insertIndex: Math.min(index, without.length) });
   };
 
+  // ── Colour rules ──
+  const box1Color = activeKit?.box1 ?? (activeKit?.lightBg ? '#000000' : '#ffffff');
+  const box2Color = activeKit?.c4 ?? '#ffffff';
+
   // ── Splash screen ──
   if (!splashDone) {
     if (Capacitor.isNativePlatform()) {
@@ -554,11 +567,31 @@ export default function App() {
         </div>
       );
     }
-    const kit = splashKits[splashKit] || splashKits[0];
     return (
-      <div style={{ position: 'fixed', inset: 0, zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: kit.bg, fontFamily: "'Bebas Neue', sans-serif" }}>
-        <span style={{ fontSize: 'clamp(52px, 14vw, 96px)', letterSpacing: '0.05em', color: kit.c4, whiteSpace: 'nowrap' }}>
-          LAZY GAFFER
+      <div style={{
+        position: 'fixed', inset: 0, zIndex: 9999,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        backgroundColor: splashKit.bg,
+        fontFamily: "'Bebas Neue', sans-serif",
+      }}>
+        <style>{`
+          @keyframes lgPulse {
+            0%   { transform: scale(1); }
+            20%  { transform: scale(1.2); }
+            40%  { transform: scale(1); }
+            60%  { transform: scale(1.2); }
+            80%  { transform: scale(1); }
+            100% { transform: scale(1); }
+          }
+        `}</style>
+        <span style={{
+          fontSize: '93vmin',
+          lineHeight: 1,
+          color: splashKit.c4,
+          WebkitTextStroke: `4px ${splashKit.outline}`,
+          animation: 'lgPulse 2.5s ease-in-out forwards',
+        }}>
+          LG
         </span>
       </div>
     );
@@ -636,7 +669,7 @@ export default function App() {
               {/* ── SQUAD VIEW ── */}
               {view === 'squad' && (
                 <div>
-                  <div ref={addRowRef} className="flex gap-2 pt-2 pb-4">
+                  <div ref={addRowRef} className="flex gap-2 pt-2" style={{ paddingBottom: 30 }}>
                     <input
                       value={newPlayerName}
                       onChange={e => setNewPlayerName(e.target.value.toUpperCase())}
@@ -659,7 +692,8 @@ export default function App() {
                       return (
                         <section
                           key={p.id}
-                          className="border-b border-t-c2 pt-2 pb-3"
+                          className="border-b pt-2 pb-3"
+                          style={{ borderColor: box2Color }}
                         >
                           {/* Name row */}
                           <div ref={el => { playerCardRefs.current[p.id] = el; }} className="flex gap-2 items-center">
@@ -671,12 +705,12 @@ export default function App() {
                               onKeyDown={e => e.key === 'Enter' && (e.target as HTMLInputElement).blur()}
                               onChange={e => setPlayers(prev => prev.map(x => x.id === p.id ? { ...x, name: e.target.value.toUpperCase() } : x))}
                               className="border-2 flex-1 bg-t-bg text-t-c1 uppercase outline-none font-bold h-[36px] p-2 cursor-text"
-                              style={{ fontSize: 18, letterSpacing: 2, borderColor: editingPlayerId === p.id ? 'var(--color-t-c4)' : 'var(--color-t-c2)', WebkitUserSelect: 'text' }}
+                              style={{ fontSize: 18, letterSpacing: 2, borderColor: editingPlayerId === p.id ? 'var(--color-t-c4)' : box2Color, WebkitUserSelect: 'text' }}
                             />
                             <button
                               onClick={() => toggleExpanded(p.id)}
-                              className="flex items-center justify-between border-2 border-t-c1 px-3 h-[36px] shrink-0"
-                              style={{ width: 88 }}
+                              className="flex items-center justify-between border-2 px-3 h-[36px] shrink-0"
+                              style={{ borderColor: box2Color, width: 88 }}
                             >
                               <span className="text-t-c4 font-bold" style={{ fontSize: 18 }}>{overall}</span>
                               <span className="text-t-c1/50 text-xs">{isExpanded ? '▲' : '▼'}</span>
@@ -720,7 +754,7 @@ export default function App() {
                           fontSize: 18,
                           background: p.isSelected ? 'var(--color-t-c4)' : 'var(--color-t-bg)',
                           color: p.isSelected ? 'var(--color-t-bg)' : 'var(--color-t-c1)',
-                          borderColor: p.isSelected ? 'var(--color-t-c4)' : 'rgba(255,255,255,0.2)',
+                          borderColor: 'var(--color-t-c4)',
                         }}
                       >
                         {p.name}
@@ -740,28 +774,28 @@ export default function App() {
                     <>
                       <div ref={teamsContainerRef} className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         {[
-                          { data: teams.team1, color: 'text-t-c1', headerColor: 'text-t-c4', border: 'border-t-c1' },
-                          { data: teams.team2, color: 'text-t-c4', headerColor: 'text-t-c1', border: 'border-t-c4' },
+                          { data: teams.team1, color: box1Color },
+                          { data: teams.team2, color: box2Color },
                         ].map(t => (
-                          <div key={t.data.name} className={`border-4 ${t.border} p-4`}>
-                            <div className={`flex items-end border-b-2 ${t.border} mb-4 pb-2`}>
-                              <h3 className={`flex-1 text-2xl font-bold truncate pr-2 ${t.headerColor}`}>{t.data.name}</h3>
+                          <div key={t.data.name} className="border-4 p-4" style={{ borderColor: t.color, color: t.color }}>
+                            <div className="flex items-end border-b-2 mb-4 pb-2" style={{ borderColor: t.color }}>
+                              <h3 className="flex-1 text-2xl font-bold truncate pr-2">{t.data.name}</h3>
                               {showPlayerDetails && (
                                 <>
-                                  <span className={`w-16 font-bold ${t.headerColor}`} style={{ fontSize: 20 }}>RTG</span>
-                                  <span className={`w-10 font-bold ${t.headerColor}`} style={{ fontSize: 20 }}>
+                                  <span className="w-16 font-bold" style={{ fontSize: 20 }}>RTG</span>
+                                  <span className="w-10 font-bold" style={{ fontSize: 20 }}>
                                     {t.data.totalRating % 1 === 0 ? t.data.totalRating : t.data.totalRating.toFixed(1)}
                                   </span>
                                 </>
                               )}
                             </div>
                             {t.data.players.map(p => (
-                              <div key={p.id} className={`flex ${t.color}`} style={{ fontSize: 20 }}>
+                              <div key={p.id} className="flex" style={{ fontSize: 20 }}>
                                 <span className="flex-1 truncate pr-2">{p.name}</span>
                                 {showPlayerDetails && (
                                   <>
-                                    <span className={`w-16 ${t.color}`}>{getEffectivePosition(p).substring(0, 3)}</span>
-                                    <span className={`w-10 ${t.color}`}>
+                                    <span className="w-16">{getEffectivePosition(p).substring(0, 3)}</span>
+                                    <span className="w-10">
                                       {getEffectiveRating(p) % 1 === 0 ? getEffectiveRating(p) : getEffectiveRating(p).toFixed(1)}
                                     </span>
                                   </>
@@ -773,17 +807,17 @@ export default function App() {
                       </div>
 
                       <div className="flex justify-center">
-                        <div className="flex w-[300px] border-4 border-t-c1 text-lg font-bold">
-                          <button onClick={() => setShowPlayerDetails(false)} className="flex-1 p-2 transition-all" style={{ fontSize: 24, background: !showPlayerDetails ? 'var(--color-t-c1)' : 'var(--color-t-bg)', color: !showPlayerDetails ? 'var(--color-t-bg)' : 'var(--color-t-c1)' }}>HIDE INFO</button>
-                          <button onClick={() => setShowPlayerDetails(true)} className="flex-1 p-2 transition-all" style={{ fontSize: 24, background: showPlayerDetails ? 'var(--color-t-c1)' : 'var(--color-t-bg)', color: showPlayerDetails ? 'var(--color-t-bg)' : 'var(--color-t-c1)' }}>SHOW INFO</button>
+                        <div className="flex w-[300px] border-4 text-lg font-bold" style={{ borderColor: box1Color }}>
+                          <button onClick={() => setShowPlayerDetails(false)} className="flex-1 p-2 transition-all" style={{ fontSize: 24, background: !showPlayerDetails ? box1Color : 'var(--color-t-bg)', color: !showPlayerDetails ? 'var(--color-t-bg)' : box1Color }}>HIDE INFO</button>
+                          <button onClick={() => setShowPlayerDetails(true)} className="flex-1 p-2 transition-all" style={{ fontSize: 24, background: showPlayerDetails ? box1Color : 'var(--color-t-bg)', color: showPlayerDetails ? 'var(--color-t-bg)' : box1Color }}>SHOW INFO</button>
                         </div>
                       </div>
 
                       <div className="flex justify-center">
                         <button
                           onClick={handleShareTeams}
-                          className="w-[300px] border-4 border-t-c4 p-2 font-bold transition-all"
-                          style={{ fontSize: 24, background: isSharing ? 'var(--color-t-c4)' : 'var(--color-t-bg)', color: isSharing ? 'var(--color-t-bg)' : 'var(--color-t-c4)' }}
+                          className="w-[300px] border-4 p-2 font-bold transition-all"
+                          style={{ fontSize: 24, borderColor: box2Color, background: isSharing ? box2Color : 'var(--color-t-bg)', color: isSharing ? 'var(--color-t-bg)' : box2Color }}
                         >SHARE TEAMS</button>
                       </div>
                     </>
@@ -944,8 +978,8 @@ export default function App() {
               }}
             >
               <nav className="flex w-full gap-4">
-                <button onClick={() => setView('squad')} className="flex-1 py-2 border-4 border-t-c2 font-bold transition-all" style={{ fontSize: 'clamp(20px, 5vw, 26px)', background: view === 'squad' ? 'var(--color-t-c2)' : 'var(--color-t-bg)', color: view === 'squad' ? 'var(--color-t-bg)' : 'var(--color-t-c2)' }}>SQUAD</button>
-                <button onClick={() => setView('selection')} className="flex-1 py-2 border-4 border-t-c3 font-bold transition-all" style={{ fontSize: 'clamp(20px, 5vw, 26px)', background: view === 'selection' ? 'var(--color-t-c3)' : 'var(--color-t-bg)', color: view === 'selection' ? 'var(--color-t-bg)' : 'var(--color-t-c3)' }}>GAFFER</button>
+                <button onClick={() => setView('squad')} className="flex-1 py-2 border-4 font-bold transition-all" style={{ fontSize: 'clamp(20px, 5vw, 26px)', borderColor: box1Color, background: view === 'squad' ? box1Color : 'var(--color-t-bg)', color: view === 'squad' ? 'var(--color-t-bg)' : box1Color }}>SQUAD</button>
+                <button onClick={() => setView('selection')} className="flex-1 py-2 border-4 font-bold transition-all" style={{ fontSize: 'clamp(20px, 5vw, 26px)', borderColor: box2Color, background: view === 'selection' ? box2Color : 'var(--color-t-bg)', color: view === 'selection' ? 'var(--color-t-bg)' : box2Color }}>GAFFER</button>
               </nav>
               <div className="text-center text-xs font-normal text-t-c1 normal-case" style={{ fontFamily: 'Courier New, monospace' }}>Copyright - Gary Neill Limited</div>
             </div>

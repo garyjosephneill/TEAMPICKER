@@ -17,6 +17,7 @@
   --color-t-c2: #1BB1E7;   /* Colour 2 — name borders, SQUAD, Team 1, header line     */
   --color-t-c3: #ffffff;   /* Colour 3 — GAFFER, Team 2, odd tap zones                */
   --color-t-c4: #F3D459;   /* Colour 4 — title, stars, ratings                        */
+  --color-t-c5: #ffffff;   /* Colour 5 — Team 1 box, always white                      */
 }
 
 body {
