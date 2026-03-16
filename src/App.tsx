@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Capacitor } from '@capacitor/core';
 import splashGif from './assets/splash-screen.gif';
+import { supabase } from './supabaseClient';
 
 // ── ERROR BOUNDARY ──────────────────────────────────────────────────────────
 class ErrorBoundary extends React.Component<{children: React.ReactNode}, {error: string | null}> {
@@ -308,10 +309,10 @@ export default function App({ userId }: { userId: string }) {
     if (scrollRef.current) scrollRef.current.scrollTo({ top: 0, behavior: 'smooth' });
   }, [view]);
 
-  // ── Fetch players from server ──
+  // ── Fetch players from Supabase ──
   useEffect(() => {
-    fetch(`/api/players/${userId}`).then(r => r.json()).then(data => {
-      if (data.length > 0) {
+    supabase.from('players').select('*').eq('user_id', userId).then(({ data }) => {
+      if (data && data.length > 0) {
         setPlayers(data.map((p: any) => {
           const r = typeof p.ratings === 'string' ? JSON.parse(p.ratings) : p.ratings;
           const merged = { ...DEFAULT_RATINGS(), ...r };
@@ -321,19 +322,27 @@ export default function App({ userId }: { userId: string }) {
           return { ...p, ratings: isFlat ? RANDOM_MM2_RATINGS() : merged };
         }));
       }
-    }).catch(() => {});
+    });
   }, [userId]);
 
-  // ── Persist players ──
+  // ── Persist players to Supabase ──
   useEffect(() => {
     if (players.length === 0) return;
     try { localStorage.setItem('ceefax_players_cache', JSON.stringify(players)); } catch {}
     const timer = setTimeout(() => {
-      fetch(`/api/players/${userId}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(players)
-      }).catch(() => {});
+      (async () => {
+        await supabase.from('players').delete().eq('user_id', userId);
+        await supabase.from('players').insert(
+          players.map(p => ({
+            id: p.id,
+            user_id: userId,
+            name: p.name,
+            ratings: p.ratings,
+            position: p.position,
+            isSelected: p.isSelected,
+          }))
+        );
+      })();
     }, 1000);
     return () => clearTimeout(timer);
   }, [players, userId]);
