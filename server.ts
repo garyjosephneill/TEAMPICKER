@@ -2,6 +2,7 @@ import express from "express";
 import Database from "better-sqlite3";
 import path from "path";
 import { fileURLToPath } from "url";
+import Stripe from "stripe";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 let dbPath = process.env.DATABASE_URL || path.join(__dirname, "squad.db");
@@ -42,7 +43,69 @@ db.exec(`
 async function startServer() {
   const app = express();
   const PORT = Number(process.env.PORT) || 3000;
+
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+  const PRICE_ID = process.env.STRIPE_PRICE_ID!;
+  const WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET!;
+  const APP_URL = process.env.APP_URL || "https://teampicker-production.up.railway.app";
+
+  // Stripe webhook — must be BEFORE express.json()
+  app.post("/api/webhook", express.raw({ type: "application/json" }), async (req, res) => {
+    const sig = req.headers["stripe-signature"];
+    let event: Stripe.Event;
+    try {
+      event = stripe.webhooks.constructEvent(req.body, sig!, WEBHOOK_SECRET);
+    } catch (err: any) {
+      console.error("Webhook signature error:", err.message);
+      res.status(400).send(`Webhook Error: ${err.message}`);
+      return;
+    }
+
+    if (event.type === "checkout.session.completed") {
+      const session = event.data.object as Stripe.Checkout.Session;
+      const userId = session.metadata?.userId;
+      if (userId) {
+        db.prepare("UPDATE user_metadata SET is_licensed = 1 WHERE user_id = ?").run(userId);
+        console.log("Licensed user:", userId);
+      }
+    }
+
+    if (event.type === "customer.subscription.deleted") {
+      const subscription = event.data.object as Stripe.Subscription;
+      const userId = subscription.metadata?.userId;
+      if (userId) {
+        db.prepare("UPDATE user_metadata SET is_licensed = 0 WHERE user_id = ?").run(userId);
+        console.log("Unlicensed user:", userId);
+      }
+    }
+
+    res.json({ received: true });
+  });
+
   app.use(express.json());
+
+  // API: Create Stripe Checkout Session
+  app.post("/api/create-checkout-session", async (req, res) => {
+    const { userId } = req.body;
+    try {
+      const session = await stripe.checkout.sessions.create({
+        mode: "subscription",
+        payment_method_types: ["card"],
+        line_items: [{ price: PRICE_ID, quantity: 1 }],
+        subscription_data: {
+          trial_period_days: 14,
+          metadata: { userId },
+        },
+        metadata: { userId },
+        success_url: `${APP_URL}/?checkout_success=true`,
+        cancel_url: `${APP_URL}/`,
+      });
+      res.json({ url: session.url });
+    } catch (err: any) {
+      console.error("Checkout session error:", err.message);
+      res.status(500).json({ error: err.message });
+    }
+  });
 
   // API: Get User Status
   app.get("/api/squad-status/:userId", (req, res) => {
