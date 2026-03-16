@@ -40,7 +40,7 @@ export default function PrivacyPolicy() {
         <div style={{ borderBottom: '4px solid var(--color-t-c2)', marginBottom: 32 }} />
 
         {/* Content */}
-        <div style={{ fontSize: 14, lineHeight: 1.8 }}>
+        <div style={{ fontSize: 18, lineHeight: 1.8 }}>
 
           <p style={{ color: 'var(--color-t-c1)', opacity: 0.6, marginBottom: 32, fontSize: 13 }}>
             Last updated: March 2026
