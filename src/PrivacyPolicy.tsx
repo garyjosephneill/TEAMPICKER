@@ -82,7 +82,7 @@ export default function PrivacyPolicy() {
           </Section>
 
           <Section title="Changes to This Policy">
-            We may update this policy from time to time. Any changes will be posted at lazygaffer.com/privacy with an updated date.
+            We may update this policy from time to time. Any changes will be posted at www.lazygaffer.com/privacy with an updated date.
           </Section>
 
         </div>
