@@ -192,7 +192,7 @@ function TapZone({ value, onChange, color }: { value: number; onChange: (v: numb
 }
 
 // ── APP ──────────────────────────────────────────────────────────────────────
-export default function App() {
+export default function App({ userId }: { userId: string }) {
   const [players, setPlayers] = useState<Player[]>(() => {
     try {
       const PLAYERS_VERSION = 'v4';
@@ -208,13 +208,6 @@ export default function App() {
   const [view, setView] = useState<'squad' | 'selection' | 'settings'>('squad');
   const [teams, setTeams] = useState<{ team1: Team; team2: Team } | null>(null);
   const [expandedPlayers, setExpandedPlayers] = useState<Set<string>>(new Set());
-  const [squadId] = useState<string>(() => {
-    const id = localStorage.getItem('ceefax_squad_id');
-    if (id) return id;
-    const newId = Math.floor(100 + Math.random() * 900).toString();
-    localStorage.setItem('ceefax_squad_id', newId);
-    return newId;
-  });
   const [newPlayerName, setNewPlayerName] = useState('');
   const [splashDone, setSplashDone] = useState(false);
   const [splashKit, setSplashKit] = useState(0);
@@ -317,7 +310,7 @@ export default function App() {
 
   // ── Fetch players from server ──
   useEffect(() => {
-    fetch(`/api/players/${squadId}`).then(r => r.json()).then(data => {
+    fetch(`/api/players/${userId}`).then(r => r.json()).then(data => {
       if (data.length > 0) {
         setPlayers(data.map((p: any) => {
           const r = typeof p.ratings === 'string' ? JSON.parse(p.ratings) : p.ratings;
@@ -329,21 +322,21 @@ export default function App() {
         }));
       }
     }).catch(() => {});
-  }, [squadId]);
+  }, [userId]);
 
   // ── Persist players ──
   useEffect(() => {
     if (players.length === 0) return;
     try { localStorage.setItem('ceefax_players_cache', JSON.stringify(players)); } catch {}
     const timer = setTimeout(() => {
-      fetch(`/api/players/${squadId}`, {
+      fetch(`/api/players/${userId}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(players)
       }).catch(() => {});
     }, 1000);
     return () => clearTimeout(timer);
-  }, [players, squadId]);
+  }, [players, userId]);
 
   // ── Keep drag refs in sync ──
   useEffect(() => { activeDragRef.current = activeDrag; }, [activeDrag]);
