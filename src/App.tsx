@@ -685,7 +685,7 @@ export default function App({ userId }: { userId: string }) {
                     >ADD</button>
                   </div>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 300px), 1fr))', gap: '0 1rem' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 300px), 1fr))', gap: '0 2rem' }}>
                     {players.map(p => {
                       const isExpanded = expandedPlayers.has(p.id);
                       const overall = (Object.values(p.ratings).reduce((a, b) => a + b, 0) / 6).toFixed(1);
