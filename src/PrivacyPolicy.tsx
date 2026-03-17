@@ -59,7 +59,7 @@ export default function PrivacyPolicy() {
       display: 'flex',
       justifyContent: 'center',
     }}>
-      <div style={{ width: '100%', maxWidth: 720, paddingTop: 'calc(max(20px, env(safe-area-inset-top)) + 10px)', paddingLeft: 'max(16px, env(safe-area-inset-left))', paddingRight: 'max(16px, env(safe-area-inset-right))', paddingBottom: 60 }}>
+      <div style={{ width: '100%', maxWidth: 720, paddingTop: 'calc(max(20px, env(safe-area-inset-top)) + 10px)', paddingLeft: 'max(16px, env(safe-area-inset-left))', paddingRight: 'max(16px, env(safe-area-inset-right))', paddingBottom: 'calc(max(40px, env(safe-area-inset-bottom)) + 40px)' }}>
 
         {/* Header */}
         <div style={{
