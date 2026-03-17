@@ -659,11 +659,11 @@ export default function App({ userId }: { userId: string }) {
               paddingBottom: 16,
             }}
           >
-            <div className="flex items-end justify-between" style={{ marginBottom: 4 }}>
+            <div className="flex items-baseline justify-between" style={{ marginBottom: 4 }}>
               <div className="text-t-c4 leading-none" style={{ fontSize: 60, fontWeight: 700, fontFamily: "'Barlow Condensed', sans-serif" }}>
                 LAZY GAFFER
               </div>
-              <div>
+              <div style={{ alignSelf: 'flex-end' }}>
                 <button
                   onClick={() => { setView(v => v === 'settings' ? 'squad' : 'settings'); setKitsView(false); setTransfersView(false); setTransferCandidate(null); setReorderView(false); }}
                   style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
