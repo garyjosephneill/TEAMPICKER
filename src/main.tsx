@@ -62,7 +62,7 @@ function AuthGate() {
         position: 'fixed', inset: 0,
         background: '#7A263A',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        fontFamily: '"Bebas Neue", "Helvetica Neue", Helvetica, Arial, sans-serif',
+        fontFamily: '"Barlow Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
         fontWeight: 700,
         fontSize: 'clamp(52px, 14vw, 80px)',
         color: '#F3D459',

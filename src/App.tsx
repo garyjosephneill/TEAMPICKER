@@ -587,7 +587,7 @@ export default function App({ userId }: { userId: string }) {
     }
     const kit = splashKits[splashKit] || splashKits[0];
     return (
-      <div style={{ position: 'fixed', inset: 0, zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: kit.bg, fontFamily: "'Bebas Neue', sans-serif" }}>
+      <div style={{ position: 'fixed', inset: 0, zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: kit.bg, fontFamily: "'Barlow Condensed', sans-serif" }}>
         <span style={{ fontSize: 'clamp(52px, 14vw, 96px)', letterSpacing: '0.05em', color: kit.c4, whiteSpace: 'nowrap' }}>
           LAZY GAFFER
         </span>
@@ -630,7 +630,7 @@ export default function App({ userId }: { userId: string }) {
             }}
           >
             <div className="flex items-end justify-between" style={{ marginBottom: 4 }}>
-              <div className="text-t-c4 leading-none" style={{ fontSize: 60, fontWeight: 700, fontFamily: "'Bebas Neue', sans-serif", position: 'relative', top: 5 }}>
+              <div className="text-t-c4 leading-none" style={{ fontSize: 60, fontWeight: 700, fontFamily: "'Barlow Condensed', sans-serif", position: 'relative', top: 5 }}>
                 LAZY GAFFER
               </div>
               <div>

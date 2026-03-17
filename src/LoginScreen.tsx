@@ -31,7 +31,7 @@ export default function LoginScreen() {
       <div style={{ width: '100%', maxWidth: 480, padding: '0 24px' }}>
 
         <div style={{
-          fontFamily: '"Bebas Neue", "Helvetica Neue", Helvetica, Arial, sans-serif',
+          fontFamily: '"Barlow Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
           fontWeight: 700,
           fontSize: 'clamp(52px, 14vw, 80px)',
           color: 'var(--color-t-c4)',
