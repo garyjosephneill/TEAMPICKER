@@ -660,7 +660,7 @@ export default function App({ userId }: { userId: string }) {
             }}
           >
             <div className="flex items-end justify-between" style={{ marginBottom: 4 }}>
-              <div className="text-t-c4 leading-none" style={{ fontSize: 60, fontWeight: 700, fontFamily: "'Barlow Condensed', sans-serif", position: 'relative', top: 5 }}>
+              <div className="text-t-c4 leading-none" style={{ fontSize: 60, fontWeight: 700, fontFamily: "'Barlow Condensed', sans-serif" }}>
                 LAZY GAFFER
               </div>
               <div>
