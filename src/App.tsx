@@ -663,7 +663,7 @@ export default function App({ userId }: { userId: string }) {
               <div className="text-t-c4 leading-none" style={{ fontSize: 60, fontWeight: 700, fontFamily: "'Barlow Condensed', sans-serif" }}>
                 LAZY GAFFER
               </div>
-              <div style={{ position: 'absolute', right: 0, bottom: 3 }}>
+              <div style={{ position: 'absolute', right: 0, bottom: 4 }}>
                 <button
                   onClick={() => { setView(v => v === 'settings' ? 'squad' : 'settings'); setKitsView(false); setTransfersView(false); setTransferCandidate(null); setReorderView(false); }}
                   style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, display: 'block' }}
