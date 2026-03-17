@@ -73,7 +73,7 @@ const FAMOUS_PLAYERS = [
 const GET_RANDOM_16 = (): Player[] => {
   const shuffle = <T,>(arr: T[]) => [...arr].sort(() => 0.5 - Math.random());
   const pick = (pos: Position, n: number) => shuffle(FAMOUS_PLAYERS.filter(p => p.position === pos)).slice(0, n);
-  const squad = shuffle([...pick(Position.GKP, 2), ...pick(Position.DEFENCE, 4), ...pick(Position.MIDFIELD, 6), ...pick(Position.ATTACK, 4)]);
+  const squad = shuffle([...pick(Position.GKP, 2), ...pick(Position.DEFENCE, 4), ...pick(Position.MIDFIELD, 7), ...pick(Position.ATTACK, 5)]);
   const selectedIds = new Set(shuffle(squad).slice(0, 10).map(p => p.name));
   return squad.map(p => ({ ...p, id: crypto.randomUUID(), isSelected: selectedIds.has(p.name), ratings: RANDOM_MM2_RATINGS() }));
 };
