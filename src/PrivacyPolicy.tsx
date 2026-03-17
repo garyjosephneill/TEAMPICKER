@@ -59,7 +59,7 @@ export default function PrivacyPolicy() {
       display: 'flex',
       justifyContent: 'center',
     }}>
-      <div style={{ width: '100%', maxWidth: 720, padding: '40px 24px 60px' }}>
+      <div style={{ width: '100%', maxWidth: 720, paddingTop: 'calc(max(20px, env(safe-area-inset-top)) + 10px)', paddingLeft: 'max(16px, env(safe-area-inset-left))', paddingRight: 'max(16px, env(safe-area-inset-right))', paddingBottom: 60 }}>
 
         {/* Header */}
         <div style={{
@@ -75,7 +75,7 @@ export default function PrivacyPolicy() {
         <div style={{
           fontFamily: '"Barlow Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
           fontWeight: 700,
-          fontSize: 28,
+          fontSize: 21,
           color: 'var(--color-t-c2)',
           letterSpacing: 3,
           marginBottom: 8,
