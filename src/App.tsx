@@ -605,12 +605,13 @@ export default function App({ userId }: { userId: string }) {
       `}</style>
       <style>{`.lazy-placeholder::placeholder { color: var(--color-t-c1); opacity: 0.5; }`}</style>
 
-      {/* ── Outer shell: position fixed, no overflow hidden ── */}
+      {/* ── Outer shell ── */}
       <div
         className="bg-t-bg text-t-c1 uppercase"
         style={{
           position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
           display: 'flex', justifyContent: 'center',
+          overflow: 'hidden',
           fontFamily: "'Rajdhani', sans-serif",
         }}
       >
@@ -720,7 +721,7 @@ export default function App({ userId }: { userId: string }) {
                             <div className="mt-3 space-y-[6px]">
                               {MM2_STATS.map(stat => (
                                 <div key={stat.key} className="flex items-center gap-1">
-                                  <span className={`shrink-0 font-bold ${stat.textColor}`} style={{ fontSize: 14, width: 36, paddingLeft: 5 }}>{stat.label}</span>
+                                  <span className={`stat-label shrink-0 font-bold ${stat.textColor}`} style={{ width: 36, paddingLeft: 5 }}>{stat.label}</span>
                                   <div style={{ flex: 1, minWidth: 0, marginLeft: -5 }}>
                                     <TapZone
                                       value={p.ratings[stat.key]}

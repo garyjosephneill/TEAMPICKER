@@ -65,6 +65,15 @@ input[type="range"]::-moz-range-thumb {
   }
 }
 
+.stat-label {
+  font-size: 14px;
+}
+@media (min-width: 640px) {
+  .stat-label {
+    font-size: 11px;
+  }
+}
+
 @keyframes marquee {
   0% { transform: translateX(0); }
   100% { transform: translateX(-100%); }
