@@ -1012,7 +1012,7 @@ export default function App({ userId }: { userId: string }) {
                 <button onClick={() => setView('squad')} className="flex-1 py-2 border-4 font-bold transition-all" style={{ fontSize: 'clamp(20px, 5vw, 26px)', borderColor: box1Color, background: view === 'squad' ? box1Color : 'var(--color-t-bg)', color: view === 'squad' ? 'var(--color-t-bg)' : box1Color }}>SQUAD</button>
                 <button onClick={() => setView('selection')} className="flex-1 py-2 border-4 font-bold transition-all" style={{ fontSize: 'clamp(20px, 5vw, 26px)', borderColor: box2Color, background: view === 'selection' ? box2Color : 'var(--color-t-bg)', color: view === 'selection' ? 'var(--color-t-bg)' : box2Color }}>GAFFER</button>
               </nav>
-              <div className="text-center text-xs font-normal text-t-c1 normal-case" style={{ fontFamily: 'Courier New, monospace' }}>Copyright - Gary Neill Limited</div>
+              <div className="text-center text-t-c1 normal-case" style={{ fontFamily: '"Rajdhani", sans-serif', fontWeight: 500, fontSize: 12 }}>Copyright - Gary Neill Limited</div>
             </div>
           )}
 
