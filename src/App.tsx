@@ -160,6 +160,7 @@ const MM2_STATS: { key: StatKey; label: string; textColor: string; fillColor: st
 function TapZone({ value, onChange, color }: { value: number; onChange: (v: number) => void; color: string }) {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const [cellSize, setCellSize] = React.useState(24);
+  const isDragging = React.useRef(false);
 
   React.useLayoutEffect(() => {
     const el = containerRef.current;
@@ -174,12 +175,41 @@ function TapZone({ value, onChange, color }: { value: number; onChange: (v: numb
     return () => ro.disconnect();
   }, []);
 
+  const getValueFromX = (clientX: number) => {
+    const el = containerRef.current;
+    if (!el) return null;
+    const rect = el.getBoundingClientRect();
+    const x = Math.max(0, clientX - rect.left);
+    const index = Math.floor(x / (cellSize + 3));
+    return Math.max(1, Math.min(10, index + 1));
+  };
+
+  const handlePointerDown = (e: React.PointerEvent) => {
+    isDragging.current = true;
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+    const v = getValueFromX(e.clientX);
+    if (v !== null) onChange(v);
+  };
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (!isDragging.current) return;
+    const v = getValueFromX(e.clientX);
+    if (v !== null) onChange(v);
+  };
+
+  const handlePointerUp = () => { isDragging.current = false; };
+
   return (
-    <div ref={containerRef} style={{ display: 'flex', gap: '3px', width: '100%' }}>
+    <div
+      ref={containerRef}
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
+      style={{ display: 'flex', gap: '3px', width: '100%', touchAction: 'none' }}
+    >
       {Array.from({ length: 10 }).map((_, i) => (
         <div
           key={i}
-          onClick={() => onChange(i + 1)}
           style={{
             width: cellSize, height: cellSize,
             flexShrink: 0, flexGrow: 0,
