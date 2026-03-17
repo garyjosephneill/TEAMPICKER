@@ -676,12 +676,12 @@ export default function App({ userId }: { userId: string }) {
                       placeholder={newPlayerName ? '' : placeholderText}
                       onKeyDown={e => e.key === 'Enter' && addPlayer()}
                       className="flex-1 bg-t-bg border-2 border-t-c2 text-t-c1 uppercase outline-none px-2 font-bold lazy-placeholder"
-                      style={{ height: 30, fontSize: 15, letterSpacing: 2 }}
+                      style={{ height: 36, fontSize: 18, letterSpacing: 2 }}
                     />
                     <button
                       onClick={addPlayer}
                       className="shrink-0 bg-t-bg border-2 border-t-c3 text-t-c3 font-bold tracking-widest text-lg active:bg-t-c3 active:text-t-bg transition-colors"
-                      style={{ width: 72, height: 30 }}
+                      style={{ width: 88, height: 36 }}
                     >ADD</button>
                   </div>
 
@@ -704,15 +704,15 @@ export default function App({ userId }: { userId: string }) {
                               onBlur={() => setEditingPlayerId(null)}
                               onKeyDown={e => e.key === 'Enter' && (e.target as HTMLInputElement).blur()}
                               onChange={e => setPlayers(prev => prev.map(x => x.id === p.id ? { ...x, name: e.target.value } : x))}
-                              className="border-2 flex-1 bg-t-bg text-t-c1 uppercase outline-none font-bold h-[30px] p-2 cursor-text"
-                              style={{ fontSize: 15, letterSpacing: 2, borderColor: editingPlayerId === p.id ? 'var(--color-t-c4)' : box2Color, WebkitUserSelect: 'text' }}
+                              className="border-2 flex-1 bg-t-bg text-t-c1 uppercase outline-none font-bold h-[36px] p-2 cursor-text"
+                              style={{ fontSize: 18, letterSpacing: 2, borderColor: editingPlayerId === p.id ? 'var(--color-t-c4)' : box2Color, WebkitUserSelect: 'text' }}
                             />
                             <button
                               onClick={() => toggleExpanded(p.id)}
-                              className="flex items-center justify-between border-2 px-2 h-[30px] shrink-0"
-                              style={{ borderColor: box2Color, width: 72 }}
+                              className="flex items-center justify-between border-2 px-3 h-[36px] shrink-0"
+                              style={{ borderColor: box2Color, width: 88 }}
                             >
-                              <span className="text-t-c4 font-bold" style={{ fontSize: 15 }}>{overall}</span>
+                              <span className="text-t-c4 font-bold" style={{ fontSize: 18 }}>{overall}</span>
                               <span className="text-t-c1/50 text-xs">{isExpanded ? '▲' : '▼'}</span>
                             </button>
                           </div>
