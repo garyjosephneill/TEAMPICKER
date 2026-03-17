@@ -85,17 +85,6 @@ export default function PrivacyPolicy() {
         </div>
         <div style={{ borderBottom: '4px solid var(--color-t-c2)', marginBottom: 16 }} />
 
-        <p style={{
-          fontFamily: '"Rajdhani", sans-serif',
-          fontWeight: 500,
-          color: 'var(--color-t-c1)',
-          opacity: 0.6,
-          marginBottom: 24,
-          fontSize: 13,
-        }}>
-          Last updated: March 2026
-        </p>
-
         {/* Accordion sections */}
         <Section title="Overview">
           Lazy Gaffer is a team picker app for casual football. This policy explains what data the app collects, how it is used, and your rights as a user.
@@ -138,6 +127,16 @@ export default function PrivacyPolicy() {
 
         {/* Footer */}
         <div style={{ borderTop: '2px solid var(--color-t-c2)', marginTop: 32, paddingTop: 16 }}>
+          <p style={{
+            fontFamily: '"Rajdhani", sans-serif',
+            fontWeight: 500,
+            color: 'var(--color-t-c1)',
+            opacity: 0.6,
+            marginBottom: 16,
+            fontSize: 13,
+          }}>
+            Last updated: March 2026
+          </p>
           <a
             href="/"
             style={{
