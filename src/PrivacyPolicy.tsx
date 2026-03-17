@@ -127,16 +127,6 @@ export default function PrivacyPolicy() {
 
         {/* Footer */}
         <div style={{ borderTop: '2px solid var(--color-t-c2)', marginTop: 32, paddingTop: 16 }}>
-          <p style={{
-            fontFamily: '"Rajdhani", sans-serif',
-            fontWeight: 500,
-            color: 'var(--color-t-c1)',
-            opacity: 0.6,
-            marginBottom: 16,
-            fontSize: 13,
-          }}>
-            Last updated: March 2026
-          </p>
           <a
             href="/"
             style={{
@@ -147,10 +137,22 @@ export default function PrivacyPolicy() {
               textDecoration: 'none',
               letterSpacing: 2,
               textTransform: 'uppercase',
+              display: 'block',
+              marginBottom: 16,
             }}
           >
             ← Back to App
           </a>
+          <p style={{
+            fontFamily: '"Rajdhani", sans-serif',
+            fontWeight: 500,
+            color: 'var(--color-t-c1)',
+            opacity: 0.6,
+            margin: 0,
+            fontSize: 13,
+          }}>
+            Last updated: March 2026
+          </p>
         </div>
 
       </div>
