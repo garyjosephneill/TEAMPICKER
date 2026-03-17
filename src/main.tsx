@@ -9,6 +9,9 @@ import './index.css'
 
 const isPrivacyPage = window.location.pathname === '/privacy'
 
+// ── DEV BYPASS: set to false before deploying to Railway ─────────────────────
+const BYPASS_AUTH = true
+
 function AuthGate() {
   const [authStatus, setAuthStatus] = useState<'loading' | 'authenticated' | 'unauthenticated'>('loading')
   const [userId, setUserId] = useState<string | null>(null)
@@ -50,6 +53,9 @@ function AuthGate() {
     return () => subscription.unsubscribe()
   }, [])
 
+  // ── Dev bypass: skip auth/licensing during testing ────────────────────────
+  if (BYPASS_AUTH) return <App userId="dev-user" />
+
   if (authStatus === 'loading' || (authStatus === 'authenticated' && isLicensed === null)) {
     return (
       <div style={{
@@ -57,6 +63,7 @@ function AuthGate() {
         background: '#7A263A',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         fontFamily: '"Bebas Neue", "Helvetica Neue", Helvetica, Arial, sans-serif',
+        fontWeight: 700,
         fontSize: 'clamp(52px, 14vw, 80px)',
         color: '#F3D459',
       }}>

@@ -611,7 +611,7 @@ export default function App({ userId }: { userId: string }) {
         style={{
           position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
           display: 'flex', justifyContent: 'center',
-          fontFamily: "'Bebas Neue', sans-serif",
+          fontFamily: "'Rajdhani', sans-serif",
         }}
       >
         {/* ── Inner column: max 1024px ── */}
@@ -629,7 +629,7 @@ export default function App({ userId }: { userId: string }) {
             }}
           >
             <div className="flex items-end justify-between" style={{ marginBottom: 4 }}>
-              <div className="text-t-c4 font-title font-normal leading-none" style={{ fontSize: 60, position: 'relative', top: 5 }}>
+              <div className="text-t-c4 leading-none" style={{ fontSize: 60, fontWeight: 700, fontFamily: "'Bebas Neue', sans-serif", position: 'relative', top: 5 }}>
                 LAZY GAFFER
               </div>
               <div>
@@ -670,7 +670,7 @@ export default function App({ userId }: { userId: string }) {
                   <div ref={addRowRef} className="flex gap-2 pt-2" style={{ paddingBottom: 30 }}>
                     <input
                       value={newPlayerName}
-                      onChange={e => setNewPlayerName(e.target.value.toUpperCase())}
+                      onChange={e => setNewPlayerName(e.target.value)}
                       placeholder={newPlayerName ? '' : placeholderText}
                       onKeyDown={e => e.key === 'Enter' && addPlayer()}
                       className="flex-1 bg-t-bg border-2 border-t-c2 text-t-c1 uppercase outline-none px-2 font-bold lazy-placeholder"
@@ -701,7 +701,7 @@ export default function App({ userId }: { userId: string }) {
                               onFocus={() => setEditingPlayerId(p.id)}
                               onBlur={() => setEditingPlayerId(null)}
                               onKeyDown={e => e.key === 'Enter' && (e.target as HTMLInputElement).blur()}
-                              onChange={e => setPlayers(prev => prev.map(x => x.id === p.id ? { ...x, name: e.target.value.toUpperCase() } : x))}
+                              onChange={e => setPlayers(prev => prev.map(x => x.id === p.id ? { ...x, name: e.target.value } : x))}
                               className="border-2 flex-1 bg-t-bg text-t-c1 uppercase outline-none font-bold h-[36px] p-2 cursor-text"
                               style={{ fontSize: 18, letterSpacing: 2, borderColor: editingPlayerId === p.id ? 'var(--color-t-c4)' : box2Color, WebkitUserSelect: 'text' }}
                             />
@@ -720,7 +720,7 @@ export default function App({ userId }: { userId: string }) {
                             <div className="mt-3 space-y-[6px]">
                               {MM2_STATS.map(stat => (
                                 <div key={stat.key} className="flex items-center gap-1">
-                                  <span className={`shrink-0 font-bold ${stat.textColor}`} style={{ fontSize: 18, width: 36, paddingLeft: 5 }}>{stat.label}</span>
+                                  <span className={`shrink-0 font-bold ${stat.textColor}`} style={{ fontSize: 14, width: 36, paddingLeft: 5 }}>{stat.label}</span>
                                   <div style={{ flex: 1, minWidth: 0, marginLeft: -5 }}>
                                     <TapZone
                                       value={p.ratings[stat.key]}
@@ -747,7 +747,7 @@ export default function App({ userId }: { userId: string }) {
                       <button
                         key={p.id}
                         onClick={() => setPlayers(prev => prev.map(x => x.id === p.id ? { ...x, isSelected: !x.isSelected } : x))}
-                        className="p-2 border-2 text-left font-bold transition-all"
+                        className="p-2 border-2 text-left font-bold uppercase transition-all"
                         style={{
                           fontSize: 18,
                           background: p.isSelected ? 'var(--color-t-c4)' : 'var(--color-t-bg)',
@@ -788,7 +788,7 @@ export default function App({ userId }: { userId: string }) {
                               )}
                             </div>
                             {t.data.players.map(p => (
-                              <div key={p.id} className="flex" style={{ fontSize: 20 }}>
+                              <div key={p.id} className="flex font-bold uppercase" style={{ fontSize: 20 }}>
                                 <span className="flex-1 truncate pr-2">{p.name}</span>
                                 {showPlayerDetails && (
                                   <>
@@ -860,7 +860,7 @@ export default function App({ userId }: { userId: string }) {
                         <button
                           key={p.id}
                           onClick={() => setTransferCandidate(p.id)}
-                          className="p-2 border-2 text-left font-bold transition-all"
+                          className="p-2 border-2 text-left font-bold uppercase transition-all"
                           style={{
                             fontSize: 18,
                             background: transferCandidate === p.id ? 'var(--color-t-c4)' : 'var(--color-t-bg)',
@@ -876,7 +876,7 @@ export default function App({ userId }: { userId: string }) {
                     const p = players.find(x => x.id === transferCandidate);
                     return p ? (
                       <div className="fixed inset-0 flex flex-col items-center justify-center gap-4 pointer-events-none" style={{ zIndex: 50 }}>
-                        <div className="text-t-c4 font-bold text-center text-xl tracking-widest">{p.name}</div>
+                        <div className="text-t-c4 font-bold uppercase text-center text-xl tracking-widest">{p.name}</div>
                         <button onClick={() => setTransferCandidate(null)} className="border-4 border-t-c2 py-2 text-xl font-bold bg-t-bg text-t-c2 pointer-events-auto" style={{ width: 'calc(50% - 8px)' }}>KEEP</button>
                         <button onClick={() => { setPlayers(prev => prev.filter(x => x.id !== transferCandidate)); setTransferCandidate(null); }} className="border-4 border-t-c4 py-2 text-xl font-bold bg-t-c4 text-t-bg pointer-events-auto" style={{ width: 'calc(50% - 8px)' }}>SELL</button>
                       </div>
@@ -913,7 +913,7 @@ export default function App({ userId }: { userId: string }) {
                             key={item.player.id}
                             data-reorder-id={item.player.id}
                             onPointerDown={e => handleReorderPointerDown(e, item.player.id)}
-                            className="p-2 border-2 text-left font-bold"
+                            className="p-2 border-2 text-left font-bold uppercase"
                             style={{
                               fontSize: 18,
                               cursor: 'grab',
@@ -935,7 +935,7 @@ export default function App({ userId }: { userId: string }) {
                       const p = players.find(x => x.id === activeDrag.id);
                       return p ? (
                         <div
-                          className="p-2 border-2 text-left font-bold"
+                          className="p-2 border-2 text-left font-bold uppercase"
                           style={{
                             fontSize: 18,
                             position: 'fixed',

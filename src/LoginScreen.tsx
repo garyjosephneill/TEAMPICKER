@@ -32,6 +32,7 @@ export default function LoginScreen() {
 
         <div style={{
           fontFamily: '"Bebas Neue", "Helvetica Neue", Helvetica, Arial, sans-serif',
+          fontWeight: 700,
           fontSize: 'clamp(52px, 14vw, 80px)',
           color: 'var(--color-t-c4)',
           lineHeight: 1,
@@ -95,7 +96,8 @@ export default function LoginScreen() {
                 background: 'none',
                 border: '2px solid var(--color-t-c2)',
                 color: 'var(--color-t-c2)',
-                fontFamily: '"Bebas Neue", sans-serif',
+                fontFamily: '"Rajdhani", sans-serif',
+                fontWeight: 700,
                 fontSize: 24,
                 letterSpacing: 3,
                 padding: '10px 0',
@@ -109,7 +111,8 @@ export default function LoginScreen() {
         ) : (
           <>
             <div style={{
-              fontFamily: '"Bebas Neue", sans-serif',
+              fontFamily: '"Rajdhani", sans-serif',
+              fontWeight: 700,
               fontSize: 28,
               color: 'var(--color-t-c2)',
               letterSpacing: 2,
