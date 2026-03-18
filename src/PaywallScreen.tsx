@@ -147,8 +147,10 @@ export default function PaywallScreen({ userId, onLicensed }: { userId: string; 
             disabled={loading !== null}
             style={{
               background: '#F3D459', color: '#7A263A',
-              border: 'none', borderRadius: 12,
+              border: '3px solid #F3D459', borderRadius: 0,
               padding: '16px 40px', fontSize: 20, fontWeight: 700,
+              fontFamily: '"Rajdhani", sans-serif', letterSpacing: 2,
+              textTransform: 'uppercase',
               cursor: loading ? 'default' : 'pointer',
               opacity: loading ? 0.7 : 1,
               marginBottom: 12, width: '100%', maxWidth: 320,
@@ -163,8 +165,10 @@ export default function PaywallScreen({ userId, onLicensed }: { userId: string; 
             disabled={loading !== null}
             style={{
               background: 'transparent', color: '#F3D459',
-              border: '2px solid #F3D459', borderRadius: 12,
+              border: '3px solid #F3D459', borderRadius: 0,
               padding: '14px 40px', fontSize: 18, fontWeight: 700,
+              fontFamily: '"Rajdhani", sans-serif', letterSpacing: 2,
+              textTransform: 'uppercase',
               cursor: loading ? 'default' : 'pointer',
               opacity: loading ? 0.7 : 1,
               marginBottom: 24, width: '100%', maxWidth: 320,
@@ -196,11 +200,13 @@ export default function PaywallScreen({ userId, onLicensed }: { userId: string; 
             disabled={loading !== null}
             style={{
               background: '#F3D459', color: '#7A263A',
-              border: 'none', borderRadius: 12,
+              border: '3px solid #F3D459', borderRadius: 0,
               padding: '16px 40px', fontSize: 20, fontWeight: 700,
+              fontFamily: '"Rajdhani", sans-serif', letterSpacing: 2,
+              textTransform: 'uppercase',
               cursor: loading ? 'default' : 'pointer',
               opacity: loading ? 0.7 : 1,
-              marginBottom: 12,
+              marginBottom: 12, width: '100%', maxWidth: 320,
             }}
           >
             {loading ? 'Loading…' : 'Start free trial'}
