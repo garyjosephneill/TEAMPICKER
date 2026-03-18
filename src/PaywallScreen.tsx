@@ -128,8 +128,16 @@ export default function PaywallScreen({ userId, onLicensed }: { userId: string; 
         LAZY GAFFER
       </div>
 
-      <div style={{ color: '#fff', fontSize: 18, marginBottom: 32, maxWidth: 320 }}>
+      <div style={{ color: '#fff', fontSize: 16, marginBottom: 12, maxWidth: 340 }}>
         Manage and rate your squad, then let the Gaffer pick two balanced teams.
+      </div>
+
+      <div style={{ color: 'rgba(255,255,255,0.85)', fontSize: 15, marginBottom: 28, maxWidth: 340, lineHeight: 1.6 }}>
+        Fourteen day trial. Completely free. No small print. No bloke called Dave moaning the teams are unfair. If the Gaffer doesn't sort out your teams for good, cancel anytime. No hard feelings.
+      </div>
+
+      <div style={{ color: '#F3D459', fontSize: 15, fontWeight: 700, marginBottom: 24 }}>
+        14 days free, then £3.99 a year or £7.99 forever.
       </div>
 
       {isNativeIOS ? (
@@ -149,9 +157,6 @@ export default function PaywallScreen({ userId, onLicensed }: { userId: string; 
             {loading === ANNUAL_ID ? 'Loading…' : `Start 14-day free trial`}
           </button>
 
-          <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: 14, marginBottom: 20 }}>
-            Then {annualProduct?.price ?? '£3.99'}/year — cancel anytime
-          </div>
 
           <button
             onClick={() => handleStoreKitPurchase(LIFETIME_ID)}
@@ -200,9 +205,6 @@ export default function PaywallScreen({ userId, onLicensed }: { userId: string; 
           >
             {loading ? 'Loading…' : 'Start free trial'}
           </button>
-          <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: 14 }}>
-            14 days free, then £3.99/year. Cancel anytime.
-          </div>
         </>
       )}
     </div>
