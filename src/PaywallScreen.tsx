@@ -129,7 +129,7 @@ export default function PaywallScreen({ userId, onLicensed }: { userId: string; 
       </div>
 
       <div style={{ color: '#fff', fontSize: 18, marginBottom: 32, maxWidth: 320 }}>
-        Build and manage your squad, pick your teams, track every player.
+        Manage and rate your squad, then let the Gaffer pick two balanced teams.
       </div>
 
       {isNativeIOS ? (

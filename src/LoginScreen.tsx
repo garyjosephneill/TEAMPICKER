@@ -3,31 +3,78 @@ import { supabase } from './supabaseClient'
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('')
-  const [stage, setStage] = useState<'form' | 'sent'>('form')
+  const [code, setCode] = useState('')
+  const [stage, setStage] = useState<'email' | 'code'>('email')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
-  const handleSubmit = async () => {
+  const handleSendCode = async () => {
     const trimmed = email.trim().toLowerCase()
     if (!trimmed) return
     setLoading(true)
     setError('')
     const { error } = await supabase.auth.signInWithOtp({
       email: trimmed,
-      options: { emailRedirectTo: window.location.origin }
+      options: { shouldCreateUser: true }
     })
     setLoading(false)
     if (error) setError(error.message)
-    else setStage('sent')
+    else setStage('code')
+  }
+
+  const handleVerifyCode = async () => {
+    const trimmed = code.trim()
+    if (!trimmed) return
+    setLoading(true)
+    setError('')
+    const { error } = await supabase.auth.verifyOtp({
+      email: email.trim().toLowerCase(),
+      token: trimmed,
+      type: 'email'
+    })
+    setLoading(false)
+    if (error) setError('Invalid code. Please try again.')
+  }
+
+  const containerStyle: React.CSSProperties = {
+    position: 'fixed', inset: 0,
+    background: 'var(--color-t-bg)',
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    fontFamily: '"Rajdhani", sans-serif',
+  }
+
+  const inputStyle: React.CSSProperties = {
+    width: '100%',
+    boxSizing: 'border-box',
+    background: 'var(--color-t-bg)',
+    border: '2px solid var(--color-t-c1)',
+    color: 'var(--color-t-c1)',
+    fontFamily: '"Rajdhani", sans-serif',
+    fontSize: 16,
+    padding: '10px 12px',
+    outline: 'none',
+    marginBottom: 12,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+    textAlign: 'center',
+  }
+
+  const buttonStyle: React.CSSProperties = {
+    width: '100%',
+    background: 'none',
+    border: '2px solid var(--color-t-c2)',
+    color: 'var(--color-t-c2)',
+    fontFamily: '"Rajdhani", sans-serif',
+    fontWeight: 700,
+    fontSize: 24,
+    letterSpacing: 3,
+    padding: '10px 0',
+    cursor: loading ? 'default' : 'pointer',
+    opacity: loading ? 0.6 : 1,
   }
 
   return (
-    <div style={{
-      position: 'fixed', inset: 0,
-      background: 'var(--color-t-bg)',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      fontFamily: '"Rajdhani", sans-serif',
-    }}>
+    <div style={containerStyle}>
       <div style={{ width: '100%', maxWidth: 480, padding: '0 24px', textAlign: 'center' }}>
 
         <div style={{
@@ -41,20 +88,11 @@ export default function LoginScreen() {
           LAZY GAFFER
         </div>
 
-        <div style={{
-          borderBottom: '4px solid var(--color-t-c2)',
-          marginBottom: 32,
-        }} />
+        <div style={{ borderBottom: '4px solid var(--color-t-c2)', marginBottom: 32 }} />
 
-        {stage === 'form' ? (
+        {stage === 'email' ? (
           <>
-            <div style={{
-              color: 'var(--color-t-c1)',
-              fontSize: 14,
-              letterSpacing: 1,
-              marginBottom: 16,
-              textTransform: 'uppercase',
-            }}>
+            <div style={{ color: 'var(--color-t-c1)', fontSize: 14, letterSpacing: 1, marginBottom: 16, textTransform: 'uppercase' }}>
               Enter your email to sign in
             </div>
 
@@ -62,84 +100,46 @@ export default function LoginScreen() {
               type="email"
               value={email}
               onChange={e => setEmail(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && handleSubmit()}
+              onKeyDown={e => e.key === 'Enter' && handleSendCode()}
               placeholder="YOUR EMAIL ADDRESS"
               autoCapitalize="off"
               autoCorrect="off"
-              style={{
-                width: '100%',
-                boxSizing: 'border-box',
-                background: 'var(--color-t-bg)',
-                border: '2px solid var(--color-t-c1)',
-                color: 'var(--color-t-c1)',
-                fontFamily: '"Rajdhani", sans-serif',
-                fontSize: 16,
-                padding: '10px 12px',
-                outline: 'none',
-                marginBottom: 12,
-                textTransform: 'uppercase',
-                letterSpacing: 1,
-                textAlign: 'center',
-              }}
+              style={inputStyle}
             />
 
-            {error && (
-              <div style={{ color: '#ff6b6b', fontSize: 13, marginBottom: 12 }}>
-                {error}
-              </div>
-            )}
+            {error && <div style={{ color: '#ff6b6b', fontSize: 13, marginBottom: 12 }}>{error}</div>}
 
-            <button
-              onClick={handleSubmit}
-              disabled={loading}
-              style={{
-                width: '100%',
-                background: 'none',
-                border: '2px solid var(--color-t-c2)',
-                color: 'var(--color-t-c2)',
-                fontFamily: '"Rajdhani", sans-serif',
-                fontWeight: 700,
-                fontSize: 24,
-                letterSpacing: 3,
-                padding: '10px 0',
-                cursor: loading ? 'default' : 'pointer',
-                opacity: loading ? 0.6 : 1,
-              }}
-            >
-              {loading ? 'SENDING...' : 'SEND MAGIC LINK'}
+            <button onClick={handleSendCode} disabled={loading} style={buttonStyle}>
+              {loading ? 'SENDING...' : 'SEND CODE'}
             </button>
           </>
         ) : (
           <>
-            <div style={{
-              fontFamily: '"Rajdhani", sans-serif',
-              fontWeight: 700,
-              fontSize: 28,
-              color: 'var(--color-t-c2)',
-              letterSpacing: 2,
-              marginBottom: 16,
-            }}>
-              CHECK YOUR EMAIL
+            <div style={{ color: 'var(--color-t-c1)', fontSize: 14, letterSpacing: 1, marginBottom: 8, textTransform: 'uppercase' }}>
+              Enter the 6-digit code sent to
             </div>
-            <div style={{ color: 'var(--color-t-c1)', fontSize: 15, lineHeight: 1.7 }}>
-              We've sent a sign-in link to <span style={{ color: 'var(--color-t-c4)' }}>{email}</span>.
-              <br /><br />
-              Tap the link in the email to open the app.
+            <div style={{ color: 'var(--color-t-c4)', fontSize: 16, fontWeight: 700, marginBottom: 24 }}>
+              {email}
             </div>
+
+            <input
+              type="number"
+              value={code}
+              onChange={e => setCode(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && handleVerifyCode()}
+              placeholder="000000"
+              style={{ ...inputStyle, fontSize: 32, letterSpacing: 8 }}
+            />
+
+            {error && <div style={{ color: '#ff6b6b', fontSize: 13, marginBottom: 12 }}>{error}</div>}
+
+            <button onClick={handleVerifyCode} disabled={loading} style={buttonStyle}>
+              {loading ? 'VERIFYING...' : 'SIGN IN'}
+            </button>
+
             <button
-              onClick={() => setStage('form')}
-              style={{
-                marginTop: 24,
-                background: 'none',
-                border: 'none',
-                color: 'var(--color-t-c1)',
-                fontFamily: '"Rajdhani", sans-serif',
-                fontSize: 13,
-                cursor: 'pointer',
-                opacity: 0.6,
-                padding: 0,
-                textDecoration: 'underline',
-              }}
+              onClick={() => { setStage('email'); setError(''); setCode('') }}
+              style={{ marginTop: 16, background: 'none', border: 'none', color: 'var(--color-t-c1)', fontFamily: '"Rajdhani", sans-serif', fontSize: 13, cursor: 'pointer', opacity: 0.6, padding: 0, textDecoration: 'underline' }}
             >
               Wrong email? Go back
             </button>
