@@ -52,7 +52,6 @@ function AuthGate() {
   const [authStatus, setAuthStatus] = useState<'loading' | 'authenticated' | 'unauthenticated'>('loading')
   const [userId, setUserId] = useState<string | null>(null)
   const [isLicensed, setIsLicensed] = useState<boolean | null>(null)
-  const [showLogin, setShowLogin] = useState(false)
 
   const checkLicense = async (uid: string) => {
     try {
@@ -114,13 +113,12 @@ function AuthGate() {
     )
   }
 
-  if (authStatus === 'unauthenticated' || showLogin) {
-    if (showLogin) return <LoginScreen onCancel={() => setShowLogin(false)} />
-    return <PaywallScreen userId='' onLicensed={() => {}} onLogin={() => setShowLogin(true)} />
+  if (authStatus === 'unauthenticated') {
+    return <LoginScreen />
   }
 
   if (!isLicensed) {
-    return <PaywallScreen userId={userId!} onLicensed={() => setIsLicensed(true)} onLogin={() => setShowLogin(true)} />
+    return <PaywallScreen userId={userId!} onLicensed={() => setIsLicensed(true)} />
   }
 
   return <App userId={userId!} />
