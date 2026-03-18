@@ -223,7 +223,7 @@ function TapZone({ value, onChange, color }: { value: number; onChange: (v: numb
 }
 
 // ── APP ──────────────────────────────────────────────────────────────────────
-export default function App({ userId }: { userId: string }) {
+export default function App({ userId, onSaveToCloud }: { userId: string | null, onSaveToCloud?: () => void }) {
   const [players, setPlayers] = useState<Player[]>(() => {
     try {
       const PLAYERS_VERSION = 'v4';
@@ -339,8 +339,9 @@ export default function App({ userId }: { userId: string }) {
     if (scrollRef.current) scrollRef.current.scrollTo({ top: 0, behavior: 'smooth' });
   }, [view]);
 
-  // ── Fetch players from Supabase ──
+  // ── Fetch players from Supabase (cloud mode only) ──
   useEffect(() => {
+    if (!userId) return;
     supabase.from('players').select('*').eq('user_id', userId).then(({ data }) => {
       if (data && data.length > 0) {
         setPlayers(data.map((p: any) => {
@@ -351,14 +352,24 @@ export default function App({ userId }: { userId: string }) {
                          merged[Position.MIDFIELD] === merged[Position.ATTACK];
           return { ...p, ratings: isFlat ? RANDOM_MM2_RATINGS() : merged };
         }));
+      } else {
+        // No cloud data yet — migrate local data if available
+        try {
+          const cached = localStorage.getItem('ceefax_players_cache');
+          if (cached) {
+            const local = JSON.parse(cached);
+            if (local.length > 0) setPlayers(local);
+          }
+        } catch {}
       }
     });
   }, [userId]);
 
-  // ── Persist players to Supabase ──
+  // ── Persist players ──
   useEffect(() => {
     if (players.length === 0) return;
     try { localStorage.setItem('ceefax_players_cache', JSON.stringify(players)); } catch {}
+    if (!userId) return; // local mode: localStorage only
     const timer = setTimeout(() => {
       (async () => {
         await supabase.from('players').delete().eq('user_id', userId);
@@ -862,6 +873,9 @@ export default function App({ userId }: { userId: string }) {
                   <button onClick={() => setTransfersView(true)} className="border-4 border-t-c1 py-2 text-xl font-bold" style={{ width: 'calc(50% - 8px)', background: 'var(--color-t-bg)', color: 'var(--color-t-c1)' }}>TRANSFERS</button>
                   <button onClick={() => setReorderView(true)} className="border-4 border-t-c1 py-2 text-xl font-bold" style={{ width: 'calc(50% - 8px)', background: 'var(--color-t-bg)', color: 'var(--color-t-c1)' }}>REORDER</button>
                   <button onClick={() => window.location.href = '/privacy'} className="border-4 border-t-c1 py-2 text-xl font-bold" style={{ width: 'calc(50% - 8px)', background: 'var(--color-t-bg)', color: 'var(--color-t-c1)' }}>PRIVACY</button>
+                  {!userId && onSaveToCloud && (
+                    <button onClick={onSaveToCloud} className="border-4 border-t-c4 py-2 text-xl font-bold" style={{ width: 'calc(50% - 8px)', background: 'var(--color-t-bg)', color: 'var(--color-t-c4)' }}>SAVE TO CLOUD</button>
+                  )}
                 </div>
               )}
 

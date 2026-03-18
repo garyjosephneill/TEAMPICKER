@@ -13,6 +13,52 @@ const isPrivacyPage = window.location.pathname === '/privacy'
 // ── DEV BYPASS: set to false before deploying to Railway ─────────────────────
 const BYPASS_AUTH = false
 
+// ── iOS: no login required, StoreKit handles licensing ───────────────────────
+function IOSGate() {
+  const [isLicensed, setIsLicensed] = useState<boolean | null>(null)
+  const [userId, setUserId] = useState<string | null>(null)
+  const [showLogin, setShowLogin] = useState(false)
+
+  useEffect(() => {
+    checkStoreKitEntitlements().then(setIsLicensed)
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) setUserId(session.user.id)
+    })
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        setUserId(session.user.id)
+        setShowLogin(false)
+      } else {
+        setUserId(null)
+      }
+    })
+    return () => subscription.unsubscribe()
+  }, [])
+
+  if (isLicensed === null) {
+    return (
+      <div style={{
+        position: 'fixed', inset: 0, background: '#7A263A',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        fontFamily: '"Barlow Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
+        fontWeight: 700, fontSize: 'clamp(52px, 14vw, 80px)', color: '#F3D459',
+      }}>
+        LAZY GAFFER
+      </div>
+    )
+  }
+
+  if (!isLicensed) {
+    return <PaywallScreen userId={userId || ''} onLicensed={() => setIsLicensed(true)} />
+  }
+
+  if (showLogin) {
+    return <LoginScreen onCancel={() => setShowLogin(false)} />
+  }
+
+  return <App userId={userId} onSaveToCloud={() => setShowLogin(true)} />
+}
+
 function AuthGate() {
   const [authStatus, setAuthStatus] = useState<'loading' | 'authenticated' | 'unauthenticated'>('loading')
   const [userId, setUserId] = useState<string | null>(null)
@@ -91,6 +137,6 @@ function AuthGate() {
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    {isPrivacyPage ? <PrivacyPolicy /> : <AuthGate />}
+    {isPrivacyPage ? <PrivacyPolicy /> : isNativeIOS ? <IOSGate /> : <AuthGate />}
   </React.StrictMode>,
 )

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { supabase } from './supabaseClient'
 
-export default function LoginScreen() {
+export default function LoginScreen({ onCancel }: { onCancel?: () => void } = {}) {
   const [email, setEmail] = useState('')
   const [code, setCode] = useState('')
   const [stage, setStage] = useState<'email' | 'code'>('email')
@@ -75,7 +75,7 @@ export default function LoginScreen() {
 
   return (
     <div style={containerStyle}>
-      <div style={{ width: '100%', maxWidth: 480, padding: '0 24px', textAlign: 'center' }}>
+      <div style={{ width: '100%', maxWidth: 480, padding: '0 24px', textAlign: 'center', position: 'relative' }}>
 
         <div style={{
           fontFamily: '"Barlow Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -89,6 +89,15 @@ export default function LoginScreen() {
         </div>
 
         <div style={{ borderBottom: '4px solid var(--color-t-c2)', marginBottom: 32 }} />
+
+        {onCancel && (
+          <button
+            onClick={onCancel}
+            style={{ position: 'absolute', top: 24, right: 24, background: 'none', border: 'none', color: 'var(--color-t-c1)', fontFamily: '"Rajdhani", sans-serif', fontSize: 14, cursor: 'pointer', opacity: 0.6, padding: 0 }}
+          >
+            CANCEL
+          </button>
+        )}
 
         {stage === 'email' ? (
           <>
@@ -116,7 +125,7 @@ export default function LoginScreen() {
         ) : (
           <>
             <div style={{ color: 'var(--color-t-c1)', fontSize: 14, letterSpacing: 1, marginBottom: 8, textTransform: 'uppercase' }}>
-              Enter the 6-digit code sent to
+              Enter the 8-digit code sent to
             </div>
             <div style={{ color: 'var(--color-t-c4)', fontSize: 16, fontWeight: 700, marginBottom: 24 }}>
               {email}
@@ -127,7 +136,7 @@ export default function LoginScreen() {
               value={code}
               onChange={e => setCode(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleVerifyCode()}
-              placeholder="000000"
+              placeholder="00000000"
               style={{ ...inputStyle, fontSize: 32, letterSpacing: 8 }}
             />
 
