@@ -215,7 +215,7 @@ export default function PaywallScreen({ userId, onLicensed }: { userId: string; 
             </button>
 
             <div style={{ color: '#F3D459', fontSize: 8, fontWeight: 700, textAlign: 'center' }}>
-              14 days free, then £3.99 a year or £7.99 forever.
+              14 days free, then £3.99 a year<br/>or £7.99 forever.
             </div>
           </>
         )}
