@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { isNativeIOS, getProducts, purchaseProduct, restorePurchases } from './storekit'
 
 const ANNUAL_ID = 'com.garyjosephneill.lazygaffer.annual'
@@ -11,6 +11,27 @@ export default function PaywallScreen({ userId, onLicensed }: { userId: string; 
   const [checking, setChecking] = useState(false)
   const [products, setProducts] = useState<Product[]>([])
   const [error, setError] = useState<string | null>(null)
+  const titleSpanRef = useRef<HTMLSpanElement>(null)
+  const titleDivRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const span = titleSpanRef.current
+    const div = titleDivRef.current
+    if (!span || !div) return
+    const measure = () => {
+      let lo = 20, hi = 100
+      while (hi - lo > 0.5) {
+        const mid = (lo + hi) / 2
+        div.style.fontSize = mid + 'px'
+        if (span.getBoundingClientRect().width <= 300) lo = mid
+        else hi = mid
+      }
+      div.style.fontSize = lo + 'px'
+      div.style.opacity = '1'
+    }
+    div.style.opacity = '0'
+    document.fonts.ready.then(measure)
+  }, [])
 
   useEffect(() => {
     if (isNativeIOS) {
@@ -115,82 +136,90 @@ export default function PaywallScreen({ userId, onLicensed }: { userId: string; 
     <div style={{
       position: 'fixed', inset: 0, background: '#7A263A',
       display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-      padding: '0 24px', textAlign: 'center',
+      padding: '0 24px',
       fontFamily: '"Rajdhani", sans-serif',
     }}>
-      <div style={{
-        fontFamily: '"Barlow Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
-        fontSize: 'clamp(52px, 14vw, 80px)',
-        color: '#F3D459',
-        lineHeight: 1,
-        marginBottom: 8,
-      }}>
-        LAZY GAFFER
+      <div style={{ width: 300, display: 'flex', flexDirection: 'column', alignItems: 'stretch' }}>
+        <div
+          ref={titleDivRef}
+          style={{
+            fontFamily: '"Barlow Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
+            fontSize: 52,
+            fontWeight: 700,
+            color: '#F3D459',
+            lineHeight: 1,
+            marginBottom: 8,
+            whiteSpace: 'nowrap',
+            opacity: 0,
+          }}
+        >
+          <span ref={titleSpanRef}>LAZY GAFFER</span>
+        </div>
+
+        <div style={{ color: '#fff', fontSize: 16, marginBottom: 12, textAlign: 'center' }}>
+          Rate your squad, then let the Gaffer<br/>pick two balanced teams.
+        </div>
+
+        {isNativeIOS ? (
+          <>
+            <button
+              onClick={() => handleStoreKitPurchase(ANNUAL_ID)}
+              disabled={loading !== null}
+              style={{
+                background: 'var(--color-t-bg)', color: '#F3D459',
+                border: '4px solid #F3D459', borderRadius: 0,
+                padding: '12px 40px', fontSize: 24, fontWeight: 700,
+                fontFamily: '"Rajdhani", sans-serif', letterSpacing: 2,
+                textTransform: 'uppercase',
+                cursor: loading ? 'default' : 'pointer',
+                opacity: loading ? 0.7 : 1,
+                marginBottom: 12,
+              }}
+            >
+              {loading === ANNUAL_ID ? 'Loading…' : 'Start free trial'}
+            </button>
+
+            {error && (
+              <div style={{ color: '#ff6b6b', fontSize: 14, marginBottom: 12, textAlign: 'center' }}>{error}</div>
+            )}
+
+            <button
+              onClick={handleRestore}
+              disabled={loading !== null}
+              style={{
+                background: 'transparent', color: 'rgba(255,255,255,0.5)',
+                border: 'none', fontSize: 14, alignSelf: 'center',
+                cursor: loading ? 'default' : 'pointer',
+              }}
+            >
+              {loading === 'restore' ? 'Restoring…' : 'Restore purchases'}
+            </button>
+          </>
+        ) : (
+          <>
+            <button
+              onClick={handleStripeSubscribe}
+              disabled={loading !== null}
+              style={{
+                background: 'var(--color-t-bg)', color: '#F3D459',
+                border: '4px solid #F3D459', borderRadius: 0,
+                padding: '12px 40px', fontSize: 24, fontWeight: 700,
+                fontFamily: '"Rajdhani", sans-serif', letterSpacing: 2,
+                textTransform: 'uppercase',
+                cursor: loading ? 'default' : 'pointer',
+                opacity: loading ? 0.7 : 1,
+                marginBottom: 16,
+              }}
+            >
+              {loading ? 'Loading…' : 'Start free trial'}
+            </button>
+
+            <div style={{ color: '#F3D459', fontSize: 8, fontWeight: 700, textAlign: 'center' }}>
+              14 days free, then £3.99 a year or £7.99 forever.
+            </div>
+          </>
+        )}
       </div>
-
-      <div style={{ color: '#fff', fontSize: 16, marginBottom: 12, maxWidth: 340 }}>
-        Rate your squad, then let the Gaffer pick two balanced teams.
-      </div>
-
-      {isNativeIOS ? (
-        <>
-          <button
-            onClick={() => handleStoreKitPurchase(ANNUAL_ID)}
-            disabled={loading !== null}
-            style={{
-              background: 'var(--color-t-bg)', color: '#F3D459',
-              border: '4px solid #F3D459', borderRadius: 0,
-              padding: '12px 40px', fontSize: 24, fontWeight: 700,
-              fontFamily: '"Rajdhani", sans-serif', letterSpacing: 2,
-              textTransform: 'uppercase',
-              cursor: loading ? 'default' : 'pointer',
-              opacity: loading ? 0.7 : 1,
-              marginBottom: 12, width: 300,
-            }}
-          >
-            {loading === ANNUAL_ID ? 'Loading…' : 'Start free trial'}
-          </button>
-
-          {error && (
-            <div style={{ color: '#ff6b6b', fontSize: 14, marginBottom: 12 }}>{error}</div>
-          )}
-
-          <button
-            onClick={handleRestore}
-            disabled={loading !== null}
-            style={{
-              background: 'transparent', color: 'rgba(255,255,255,0.5)',
-              border: 'none', fontSize: 14,
-              cursor: loading ? 'default' : 'pointer',
-            }}
-          >
-            {loading === 'restore' ? 'Restoring…' : 'Restore purchases'}
-          </button>
-        </>
-      ) : (
-        <>
-          <button
-            onClick={handleStripeSubscribe}
-            disabled={loading !== null}
-            style={{
-              background: 'var(--color-t-bg)', color: '#F3D459',
-              border: '4px solid #F3D459', borderRadius: 0,
-              padding: '12px 40px', fontSize: 24, fontWeight: 700,
-              fontFamily: '"Rajdhani", sans-serif', letterSpacing: 2,
-              textTransform: 'uppercase',
-              cursor: loading ? 'default' : 'pointer',
-              opacity: loading ? 0.7 : 1,
-              marginBottom: 16, width: 300,
-            }}
-          >
-            {loading ? 'Loading…' : 'Start free trial'}
-          </button>
-
-          <div style={{ color: '#F3D459', fontSize: 8, fontWeight: 700 }}>
-            14 days free, then £3.99 a year or £7.99 forever.
-          </div>
-        </>
-      )}
     </div>
   )
 }
