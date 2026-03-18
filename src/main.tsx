@@ -35,18 +35,7 @@ function IOSGate() {
     return () => subscription.unsubscribe()
   }, [])
 
-  if (isLicensed === null) {
-    return (
-      <div style={{
-        position: 'fixed', inset: 0, background: '#7A263A',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        fontFamily: '"Barlow Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
-        fontWeight: 700, fontSize: 'clamp(52px, 14vw, 80px)', color: '#F3D459',
-      }}>
-        LAZY GAFFER
-      </div>
-    )
-  }
+  if (isLicensed === null) return null
 
   if (!isLicensed) {
     return <PaywallScreen userId={userId || ''} onLicensed={() => setIsLicensed(true)} />

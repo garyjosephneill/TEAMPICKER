@@ -779,6 +779,16 @@ export default function App({ userId, onSaveToCloud }: { userId: string | null, 
                       );
                     })}
                   </div>
+
+                  {!userId && onSaveToCloud && (
+                    <div className="flex justify-center" style={{ paddingTop: 16, paddingBottom: 12 }}>
+                      <button
+                        onClick={onSaveToCloud}
+                        className="w-[300px] border-2 font-bold"
+                        style={{ height: 36, fontSize: 16, letterSpacing: 2, background: 'var(--color-t-bg)', color: 'var(--color-t-c1)', borderColor: box2Color }}
+                      >AUTO SAVE SQUAD</button>
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -873,9 +883,6 @@ export default function App({ userId, onSaveToCloud }: { userId: string | null, 
                   <button onClick={() => setTransfersView(true)} className="border-4 border-t-c1 py-2 text-xl font-bold" style={{ width: 'calc(50% - 8px)', background: 'var(--color-t-bg)', color: 'var(--color-t-c1)' }}>TRANSFERS</button>
                   <button onClick={() => setReorderView(true)} className="border-4 border-t-c1 py-2 text-xl font-bold" style={{ width: 'calc(50% - 8px)', background: 'var(--color-t-bg)', color: 'var(--color-t-c1)' }}>REORDER</button>
                   <button onClick={() => window.location.href = '/privacy'} className="border-4 border-t-c1 py-2 text-xl font-bold" style={{ width: 'calc(50% - 8px)', background: 'var(--color-t-bg)', color: 'var(--color-t-c1)' }}>PRIVACY</button>
-                  {!userId && onSaveToCloud && (
-                    <button onClick={onSaveToCloud} className="border-4 border-t-c4 py-2 text-xl font-bold" style={{ width: 'calc(50% - 8px)', background: 'var(--color-t-bg)', color: 'var(--color-t-c4)' }}>SAVE TO CLOUD</button>
-                  )}
                 </div>
               )}
 
