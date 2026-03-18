@@ -132,7 +132,8 @@ export default function LoginScreen({ onCancel }: { onCancel?: () => void } = {}
             </div>
 
             <input
-              type="number"
+              type="text"
+              inputMode="numeric"
               value={code}
               onChange={e => setCode(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleVerifyCode()}
