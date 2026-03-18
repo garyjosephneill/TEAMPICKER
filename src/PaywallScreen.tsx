@@ -51,8 +51,8 @@ export default function PaywallScreen({ userId, onLicensed }: { userId: string; 
         setError('Purchase is pending approval.')
       }
       // cancelled: do nothing
-    } catch {
-      setError('Purchase failed. Please try again.')
+    } catch (err: any) {
+      setError('Error: ' + (err?.message || err?.localizedDescription || String(err)))
     } finally {
       setLoading(null)
     }
@@ -116,7 +116,7 @@ export default function PaywallScreen({ userId, onLicensed }: { userId: string; 
       position: 'fixed', inset: 0, background: '#7A263A',
       display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
       padding: '0 24px', textAlign: 'center',
-      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+      fontFamily: '"Rajdhani", sans-serif',
     }}>
       <div style={{
         fontFamily: '"Bebas Neue", "Helvetica Neue", Helvetica, Arial, sans-serif',
