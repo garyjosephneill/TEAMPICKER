@@ -5,12 +5,13 @@ import PrivacyPolicy from './PrivacyPolicy'
 import LoginScreen from './LoginScreen'
 import PaywallScreen from './PaywallScreen'
 import { supabase } from './supabaseClient'
+import { isNativeIOS, checkStoreKitEntitlements } from './storekit'
 import './index.css'
 
 const isPrivacyPage = window.location.pathname === '/privacy'
 
 // ── DEV BYPASS: set to false before deploying to Railway ─────────────────────
-const BYPASS_AUTH = true
+const BYPASS_AUTH = false
 
 function AuthGate() {
   const [authStatus, setAuthStatus] = useState<'loading' | 'authenticated' | 'unauthenticated'>('loading')
@@ -19,9 +20,14 @@ function AuthGate() {
 
   const checkLicense = async (uid: string) => {
     try {
-      const res = await fetch(`/api/squad-status/${uid}`)
-      const data = await res.json()
-      setIsLicensed(!!data.is_licensed)
+      if (isNativeIOS) {
+        const licensed = await checkStoreKitEntitlements()
+        setIsLicensed(licensed)
+      } else {
+        const res = await fetch(`/api/squad-status/${uid}`)
+        const data = await res.json()
+        setIsLicensed(!!data.is_licensed)
+      }
     } catch {
       setIsLicensed(false)
     }

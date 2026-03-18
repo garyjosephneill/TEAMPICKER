@@ -26,14 +26,14 @@ export default function LoginScreen() {
       position: 'fixed', inset: 0,
       background: 'var(--color-t-bg)',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
-      fontFamily: '"Courier New", Courier, monospace',
+      fontFamily: '"Rajdhani", sans-serif',
     }}>
-      <div style={{ width: '100%', maxWidth: 480, padding: '0 24px' }}>
+      <div style={{ width: '100%', maxWidth: 480, padding: '0 24px', textAlign: 'center' }}>
 
         <div style={{
-          fontFamily: '"Barlow Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
+          fontFamily: '"Bebas Neue", "Helvetica Neue", Helvetica, Arial, sans-serif',
           fontWeight: 700,
-          fontSize: 'clamp(52px, 14vw, 80px)',
+          fontSize: 'clamp(62px, 17vw, 96px)',
           color: 'var(--color-t-c4)',
           lineHeight: 1,
           marginBottom: 4,
@@ -72,13 +72,14 @@ export default function LoginScreen() {
                 background: 'var(--color-t-bg)',
                 border: '2px solid var(--color-t-c1)',
                 color: 'var(--color-t-c1)',
-                fontFamily: '"Courier New", Courier, monospace',
+                fontFamily: '"Rajdhani", sans-serif',
                 fontSize: 16,
                 padding: '10px 12px',
                 outline: 'none',
                 marginBottom: 12,
                 textTransform: 'uppercase',
                 letterSpacing: 1,
+                textAlign: 'center',
               }}
             />
 
@@ -132,7 +133,7 @@ export default function LoginScreen() {
                 background: 'none',
                 border: 'none',
                 color: 'var(--color-t-c1)',
-                fontFamily: '"Courier New", Courier, monospace',
+                fontFamily: '"Rajdhani", sans-serif',
                 fontSize: 13,
                 cursor: 'pointer',
                 opacity: 0.6,
