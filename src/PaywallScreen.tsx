@@ -6,7 +6,7 @@ const LIFETIME_ID = 'com.garyjosephneill.lazygaffer.lifetime'
 
 type Product = { id: string; displayName: string; price: string; type: string }
 
-export default function PaywallScreen({ userId, onLicensed }: { userId: string; onLicensed: () => void }) {
+export default function PaywallScreen({ userId, onLicensed, onLogin }: { userId: string; onLicensed: () => void; onLogin?: () => void }) {
   const [loading, setLoading] = useState<string | null>(null)
   const [checking, setChecking] = useState(false)
   const [products, setProducts] = useState<Product[]>([])
@@ -217,6 +217,19 @@ export default function PaywallScreen({ userId, onLicensed }: { userId: string; 
             <div style={{ color: '#F3D459', fontSize: 8, fontWeight: 700, textAlign: 'center' }}>
               14 days free, then £3.99 a year<br/>or £7.99 forever.
             </div>
+
+            {onLogin && (
+              <button
+                onClick={onLogin}
+                style={{
+                  background: 'transparent', color: 'rgba(255,255,255,0.5)',
+                  border: 'none', fontSize: 14, alignSelf: 'center', marginTop: 16,
+                  cursor: 'pointer',
+                }}
+              >
+                Already have an account? Log in
+              </button>
+            )}
           </>
         )}
       </div>
