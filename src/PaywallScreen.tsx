@@ -132,14 +132,6 @@ export default function PaywallScreen({ userId, onLicensed }: { userId: string; 
         Manage and rate your squad, then let the Gaffer pick two balanced teams.
       </div>
 
-      <div style={{ color: 'rgba(255,255,255,0.85)', fontSize: 15, marginBottom: 28, maxWidth: 340, lineHeight: 1.6 }}>
-        Fourteen day trial. Completely free. No small print. No bloke called Dave moaning the teams are unfair. If the Gaffer doesn't sort out your teams for good, cancel anytime. No hard feelings.
-      </div>
-
-      <div style={{ color: '#F3D459', fontSize: 15, fontWeight: 700, marginBottom: 24 }}>
-        14 days free, then £3.99 a year or £7.99 forever.
-      </div>
-
       {isNativeIOS ? (
         <>
           <button
@@ -157,24 +149,6 @@ export default function PaywallScreen({ userId, onLicensed }: { userId: string; 
             }}
           >
             {loading === ANNUAL_ID ? 'Loading…' : `Start 14-day free trial`}
-          </button>
-
-
-          <button
-            onClick={() => handleStoreKitPurchase(LIFETIME_ID)}
-            disabled={loading !== null}
-            style={{
-              background: 'transparent', color: '#F3D459',
-              border: '3px solid #F3D459', borderRadius: 0,
-              padding: '14px 40px', fontSize: 18, fontWeight: 700,
-              fontFamily: '"Rajdhani", sans-serif', letterSpacing: 2,
-              textTransform: 'uppercase',
-              cursor: loading ? 'default' : 'pointer',
-              opacity: loading ? 0.7 : 1,
-              marginBottom: 24, width: '100%', maxWidth: 320,
-            }}
-          >
-            {loading === LIFETIME_ID ? 'Loading…' : `Lifetime — ${lifetimeProduct?.price ?? '£7.99'}`}
           </button>
 
           {error && (
@@ -199,18 +173,26 @@ export default function PaywallScreen({ userId, onLicensed }: { userId: string; 
             onClick={handleStripeSubscribe}
             disabled={loading !== null}
             style={{
-              background: '#F3D459', color: '#7A263A',
-              border: '3px solid #F3D459', borderRadius: 0,
-              padding: '16px 40px', fontSize: 20, fontWeight: 700,
+              background: 'var(--color-t-bg)', color: '#F3D459',
+              border: '4px solid #F3D459', borderRadius: 0,
+              padding: '12px 40px', fontSize: 24, fontWeight: 700,
               fontFamily: '"Rajdhani", sans-serif', letterSpacing: 2,
               textTransform: 'uppercase',
               cursor: loading ? 'default' : 'pointer',
               opacity: loading ? 0.7 : 1,
-              marginBottom: 12, width: '100%', maxWidth: 320,
+              marginBottom: 16, width: 300,
             }}
           >
             {loading ? 'Loading…' : 'Start free trial'}
           </button>
+
+          <div style={{ color: 'rgba(255,255,255,0.85)', fontSize: 12, marginBottom: 8, maxWidth: 300, lineHeight: 1.6 }}>
+            Fourteen day trial. Completely free. No small print. No bloke called Dave moaning the teams are unfair. If the Gaffer doesn't sort out your teams for good, cancel anytime. No hard feelings.
+          </div>
+
+          <div style={{ color: '#F3D459', fontSize: 12, fontWeight: 700 }}>
+            14 days free, then £3.99 a year or £7.99 forever.
+          </div>
         </>
       )}
     </div>
