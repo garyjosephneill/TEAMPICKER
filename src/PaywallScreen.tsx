@@ -97,7 +97,7 @@ export default function PaywallScreen({ userId, onLicensed }: { userId: string; 
       <div style={{
         position: 'fixed', inset: 0, background: '#7A263A',
         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-        fontFamily: '"Bebas Neue", "Helvetica Neue", Helvetica, Arial, sans-serif',
+        fontFamily: '"Barlow Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
         color: '#F3D459',
       }}>
         <div style={{ fontSize: 'clamp(48px, 12vw, 72px)' }}>LAZY GAFFER</div>
@@ -119,7 +119,7 @@ export default function PaywallScreen({ userId, onLicensed }: { userId: string; 
       fontFamily: '"Rajdhani", sans-serif',
     }}>
       <div style={{
-        fontFamily: '"Bebas Neue", "Helvetica Neue", Helvetica, Arial, sans-serif',
+        fontFamily: '"Barlow Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
         fontSize: 'clamp(52px, 14vw, 80px)',
         color: '#F3D459',
         lineHeight: 1,
