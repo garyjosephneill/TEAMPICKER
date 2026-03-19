@@ -39,6 +39,7 @@ db.exec(`
     is_licensed INTEGER DEFAULT 0
   );
 `);
+try { db.exec(`ALTER TABLE user_metadata ADD COLUMN stripe_customer_id TEXT`) } catch {} // no-op if already exists
 
 async function startServer() {
   const app = express();
@@ -65,7 +66,7 @@ async function startServer() {
       const session = event.data.object as Stripe.Checkout.Session;
       const userId = session.metadata?.userId;
       if (userId) {
-        db.prepare("UPDATE user_metadata SET is_licensed = 1 WHERE user_id = ?").run(userId);
+        db.prepare("UPDATE user_metadata SET is_licensed = 1, stripe_customer_id = ? WHERE user_id = ?").run(session.customer, userId);
         console.log("Licensed user:", userId);
       }
     }
@@ -103,6 +104,22 @@ async function startServer() {
       res.json({ url: session.url });
     } catch (err: any) {
       console.error("Checkout session error:", err.message);
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  // API: Stripe customer portal
+  app.post("/api/create-portal-session", async (req, res) => {
+    const { userId } = req.body;
+    try {
+      const row = db.prepare("SELECT stripe_customer_id FROM user_metadata WHERE user_id = ?").get(userId) as any;
+      if (!row?.stripe_customer_id) { res.status(404).json({ error: "No subscription found" }); return; }
+      const session = await stripe.billingPortal.sessions.create({
+        customer: row.stripe_customer_id,
+        return_url: APP_URL,
+      });
+      res.json({ url: session.url });
+    } catch (err: any) {
       res.status(500).json({ error: err.message });
     }
   });

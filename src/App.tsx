@@ -882,6 +882,12 @@ export default function App({ userId, onSaveToCloud }: { userId: string | null, 
                   <button onClick={() => setKitsView(true)} className="border-4 border-t-c1 py-2 text-xl font-bold" style={{ width: 'calc(50% - 8px)', background: 'var(--color-t-bg)', color: 'var(--color-t-c1)' }}>KITS</button>
                   <button onClick={() => setTransfersView(true)} className="border-4 border-t-c1 py-2 text-xl font-bold" style={{ width: 'calc(50% - 8px)', background: 'var(--color-t-bg)', color: 'var(--color-t-c1)' }}>TRANSFERS</button>
                   <button onClick={() => setReorderView(true)} className="border-4 border-t-c1 py-2 text-xl font-bold" style={{ width: 'calc(50% - 8px)', background: 'var(--color-t-bg)', color: 'var(--color-t-c1)' }}>REORDER</button>
+                  <button onClick={async () => {
+                    const res = await fetch('/api/create-portal-session', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userId }) })
+                    const { url, error } = await res.json()
+                    if (url) window.location.href = url
+                    else alert(error || 'Could not open subscription portal')
+                  }} className="border-4 border-t-c1 py-2 text-xl font-bold" style={{ width: 'calc(50% - 8px)', background: 'var(--color-t-bg)', color: 'var(--color-t-c1)' }}>SUBSCRIPTION</button>
                   <button onClick={() => window.location.href = '/privacy'} className="border-4 border-t-c1 py-2 text-xl font-bold" style={{ width: 'calc(50% - 8px)', background: 'var(--color-t-bg)', color: 'var(--color-t-c1)' }}>PRIVACY</button>
                 </div>
               )}
