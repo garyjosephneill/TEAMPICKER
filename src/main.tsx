@@ -57,8 +57,6 @@ function AuthGate() {
   const [authStatus, setAuthStatus] = useState<'loading' | 'authenticated' | 'unauthenticated'>('loading')
   const [userId, setUserId] = useState<string | null>(null)
   const [isLicensed, setIsLicensed] = useState<boolean | null>(null)
-  const [showLanding, setShowLanding] = useState(true)
-  const [pendingEmail, setPendingEmail] = useState('')
 
   const checkLicense = async (uid: string) => {
     try {
@@ -109,9 +107,7 @@ function AuthGate() {
   }
 
   if (authStatus === 'unauthenticated') {
-    return showLanding
-      ? <LandingPage onCodeSent={(email) => { setPendingEmail(email); setShowLanding(false) }} />
-      : <LoginScreen initialEmail={pendingEmail} />
+    return <LandingPage />
   }
 
   if (!isLicensed) {
