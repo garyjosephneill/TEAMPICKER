@@ -64,14 +64,13 @@ export default function PaywallScreen({ userId, onLicensed }: { userId: string; 
     let attempts = 0
     const interval = setInterval(async () => {
       attempts++
-      const res = await fetch(`/api/squad-status/${userId}`)
-      const data = await res.json()
-      console.log(`[checkout] poll ${attempts}: is_licensed=${data.is_licensed}`)
-      if (data.is_licensed || attempts >= 20) {
-        clearInterval(interval)
-        if (data.is_licensed) onLicensed()
-        else setChecking(false)
-      }
+      try {
+        const res = await fetch(`/api/squad-status/${userId}`)
+        const data = await res.json()
+        console.log(`[checkout] poll ${attempts}: is_licensed=${data.is_licensed}`)
+        if (data.is_licensed) { clearInterval(interval); onLicensed(); return }
+      } catch { /* network error — keep polling */ }
+      if (attempts >= 20) { clearInterval(interval); setChecking(false) }
     }, 1500)
     return () => clearInterval(interval)
   }, [userId])
@@ -130,7 +129,20 @@ export default function PaywallScreen({ userId, onLicensed }: { userId: string; 
   }
 
   if (autoRedirecting || checking) {
-    return <div style={{ position: 'fixed', inset: 0, background: splashColour }} />
+    return (
+      <div style={{
+        position: 'fixed', inset: 0, background: splashColour,
+        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+      }}>
+        {checking && (
+          <div style={{
+            fontFamily: "'Rajdhani', sans-serif", fontWeight: 700,
+            fontSize: 18, letterSpacing: 2, color: '#ffffff',
+            textTransform: 'uppercase', textAlign: 'center',
+          }}>Setting up your account…</div>
+        )}
+      </div>
+    )
   }
 
   const annualProduct = products.find(p => p.id === ANNUAL_ID)
