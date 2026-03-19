@@ -12,6 +12,9 @@ import './index.css'
 const isPrivacyPage = window.location.pathname === '/privacy'
 const isLandingPage = window.location.pathname === '/landing'
 
+const SPLASH_COLOURS = ['#00843D', '#5EB6E4', '#FF4F00']
+const splashColour = SPLASH_COLOURS[Math.floor(Math.random() * SPLASH_COLOURS.length)]
+
 // ── DEV BYPASS: set to false before deploying to Railway ─────────────────────
 const BYPASS_AUTH = false
 
@@ -102,19 +105,7 @@ function AuthGate() {
   if (BYPASS_AUTH) return <App userId="dev-user" />
 
   if (authStatus === 'loading' || (authStatus === 'authenticated' && isLicensed === null)) {
-    return (
-      <div style={{
-        position: 'fixed', inset: 0,
-        background: '#7A263A',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        fontFamily: '"Barlow Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
-        fontWeight: 700,
-        fontSize: 'clamp(52px, 14vw, 80px)',
-        color: '#F3D459',
-      }}>
-        LAZY GAFFER
-      </div>
-    )
+    return <div style={{ position: 'fixed', inset: 0, background: splashColour }} />
   }
 
   if (authStatus === 'unauthenticated') {

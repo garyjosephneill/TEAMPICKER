@@ -6,6 +6,9 @@ const LIFETIME_ID = 'com.garyjosephneill.lazygaffer.lifetime'
 
 type Product = { id: string; displayName: string; price: string; type: string }
 
+const SPLASH_COLOURS = ['#00843D', '#5EB6E4', '#FF4F00']
+const splashColour = SPLASH_COLOURS[Math.floor(Math.random() * SPLASH_COLOURS.length)]
+
 // True when this is a web user who needs to be redirected to Stripe (not returning from it)
 const isCheckoutReturn = !isNativeIOS && new URLSearchParams(window.location.search).get('checkout_success') === 'true'
 
@@ -127,21 +130,7 @@ export default function PaywallScreen({ userId, onLicensed }: { userId: string; 
   }
 
   if (autoRedirecting || checking) {
-    return (
-      <div style={{
-        position: 'fixed', inset: 0, background: '#7A263A',
-        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-        fontFamily: '"Barlow Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
-        color: '#F3D459',
-      }}>
-        <div style={{ fontSize: 'clamp(48px, 12vw, 72px)' }}>LAZY GAFFER</div>
-        {checking && (
-          <div style={{ fontSize: 18, color: '#fff', marginTop: 16, fontFamily: 'sans-serif' }}>
-            Activating your account…
-          </div>
-        )}
-      </div>
-    )
+    return <div style={{ position: 'fixed', inset: 0, background: splashColour }} />
   }
 
   const annualProduct = products.find(p => p.id === ANNUAL_ID)
