@@ -55,7 +55,7 @@ export default function LandingPage({ onCodeSent }: { onCodeSent?: (email: strin
           }}>RATE YOUR SQUAD, THEN LET THE GAFFER<br />PICK TWO PERFECTLY BALANCED TEAMS</div>
 
           {/* Email input */}
-          <div style={{ position: 'relative', marginBottom: 20 }}>
+          <div style={{ marginBottom: 20 }}>
             <input
               type="email"
               value={email}
@@ -63,13 +63,13 @@ export default function LandingPage({ onCodeSent }: { onCodeSent?: (email: strin
               onKeyDown={e => e.key === 'Enter' && handleSendCode()}
               onFocus={() => setEmailFocused(true)}
               onBlur={() => setEmailFocused(false)}
-              placeholder="YOUR EMAIL HERE FOR LOG-IN CODE"
+              placeholder=">> YOUR EMAIL HERE FOR LOG-IN CODE <<"
               autoCapitalize="off"
               autoCorrect="off"
               style={{
                 width: '100%', boxSizing: 'border-box',
                 border: `4px solid ${kit.c4}`,
-                padding: '10px 56px 10px 0',
+                padding: '10px',
                 fontFamily: "'Rajdhani', sans-serif",
                 fontWeight: 700, fontSize: 20, letterSpacing: 2,
                 textTransform: 'uppercase', textAlign: 'center', outline: 'none',
@@ -80,16 +80,6 @@ export default function LandingPage({ onCodeSent }: { onCodeSent?: (email: strin
                 opacity: loading ? 0.6 : 1,
               }}
             />
-            <div
-              onClick={handleSendCode}
-              style={{
-                position: 'absolute', right: 12, top: '50%',
-                transform: 'translateY(-50%)',
-                color: emailFocused ? '#ffffff' : kit.c4,
-                fontSize: 40, cursor: 'pointer',
-                lineHeight: 1, userSelect: 'none',
-              }}
-            >▶</div>
           </div>
 
           {error && (

@@ -93,8 +93,8 @@ export default function LoginScreen({ onCancel, initialEmail = '' }: { onCancel?
                 lineHeight: 1.3, marginBottom: 32,
               }}>WHERE DO WE SEND YOUR LOG-IN CODE?</div>
 
-              {/* Email input styled as button */}
-              <div style={{ position: 'relative', marginBottom: 20 }}>
+              {/* Email input */}
+              <div style={{ marginBottom: 20 }}>
                 <input
                   type="email"
                   value={email}
@@ -102,28 +102,17 @@ export default function LoginScreen({ onCancel, initialEmail = '' }: { onCancel?
                   onKeyDown={e => e.key === 'Enter' && handleSendCode()}
                   onFocus={() => setEmailFocused(true)}
                   onBlur={() => setEmailFocused(false)}
-                  placeholder="YOUR EMAIL ADDRESS"
+                  placeholder=">> YOUR EMAIL ADDRESS <<"
                   autoCapitalize="off"
                   autoCorrect="off"
                   style={{
                     ...inputStyle,
-                    paddingRight: 56,
                     background: emailFocused ? kit.c4 : 'transparent',
                     color: emailFocused ? '#ffffff' : kit.c4,
                     WebkitBoxShadow: `0 0 0 1000px ${emailFocused ? kit.c4 : 'transparent'} inset`,
                     WebkitTextFillColor: emailFocused ? '#ffffff' : kit.c4,
                   }}
                 />
-                <div
-                  onClick={handleSendCode}
-                  style={{
-                    position: 'absolute', right: 12, top: '50%',
-                    transform: 'translateY(-50%)',
-                    color: emailFocused ? '#ffffff' : kit.c4,
-                    fontSize: 40, cursor: 'pointer',
-                    lineHeight: 1, userSelect: 'none',
-                  }}
-                >▶</div>
               </div>
 
               {error && (
@@ -143,8 +132,8 @@ export default function LoginScreen({ onCancel, initialEmail = '' }: { onCancel?
                 {email.toUpperCase()}
               </div>
 
-              {/* Code input with triangle */}
-              <div style={{ position: 'relative', marginBottom: 20 }}>
+              {/* Code input */}
+              <div style={{ marginBottom: 20 }}>
                 <input
                   type="text"
                   inputMode="numeric"
@@ -153,26 +142,17 @@ export default function LoginScreen({ onCancel, initialEmail = '' }: { onCancel?
                   onKeyDown={e => e.key === 'Enter' && handleVerifyCode()}
                   onFocus={() => setCodeFocused(true)}
                   onBlur={() => setCodeFocused(false)}
-                  placeholder="000000"
+                  placeholder=">> 000000 <<"
                   style={{
                     ...inputStyle,
-                    fontSize: 40, letterSpacing: 12, paddingRight: 56,
+                    fontSize: 40, letterSpacing: 12,
                     background: codeFocused ? kit.c4 : 'transparent',
                     color: codeFocused ? '#ffffff' : kit.c4,
                     WebkitBoxShadow: `0 0 0 1000px ${codeFocused ? kit.c4 : 'transparent'} inset`,
                     WebkitTextFillColor: codeFocused ? '#ffffff' : kit.c4,
+                    opacity: loading ? 0.6 : 1,
                   }}
                 />
-                <div
-                  onClick={!loading ? handleVerifyCode : undefined}
-                  style={{
-                    position: 'absolute', right: 12, top: '50%',
-                    transform: 'translateY(-50%)',
-                    color: codeFocused ? '#ffffff' : kit.c4,
-                    fontSize: 40, cursor: loading ? 'default' : 'pointer',
-                    lineHeight: 1, userSelect: 'none', opacity: loading ? 0.6 : 1,
-                  }}
-                >{loading ? '...' : '▶'}</div>
               </div>
 
               {error && (
