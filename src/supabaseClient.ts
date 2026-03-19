@@ -6,7 +6,7 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 function setCookie(name: string, value: string) {
   const expires = new Date()
   expires.setFullYear(expires.getFullYear() + 1)
-  document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires.toUTCString()}; path=/; SameSite=Lax; Secure`
+  document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires.toUTCString()}; path=/; domain=.lazygaffer.com; SameSite=Lax; Secure`
 }
 
 function getCookie(name: string): string | null {

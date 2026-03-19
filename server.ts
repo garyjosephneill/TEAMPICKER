@@ -49,6 +49,14 @@ async function startServer() {
   const WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET!;
   const APP_URL = process.env.APP_URL || "https://teampicker-production.up.railway.app";
 
+  // Redirect www → non-www
+  app.use((req, res, next) => {
+    if (req.hostname === 'www.lazygaffer.com') {
+      return res.redirect(301, `https://lazygaffer.com${req.originalUrl}`)
+    }
+    next()
+  })
+
   // Stripe webhook — must be BEFORE express.json()
   app.post("/api/webhook", express.raw({ type: "application/json" }), async (req, res) => {
     const sig = req.headers["stripe-signature"];
