@@ -96,14 +96,28 @@ export default function LandingPage({ onCodeSent }: { onCodeSent?: (email: strin
             <div style={{ color: '#ff6b6b', fontFamily: "'Rajdhani', sans-serif", fontSize: 14, marginBottom: 12 }}>{error}</div>
           )}
 
-          {/* Small print */}
-          <div style={{
-            fontFamily: "'Rajdhani', sans-serif",
-            fontWeight: 500, fontSize: 10, letterSpacing: 1,
-            color: kit.c1, textTransform: 'uppercase', lineHeight: 1.5,
-          }}>
-            HASSLE FREE TEAMS FOR LESS THAN A PINT.<br />
-            £3.99 A YEAR OR £7.99 FOREVER.
+          {/* Scrolling ticker */}
+          <div style={{ overflow: 'hidden', width: '100%' }}>
+            <style>{`
+              @keyframes ticker {
+                0%   { transform: translateX(0); }
+                100% { transform: translateX(-50%); }
+              }
+            `}</style>
+            <div style={{
+              display: 'inline-flex',
+              animation: 'ticker 8s linear infinite',
+              whiteSpace: 'nowrap',
+            }}>
+              {Array.from({ length: 6 }).map((_, i) => (
+                <span key={i} style={{
+                  fontFamily: "'Rajdhani', sans-serif",
+                  fontWeight: 700, fontSize: 12, letterSpacing: 2,
+                  color: kit.c1, textTransform: 'uppercase',
+                  paddingRight: 48,
+                }}>14-DAY FREE TRIAL</span>
+              ))}
+            </div>
           </div>
 
         </div>
