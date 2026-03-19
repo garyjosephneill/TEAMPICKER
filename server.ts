@@ -94,6 +94,7 @@ async function startServer() {
         payment_method_types: ["card"],
         line_items: [{ price: PRICE_ID, quantity: 1 }],
         allow_promotion_codes: true,
+        payment_method_collection: 'if_required',
         subscription_data: {
           trial_period_days: 14,
           metadata: { userId },
