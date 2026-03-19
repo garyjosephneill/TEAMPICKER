@@ -39,6 +39,14 @@ export default function PaywallScreen({ userId, onLicensed }: { userId: string; 
     }
   }, [])
 
+  // Stripe auto-redirect (web only, not returning from checkout)
+  useEffect(() => {
+    if (isNativeIOS) return
+    const params = new URLSearchParams(window.location.search)
+    if (params.get('checkout_success') === 'true') return
+    handleStripeSubscribe()
+  }, [])
+
   // Stripe return handling (web only)
   useEffect(() => {
     if (isNativeIOS) return

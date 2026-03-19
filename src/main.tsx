@@ -4,11 +4,13 @@ import App from './App'
 import PrivacyPolicy from './PrivacyPolicy'
 import LoginScreen from './LoginScreen'
 import PaywallScreen from './PaywallScreen'
+import LandingPage from './LandingPage'
 import { supabase } from './supabaseClient'
 import { isNativeIOS, checkStoreKitEntitlements } from './storekit'
 import './index.css'
 
 const isPrivacyPage = window.location.pathname === '/privacy'
+const isLandingPage = window.location.pathname === '/landing'
 
 // ── DEV BYPASS: set to false before deploying to Railway ─────────────────────
 const BYPASS_AUTH = false
@@ -52,6 +54,8 @@ function AuthGate() {
   const [authStatus, setAuthStatus] = useState<'loading' | 'authenticated' | 'unauthenticated'>('loading')
   const [userId, setUserId] = useState<string | null>(null)
   const [isLicensed, setIsLicensed] = useState<boolean | null>(null)
+  const [showLanding, setShowLanding] = useState(true)
+  const [pendingEmail, setPendingEmail] = useState('')
 
   const checkLicense = async (uid: string) => {
     try {
@@ -114,7 +118,9 @@ function AuthGate() {
   }
 
   if (authStatus === 'unauthenticated') {
-    return <LoginScreen />
+    return showLanding
+      ? <LandingPage onCodeSent={(email) => { setPendingEmail(email); setShowLanding(false) }} />
+      : <LoginScreen initialEmail={pendingEmail} />
   }
 
   if (!isLicensed) {
@@ -126,6 +132,6 @@ function AuthGate() {
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    {isPrivacyPage ? <PrivacyPolicy /> : isNativeIOS ? <IOSGate /> : <AuthGate />}
+    {isPrivacyPage ? <PrivacyPolicy /> : isLandingPage ? <LandingPage /> : isNativeIOS ? <IOSGate /> : <AuthGate />}
   </React.StrictMode>,
 )

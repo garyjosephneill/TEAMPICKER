@@ -1,0 +1,114 @@
+import React, { useState } from 'react'
+import { BgScene, useRandomVariant } from './BgScene'
+import { supabase } from './supabaseClient'
+
+export default function LandingPage({ onCodeSent }: { onCodeSent?: (email: string) => void }) {
+  const { kitIndex, isGaffer, kit } = useRandomVariant()
+  const [email, setEmail]           = useState('')
+  const [emailFocused, setEmailFocused] = useState(false)
+  const [loading, setLoading]       = useState(false)
+  const [error, setError]           = useState('')
+
+  const handleSendCode = async () => {
+    const trimmed = email.trim().toLowerCase()
+    if (!trimmed) return
+    setLoading(true)
+    setError('')
+    const { error } = await supabase.auth.signInWithOtp({
+      email: trimmed,
+      options: { shouldCreateUser: true }
+    })
+    setLoading(false)
+    if (error) setError(error.message)
+    else onCodeSent?.(trimmed)
+  }
+
+  return (
+    <div style={{ position: 'fixed', inset: 0, overflow: 'hidden' }}>
+
+      <BgScene kit={kit} kitIndex={kitIndex} isGaffer={isGaffer} />
+
+      {/* Layer 3: landing content */}
+      <div style={{
+        position: 'relative', zIndex: 2,
+        width: '100%', height: '100%',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+      }}>
+        <div style={{ maxWidth: 660, width: '90%', textAlign: 'center', padding: '40px 48px' }}>
+
+          {/* Title */}
+          <div style={{
+            fontFamily: "'Barlow Condensed', sans-serif",
+            fontWeight: 700, fontSize: 96, lineHeight: 1,
+            color: kit.c1, letterSpacing: '0.02em', marginBottom: 16,
+          }}>LAZY GAFFER</div>
+
+          {/* Separator */}
+          <div style={{ borderBottom: `4px solid ${kit.c1}`, marginBottom: 24 }} />
+
+          {/* Subtitle */}
+          <div style={{
+            fontFamily: "'Rajdhani', sans-serif",
+            fontWeight: 700, fontSize: 24, letterSpacing: 2,
+            color: kit.c1, textTransform: 'uppercase',
+            lineHeight: 1.3, marginBottom: 32,
+          }}>RATE YOUR SQUAD, THEN LET THE GAFFER<br />PICK TWO PERFECTLY BALANCED TEAMS</div>
+
+          {/* Email input */}
+          <div style={{ position: 'relative', marginBottom: 20 }}>
+            <input
+              type="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && handleSendCode()}
+              onFocus={() => setEmailFocused(true)}
+              onBlur={() => setEmailFocused(false)}
+              placeholder="YOUR EMAIL HERE FOR LOG-IN CODE"
+              autoCapitalize="off"
+              autoCorrect="off"
+              style={{
+                width: '100%', boxSizing: 'border-box',
+                border: `4px solid ${kit.c4}`,
+                padding: '10px 56px 10px 0',
+                fontFamily: "'Rajdhani', sans-serif",
+                fontWeight: 700, fontSize: 20, letterSpacing: 2,
+                textTransform: 'uppercase', textAlign: 'center', outline: 'none',
+                background: emailFocused ? kit.c4 : 'transparent',
+                color: emailFocused ? '#ffffff' : kit.c4,
+                WebkitBoxShadow: `0 0 0 1000px ${emailFocused ? kit.c4 : 'transparent'} inset`,
+                WebkitTextFillColor: emailFocused ? '#ffffff' : kit.c4,
+                opacity: loading ? 0.6 : 1,
+              }}
+            />
+            <div
+              onClick={handleSendCode}
+              style={{
+                position: 'absolute', right: 12, top: '50%',
+                transform: 'translateY(-50%)',
+                color: emailFocused ? '#ffffff' : kit.c4,
+                fontSize: 40, cursor: 'pointer',
+                lineHeight: 1, userSelect: 'none',
+              }}
+            >▶</div>
+          </div>
+
+          {error && (
+            <div style={{ color: '#ff6b6b', fontFamily: "'Rajdhani', sans-serif", fontSize: 14, marginBottom: 12 }}>{error}</div>
+          )}
+
+          {/* Small print */}
+          <div style={{
+            fontFamily: "'Rajdhani', sans-serif",
+            fontWeight: 500, fontSize: 10, letterSpacing: 1,
+            color: kit.c1, textTransform: 'uppercase', lineHeight: 1.5,
+          }}>
+            HASSLE FREE TEAMS FOR LESS THAN A PINT.<br />
+            £3.99 A YEAR OR £7.99 FOREVER.
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  )
+}
