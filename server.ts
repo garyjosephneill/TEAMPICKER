@@ -41,6 +41,9 @@ async function startServer() {
   const app = express();
   const PORT = Number(process.env.PORT) || 3000;
 
+  const missingVars = ['STRIPE_SECRET_KEY', 'STRIPE_PRICE_ID', 'STRIPE_WEBHOOK_SECRET'].filter(k => !process.env[k])
+  if (missingVars.length) { console.error('Missing env vars:', missingVars.join(', ')); process.exit(1) }
+
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
   const PRICE_ID = process.env.STRIPE_PRICE_ID!;
   const WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET!;
@@ -84,6 +87,7 @@ async function startServer() {
   // API: Create Stripe Checkout Session
   app.post("/api/create-checkout-session", async (req, res) => {
     const { userId } = req.body;
+    if (!userId || typeof userId !== 'string') { res.status(400).json({ error: 'userId required' }); return; }
     try {
       const session = await stripe.checkout.sessions.create({
         mode: "subscription",

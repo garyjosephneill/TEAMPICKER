@@ -74,7 +74,7 @@ export default function PaywallScreen({ userId, onLicensed }: { userId: string; 
       }
     }, 1500)
     return () => clearInterval(interval)
-  }, [])
+  }, [userId])
 
   const handleStoreKitPurchase = async (productId: string) => {
     setLoading(productId)
