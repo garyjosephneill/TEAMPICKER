@@ -74,14 +74,14 @@ function AuthGate() {
   }
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (session?.user) {
         saveSessionCookies(session.access_token, session.refresh_token!)
         setUserId(session.user.id)
         setAuthStatus('authenticated')
         checkLicense(session.user.id)
       } else {
-        clearSessionCookies()
+        if (event === 'SIGNED_OUT') clearSessionCookies()
         setUserId(null)
         setAuthStatus('unauthenticated')
         setIsLicensed(null)
