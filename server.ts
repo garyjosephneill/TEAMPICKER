@@ -5,11 +5,7 @@ import { fileURLToPath } from "url";
 import Stripe from "stripe";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-let dbPath = process.env.DATABASE_URL || path.join(__dirname, "squad.db");
-if (dbPath.includes("://")) {
-  console.warn("DATABASE_URL is set to a non-SQLite URL. Falling back to local squad.db");
-  dbPath = path.join(__dirname, "squad.db");
-}
+const dbPath = path.join("/app/data", "squad.db");
 const db = new Database(dbPath);
 
 // Force clean recreate of players table
