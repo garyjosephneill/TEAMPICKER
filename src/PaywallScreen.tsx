@@ -6,11 +6,16 @@ const LIFETIME_ID = 'com.garyjosephneill.lazygaffer.lifetime'
 
 type Product = { id: string; displayName: string; price: string; type: string }
 
+// True when this is a web user who needs to be redirected to Stripe (not returning from it)
+const isCheckoutReturn = !isNativeIOS && new URLSearchParams(window.location.search).get('checkout_success') === 'true'
+
 export default function PaywallScreen({ userId, onLicensed }: { userId: string; onLicensed: () => void }) {
   const [loading, setLoading] = useState<string | null>(null)
   const [checking, setChecking] = useState(false)
   const [products, setProducts] = useState<Product[]>([])
   const [error, setError] = useState<string | null>(null)
+  // Web users who aren't returning from checkout get auto-redirected; show plain splash not paywall
+  const [autoRedirecting, setAutoRedirecting] = useState(!isNativeIOS && !isCheckoutReturn)
   const titleSpanRef = useRef<HTMLSpanElement>(null)
   const titleDivRef = useRef<HTMLDivElement>(null)
 
@@ -41,10 +46,8 @@ export default function PaywallScreen({ userId, onLicensed }: { userId: string; 
 
   // Stripe auto-redirect (web only, not returning from checkout)
   useEffect(() => {
-    if (isNativeIOS) return
-    const params = new URLSearchParams(window.location.search)
-    if (params.get('checkout_success') === 'true') return
-    handleStripeSubscribe()
+    if (!autoRedirecting) return
+    handleStripeSubscribe().catch(() => setAutoRedirecting(false))
   }, [])
 
   // Stripe return handling (web only)
@@ -60,7 +63,8 @@ export default function PaywallScreen({ userId, onLicensed }: { userId: string; 
       attempts++
       const res = await fetch(`/api/squad-status/${userId}`)
       const data = await res.json()
-      if (data.is_licensed || attempts >= 12) {
+      console.log(`[checkout] poll ${attempts}: is_licensed=${data.is_licensed}`)
+      if (data.is_licensed || attempts >= 20) {
         clearInterval(interval)
         if (data.is_licensed) onLicensed()
         else setChecking(false)
@@ -118,10 +122,11 @@ export default function PaywallScreen({ userId, onLicensed }: { userId: string; 
     } catch (err) {
       console.error(err)
       setLoading(null)
+      setAutoRedirecting(false)
     }
   }
 
-  if (checking) {
+  if (autoRedirecting || checking) {
     return (
       <div style={{
         position: 'fixed', inset: 0, background: '#7A263A',
@@ -130,9 +135,11 @@ export default function PaywallScreen({ userId, onLicensed }: { userId: string; 
         color: '#F3D459',
       }}>
         <div style={{ fontSize: 'clamp(48px, 12vw, 72px)' }}>LAZY GAFFER</div>
-        <div style={{ fontSize: 18, color: '#fff', marginTop: 16, fontFamily: 'sans-serif' }}>
-          Activating your account…
-        </div>
+        {checking && (
+          <div style={{ fontSize: 18, color: '#fff', marginTop: 16, fontFamily: 'sans-serif' }}>
+            Activating your account…
+          </div>
+        )}
       </div>
     )
   }
