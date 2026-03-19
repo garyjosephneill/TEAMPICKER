@@ -5,7 +5,7 @@ import PrivacyPolicy from './PrivacyPolicy'
 import LoginScreen from './LoginScreen'
 import PaywallScreen from './PaywallScreen'
 import LandingPage from './LandingPage'
-import { supabase } from './supabaseClient'
+import { supabase, saveSessionCookies, getSessionCookies, clearSessionCookies } from './supabaseClient'
 import { isNativeIOS, checkStoreKitEntitlements } from './storekit'
 import './index.css'
 
@@ -76,23 +76,39 @@ function AuthGate() {
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session?.user) {
+        saveSessionCookies(session.access_token, session.refresh_token!)
         setUserId(session.user.id)
         setAuthStatus('authenticated')
         checkLicense(session.user.id)
       } else {
+        clearSessionCookies()
         setUserId(null)
         setAuthStatus('unauthenticated')
         setIsLicensed(null)
       }
     })
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (session?.user) {
         setUserId(session.user.id)
         setAuthStatus('authenticated')
         checkLicense(session.user.id)
       } else {
-        setAuthStatus('unauthenticated')
+        // localStorage is empty (browser was quit) — try restoring from cookies
+        const cookies = getSessionCookies()
+        if (cookies) {
+          const { data } = await supabase.auth.setSession({
+            access_token: cookies.accessToken,
+            refresh_token: cookies.refreshToken,
+          })
+          if (!data.session) {
+            clearSessionCookies()
+            setAuthStatus('unauthenticated')
+          }
+          // if successful, onAuthStateChange fires and handles the rest
+        } else {
+          setAuthStatus('unauthenticated')
+        }
       }
     })
 
