@@ -147,6 +147,11 @@ const INTL_KITS = [
   { name: 'WALES',       bg: '#C8102E', c1: '#ffffff', c2: '#FFD700', c3: '#004B87', c4: '#FFD700' },
 ];
 
+// Kits shown to new users on first load (curated for readability)
+const DEFAULT_KITS = [...KITS, ...INTL_KITS].filter(k =>
+  ['ASTON VILLA', 'BRIGHTON', 'FULHAM', 'WEST HAM', 'AUSTRALIA', 'NETHERLANDS', 'PORTUGAL', 'SPAIN'].includes(k.name)
+)
+
 const MM2_STATS: { key: StatKey; label: string; textColor: string; fillColor: string }[] = [
   { key: Position.GKP,      label: 'GKP', textColor: 'text-t-c3', fillColor: 't-c3' },
   { key: Position.DEFENCE,  label: 'DEF', textColor: 'text-t-c1', fillColor: 't-c1' },
@@ -295,8 +300,7 @@ export default function App({ userId, onSaveToCloud }: { userId: string | null, 
       localStorage.setItem('lazy_gaffer_kit_version', KIT_VERSION);
     }
     const saved = localStorage.getItem('lazy_gaffer_kit');
-    const allKits = [...KITS, ...INTL_KITS];
-    const appKit = saved ? JSON.parse(saved) : allKits[Math.floor(Math.random() * allKits.length)];
+    const appKit = saved ? JSON.parse(saved) : DEFAULT_KITS[Math.floor(Math.random() * DEFAULT_KITS.length)];
     setActiveKit(appKit);
     const root = document.documentElement;
     const meta = document.querySelector('meta[name="theme-color"]') as HTMLMetaElement;
