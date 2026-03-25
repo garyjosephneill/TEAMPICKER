@@ -769,7 +769,7 @@ export default function App({ userId, onSaveToCloud }: { userId: string | null, 
                     >ADD</button>
                   </div>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 300px), 1fr))', gap: '0 2rem' }}>
+                  <div className="grid grid-cols-1 md:grid-cols-3" style={{ gap: '0 2rem' }}>
                     {players.map(p => {
                       const isExpanded = expandedPlayers.has(p.id);
                       const overall = (Object.values(p.ratings).reduce((a, b) => a + b, 0) / 6).toFixed(1);
