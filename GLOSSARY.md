@@ -50,9 +50,13 @@
 **TestFlight** — Apple's beta testing platform (part of App Store Connect). Lets you install pre-release builds on your iPhone before going public.
 
 ## Auth & Identity
-**Magic link** — The web login method. User enters their email, receives an email with a clickable link. Clicking it logs them straight in — no code to enter. Replaced the OTP code flow in March 2026.
+**Magic link** — The web login method. User enters their email, receives an email with a clickable link. Clicking it logs them straight in — no code to enter. Replaced the OTP code flow for web in March 2026. **Does not work on native iOS** — tapping a link in an email app opens Safari, not the Capacitor app, so the session never reaches the app.
 
-**Supabase Auth (OTP)** — Still used for iOS cloud-save login (the optional "Save to cloud" flow). Users enter their email and receive a code. Not used for the main web login flow.
+**Supabase Auth (OTP)** — Used for iOS cloud-save login (the optional AUTO SAVE SQUAD flow). Users enter their email and receive an 8-digit code to enter in-app. Correct approach for native iOS because it keeps the user inside the app throughout. Not used for web login.
+
+**LandingPage.tsx** — Web-only login/entry screen. Shows kit backgrounds, handles magic link flow, auto-redirects to Stripe after login. Used by `AuthGate` (web path only).
+
+**LoginScreen.tsx** — iOS-only cloud-save login screen. Simple dark screen using the app's kit colours. Shows email input → 8-digit OTP code flow. Only appears when user taps AUTO SAVE SQUAD — never shown on app startup.
 
 **Supabase email templates** — In Supabase → Authentication → Email Templates. Two key templates:
 - **Magic Link**: used for existing users logging in — must use `{{ .ConfirmationURL }}` not `{{ .Token }}`
@@ -63,6 +67,18 @@
 **Session persistence (cookies)** — Supabase stores sessions in `localStorage` by default, which Safari clears when the browser quits. We work around this by saving the access token and refresh token to 1-year cookies (`lg_at`, `lg_rt`). On page load, if localStorage is empty, we restore the session from cookies using `supabase.auth.setSession()`.
 
 **www vs non-www domain issue** — Cookies and localStorage are per-origin. Cookies set on `lazygaffer.com` are invisible on `www.lazygaffer.com`. Fixed by: (1) setting cookies with `domain=.lazygaffer.com`, and (2) server redirecting `www.lazygaffer.com` → `lazygaffer.com` (301).
+
+## Gaffer Page — Share Teams
+**Share overlay** — When SHARE TEAMS is clicked on desktop/web, a full-screen wash overlay appears (uses the active kit's background colour) with three destination buttons: EMAIL, WHATSAPP, CLIPBOARD. Tapping outside the buttons dismisses it. iOS is unaffected — this feature is desktop-only, gated by `Capacitor.isNativePlatform()`.
+
+**Share destinations** — EMAIL opens the user's mail client with teams pre-filled. WHATSAPP opens `wa.me` with teams as the message. CLIPBOARD copies the teams text silently and briefly flashes the SHARE TEAMS button to confirm. All shared text is forced to uppercase.
+
+## Gaffer Page — Team Names
+**Random team names** — After GENERATE TEAMS is pressed, two names are picked at random from an 18-name pool (UNITED, CITY, ROVERS etc.). A blinking `|` cursor appears after each name to indicate it's editable.
+
+**Inline team name editing** — On the results screen, tapping a team name lets you rename it on the fly. Saves to state only (resets next time teams are generated). The blinking cursor disappears once persistent custom names are set via Settings.
+
+**Persistent custom team names (Settings → TEAM NAMES)** — Users can pre-set two fixed team names (e.g. BIBS / SKINS) that are saved to `localStorage` and used every time teams are generated. Leave either field blank to revert to random. A CLEAR button resets both. When custom names are active, the blinking cursor on the results screen is hidden.
 
 ## Local Development
 **localhost** — Your own computer acting as a private web server. Run `npx vite` in the TEAMPICKER directory to start it. Only you can see it — nothing is live or public. Use this to test changes before pushing to Railway.
