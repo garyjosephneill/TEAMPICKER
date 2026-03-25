@@ -273,7 +273,7 @@ export function BgScene({ kit, kitIndex, isGaffer }: { kit: Kit; kitIndex: numbe
         </div>
       </div>
 
-      {/* Layer 2: 90% colour wash */}
+      {/* Layer 2: colour wash */}
       <div style={{ position: 'absolute', inset: 0, background: kit.bg, opacity: 0.90, pointerEvents: 'none' }} />
     </>
   )

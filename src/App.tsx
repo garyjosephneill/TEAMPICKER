@@ -251,6 +251,7 @@ export default function App({ userId, onSaveToCloud }: { userId: string | null, 
   const [editingPlayerId, setEditingPlayerId] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
+  const [showShareOverlay, setShowShareOverlay] = useState(false);
   const [showPlayerDetails, setShowPlayerDetails] = useState(true);
   const [activeKit, setActiveKit] = useState<typeof KITS[0] | null>(null);
   const [kitsView, setKitsView] = useState(false);
@@ -586,10 +587,8 @@ export default function App({ userId, onSaveToCloud }: { userId: string | null, 
     setTimeout(() => { if (teamsContainerRef.current) scrollToEl(teamsContainerRef.current); }, 100);
   };
 
-  const handleShareTeams = () => {
-    if (!teams) return;
-    setIsSharing(true);
-    setTimeout(() => setIsSharing(false), 1000);
+  const buildShareText = () => {
+    if (!teams) return '';
     const fmt = (n: number) => n % 1 === 0 ? String(n) : n.toFixed(1);
     const formatTeam = (team: Team) => {
       let text = `${team.name}\n------------------------\n`;
@@ -603,8 +602,39 @@ export default function App({ userId, onSaveToCloud }: { userId: string | null, 
       if (showPlayerDetails) text += `------------------------\nTOTAL RTG: ${fmt(team.totalRating)}\n`;
       return text;
     };
-    const body = `${formatTeam(teams.team1)}\n\n${formatTeam(teams.team2)}`;
+    return `${formatTeam(teams.team1)}\n\n${formatTeam(teams.team2)}`;
+  };
+
+  const handleShareTeams = () => {
+    if (!teams) return;
+    if (!Capacitor.isNativePlatform()) {
+      setShowShareOverlay(true);
+    } else {
+      // iOS fallback (not used since app is submitted, but keeps parity)
+      const body = buildShareText();
+      window.location.href = `mailto:?subject=${encodeURIComponent(`Teams for ${new Date().toLocaleDateString()}`)}&body=${encodeURIComponent(body)}`;
+    }
+  };
+
+  const handleShareEmail = () => {
+    const body = buildShareText();
     window.location.href = `mailto:?subject=${encodeURIComponent(`Teams for ${new Date().toLocaleDateString()}`)}&body=${encodeURIComponent(body)}`;
+    setShowShareOverlay(false);
+  };
+
+  const handleShareWhatsApp = () => {
+    const body = buildShareText();
+    window.open(`https://wa.me/?text=${encodeURIComponent(body)}`, '_blank');
+    setShowShareOverlay(false);
+  };
+
+  const handleShareClipboard = () => {
+    const body = buildShareText();
+    navigator.clipboard.writeText(body).then(() => {
+      setIsSharing(true);
+      setTimeout(() => setIsSharing(false), 1500);
+    });
+    setShowShareOverlay(false);
   };
 
   const handleReorderPointerDown = (e: React.PointerEvent, id: string) => {
@@ -1046,6 +1076,44 @@ export default function App({ userId, onSaveToCloud }: { userId: string | null, 
               <div className="text-center text-t-c1 normal-case" style={{ fontFamily: '"Rajdhani", sans-serif', fontWeight: 500, fontSize: 12 }}>Copyright - Gary Neill Limited</div>
             </div>
           )}
+
+        {/* ── Share overlay (desktop only) ── */}
+        {showShareOverlay && !Capacitor.isNativePlatform() && (() => {
+          const btnColor = activeKit?.lightBg ? '#000000' : '#ffffff';
+          return (
+            <div
+              onClick={() => setShowShareOverlay(false)}
+              style={{
+                position: 'fixed', inset: 0,
+                background: activeKit?.bg ?? 'var(--color-t-bg)',
+                opacity: 0.95,
+                display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                gap: 24,
+                zIndex: 100,
+              }}
+            >
+              {[
+                { label: 'EMAIL', action: handleShareEmail },
+                { label: 'WHATSAPP', action: handleShareWhatsApp },
+                { label: 'CLIPBOARD', action: handleShareClipboard },
+              ].map(({ label, action }) => (
+                <button
+                  key={label}
+                  onClick={e => { e.stopPropagation(); action(); }}
+                  className="w-[300px] border-4 p-2 font-bold"
+                  style={{
+                    fontSize: 24,
+                    background: 'transparent',
+                    color: btnColor,
+                    borderColor: btnColor,
+                    fontFamily: '"Rajdhani", sans-serif',
+                    letterSpacing: 2,
+                  }}
+                >{label}</button>
+              ))}
+            </div>
+          );
+        })()}
 
         </div>
       </div>
