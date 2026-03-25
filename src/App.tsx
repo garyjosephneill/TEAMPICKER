@@ -1089,24 +1089,28 @@ export default function App({ userId, onSaveToCloud }: { userId: string | null, 
                   <div className="text-t-c1 font-bold text-sm tracking-widest uppercase" style={{ fontFamily: '"Rajdhani", sans-serif' }}>
                     Set custom team names — leave blank for random
                   </div>
-                  {(['TEAM 1', 'TEAM 2'] as const).map((label, i) => (
-                    <div key={label} className="flex flex-col gap-2" style={{ width: 'calc(50% - 8px)' }}>
-                      <label className="text-t-c1 font-bold text-xs tracking-widest uppercase" style={{ fontFamily: '"Rajdhani", sans-serif' }}>{label}</label>
-                      <input
-                        className="border-4 border-t-c1 bg-transparent text-t-c1 font-bold text-xl p-2 uppercase outline-none w-full"
-                        style={{ fontFamily: '"Rajdhani", sans-serif', letterSpacing: 2 }}
-                        maxLength={20}
-                        value={customTeamNames[i]}
-                        onChange={e => {
-                          const updated: [string, string] = [...customTeamNames] as [string, string];
-                          updated[i] = e.target.value.toUpperCase();
-                          setCustomTeamNames(updated);
-                          localStorage.setItem('customTeamNames', JSON.stringify(updated));
-                        }}
-                        placeholder="RANDOM"
-                      />
-                    </div>
-                  ))}
+                  {(['TEAM 1', 'TEAM 2'] as const).map((label, i) => {
+                    const color = i === 1 ? 'var(--color-t-c4)' : 'var(--color-t-c1)';
+                    const borderClass = i === 1 ? 'border-t-c4' : 'border-t-c1';
+                    return (
+                      <div key={label} className="flex flex-col gap-2" style={{ width: 'calc(50% - 8px)' }}>
+                        <label className="font-bold text-xs tracking-widest uppercase" style={{ fontFamily: '"Rajdhani", sans-serif', color }}>{label}</label>
+                        <input
+                          className={`border-4 ${borderClass} bg-transparent font-bold text-xl p-2 uppercase outline-none w-full`}
+                          style={{ fontFamily: '"Rajdhani", sans-serif', letterSpacing: 2, color }}
+                          maxLength={20}
+                          value={customTeamNames[i]}
+                          onChange={e => {
+                            const updated: [string, string] = [...customTeamNames] as [string, string];
+                            updated[i] = e.target.value.toUpperCase();
+                            setCustomTeamNames(updated);
+                            localStorage.setItem('customTeamNames', JSON.stringify(updated));
+                          }}
+                          placeholder="RANDOM"
+                        />
+                      </div>
+                    );
+                  })}
                   <button
                     onClick={() => {
                       const cleared: [string, string] = ['', ''];
@@ -1118,8 +1122,8 @@ export default function App({ userId, onSaveToCloud }: { userId: string | null, 
                   >CLEAR</button>
                   <button
                     onClick={() => setTeamNamesView(false)}
-                    className="border-4 border-t-c1 py-2 text-xl font-bold"
-                    style={{ width: 'calc(50% - 8px)', background: 'var(--color-t-bg)', color: 'var(--color-t-c1)' }}
+                    className="border-4 border-t-c4 py-2 text-xl font-bold"
+                    style={{ width: 'calc(50% - 8px)', background: 'var(--color-t-bg)', color: 'var(--color-t-c4)' }}
                   >DONE</button>
                 </div>
               )}
