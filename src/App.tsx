@@ -684,6 +684,8 @@ export default function App({ userId, onSaveToCloud }: { userId: string | null, 
         ::-webkit-scrollbar { display: none; }
         input[type=range]::-webkit-slider-thumb { background: ${activeKit?.lightBg ? '#000000' : 'var(--color-t-c1)'}; }
         input[type=range]::-moz-range-thumb { background: ${activeKit?.lightBg ? '#000000' : 'var(--color-t-c1)'}; border: none; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        .team-name-cursor::after { content: '|'; margin-left: 2px; animation: blink 1s step-start infinite; }
       `}</style>
       <style>{`.lazy-placeholder::placeholder { color: var(--color-t-c1); opacity: 0.5; }`}</style>
 
@@ -876,7 +878,7 @@ export default function App({ userId, onSaveToCloud }: { userId: string | null, 
                                   autoFocus
                                   defaultValue={t.data.name}
                                   className="flex-1 text-2xl font-bold bg-transparent outline-none pr-2 uppercase"
-                                  style={{ color: t.color, borderBottom: `2px solid ${t.color}` }}
+                                  style={{ color: t.color }}
                                   onBlur={e => {
                                     const val = e.target.value.trim().toUpperCase() || t.data.name;
                                     setTeams(prev => prev ? { ...prev, [t.key]: { ...prev[t.key], name: val } } : prev);
@@ -886,8 +888,7 @@ export default function App({ userId, onSaveToCloud }: { userId: string | null, 
                                 />
                               ) : (
                                 <h3
-                                  className="flex-1 text-2xl font-bold truncate pr-2 cursor-pointer"
-                                  title="Tap to rename"
+                                  className={`flex-1 text-2xl font-bold truncate pr-2 cursor-pointer${(!customTeamNames[0].trim() && !customTeamNames[1].trim()) ? ' team-name-cursor' : ''}`}
                                   onClick={() => setEditingTeamName(t.key)}
                                 >{t.data.name}</h3>
                               )}
