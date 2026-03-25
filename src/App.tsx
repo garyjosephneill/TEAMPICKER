@@ -685,7 +685,7 @@ export default function App({ userId, onSaveToCloud }: { userId: string | null, 
         input[type=range]::-webkit-slider-thumb { background: ${activeKit?.lightBg ? '#000000' : 'var(--color-t-c1)'}; }
         input[type=range]::-moz-range-thumb { background: ${activeKit?.lightBg ? '#000000' : 'var(--color-t-c1)'}; border: none; }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-        .team-name-cursor::after { content: '|'; margin-left: 2px; animation: blink 1s step-start infinite; }
+        .team-name-cursor::after { content: ''; display: inline-block; width: 1px; height: 0.85em; background: currentColor; margin-left: 3px; vertical-align: middle; animation: blink 1s step-start infinite; }
       `}</style>
       <style>{`.lazy-placeholder::placeholder { color: var(--color-t-c1); opacity: 0.5; }`}</style>
 
