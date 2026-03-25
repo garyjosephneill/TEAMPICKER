@@ -157,11 +157,11 @@ async function startServer() {
   app.get("/api/players/:userId", (req, res) => {
     const { userId } = req.params;
     const players = db.prepare("SELECT * FROM players WHERE user_id = ?").all(userId);
-    res.json(players.map((p: any) => ({
-      ...p,
-      ratings: JSON.parse(p.ratings),
-      isSelected: !!p.isSelected
-    })));
+    res.json(players.map((p: any) => {
+      let ratings;
+      try { ratings = JSON.parse(p.ratings); } catch { ratings = {}; }
+      return { ...p, ratings, isSelected: !!p.isSelected };
+    }));
   });
 
   // API: Save Players

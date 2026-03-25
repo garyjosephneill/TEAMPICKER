@@ -640,7 +640,7 @@ export default function App({ userId, onSaveToCloud }: { userId: string | null, 
     navigator.clipboard.writeText(body).then(() => {
       setIsSharing(true);
       setTimeout(() => setIsSharing(false), 1500);
-    });
+    }).catch(() => {});
     setShowShareOverlay(false);
   };
 
@@ -776,11 +776,11 @@ export default function App({ userId, onSaveToCloud }: { userId: string | null, 
                       return (
                         <section
                           key={p.id}
-                          className="border-b pt-2 pb-3"
+                          className="border-b pt-2 pb-3 min-w-0"
                           style={{ borderColor: box2Color }}
                         >
                           {/* Name row */}
-                          <div ref={el => { playerCardRefs.current[p.id] = el; }} className="flex gap-2 items-center">
+                          <div ref={el => { playerCardRefs.current[p.id] = el; }} className="flex gap-2 items-center min-w-0">
                             <input
                               value={p.name}
                               inputMode="text"
@@ -788,7 +788,7 @@ export default function App({ userId, onSaveToCloud }: { userId: string | null, 
                               onBlur={() => setEditingPlayerId(null)}
                               onKeyDown={e => e.key === 'Enter' && (e.target as HTMLInputElement).blur()}
                               onChange={e => setPlayers(prev => prev.map(x => x.id === p.id ? { ...x, name: e.target.value } : x))}
-                              className="border-2 flex-1 bg-t-bg text-t-c1 uppercase outline-none font-bold h-[36px] p-2 cursor-text"
+                              className="border-2 flex-1 min-w-0 bg-t-bg text-t-c1 uppercase outline-none font-bold h-[36px] p-2 cursor-text"
                               style={{ fontSize: 18, letterSpacing: 2, borderColor: editingPlayerId === p.id ? 'var(--color-t-c4)' : box2Color, WebkitUserSelect: 'text' }}
                             />
                             <button
