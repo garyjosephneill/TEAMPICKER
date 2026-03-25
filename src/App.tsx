@@ -970,8 +970,8 @@ export default function App({ userId, onSaveToCloud }: { userId: string | null, 
                     return p ? (
                       <div className="fixed inset-0 flex flex-col items-center justify-center gap-4 pointer-events-none" style={{ zIndex: 50 }}>
                         <div className="text-t-c4 font-bold uppercase text-center text-xl tracking-widest">{p.name}</div>
-                        <button onClick={() => setTransferCandidate(null)} className="border-4 border-t-c2 py-2 text-xl font-bold bg-t-bg text-t-c2 pointer-events-auto" style={{ width: 'calc(50% - 8px)' }}>KEEP</button>
-                        <button onClick={() => { setPlayers(prev => prev.filter(x => x.id !== transferCandidate)); setTransferCandidate(null); }} className="border-4 border-t-c4 py-2 text-xl font-bold bg-t-c4 text-t-bg pointer-events-auto" style={{ width: 'calc(50% - 8px)' }}>SELL</button>
+                        <button onClick={() => setTransferCandidate(null)} className="border-4 border-t-c2 py-2 text-xl font-bold bg-t-bg text-t-c2 pointer-events-auto" style={{ width: 'calc(50% - 8px)', maxWidth: 504 }}>KEEP</button>
+                        <button onClick={() => { setPlayers(prev => prev.filter(x => x.id !== transferCandidate)); setTransferCandidate(null); }} className="border-4 border-t-c4 py-2 text-xl font-bold bg-t-c4 text-t-bg pointer-events-auto" style={{ width: 'calc(50% - 8px)', maxWidth: 504 }}>SELL</button>
                       </div>
                     ) : null;
                   })()}
