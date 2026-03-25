@@ -1166,10 +1166,10 @@ export default function App({ userId, onSaveToCloud }: { userId: string | null, 
               }}
             >
               {[
-                { label: 'EMAIL', action: handleShareEmail },
-                { label: 'WHATSAPP', action: handleShareWhatsApp },
-                { label: 'CLIPBOARD', action: handleShareClipboard },
-              ].map(({ label, action }) => (
+                { label: 'EMAIL', action: handleShareEmail, c4: false },
+                { label: 'WHATSAPP', action: handleShareWhatsApp, c4: true },
+                { label: 'CLIPBOARD', action: handleShareClipboard, c4: false },
+              ].map(({ label, action, c4 }) => (
                 <button
                   key={label}
                   onClick={e => { e.stopPropagation(); action(); }}
@@ -1177,8 +1177,8 @@ export default function App({ userId, onSaveToCloud }: { userId: string | null, 
                   style={{
                     fontSize: 24,
                     background: 'transparent',
-                    color: btnColor,
-                    borderColor: btnColor,
+                    color: c4 ? 'var(--color-t-c4)' : btnColor,
+                    borderColor: c4 ? 'var(--color-t-c4)' : btnColor,
                     fontFamily: '"Rajdhani", sans-serif',
                     letterSpacing: 2,
                   }}
