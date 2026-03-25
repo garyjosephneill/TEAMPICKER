@@ -251,6 +251,11 @@ export default function App({ userId, onSaveToCloud }: { userId: string | null, 
   const [editingPlayerId, setEditingPlayerId] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
+  const [editingTeamName, setEditingTeamName] = useState<'team1' | 'team2' | null>(null);
+  const [customTeamNames, setCustomTeamNames] = useState<[string, string]>(() => {
+    try { const s = localStorage.getItem('customTeamNames'); return s ? JSON.parse(s) : ['', '']; } catch { return ['', '']; }
+  });
+  const [teamNamesView, setTeamNamesView] = useState(false);
   const [showShareOverlay, setShowShareOverlay] = useState(false);
   const [showPlayerDetails, setShowPlayerDetails] = useState(true);
   const [activeKit, setActiveKit] = useState<typeof KITS[0] | null>(null);
@@ -572,7 +577,9 @@ export default function App({ userId, onSaveToCloud }: { userId: string | null, 
       sortOrder[getEffectivePosition(a)] - sortOrder[getEffectivePosition(b)] ||
       getEffectiveRating(b) - getEffectiveRating(a)
     );
-    const shuffledNames = [...TEAM_NAMES].sort(() => 0.5 - Math.random());
+    const shuffledNames = (customTeamNames[0].trim() && customTeamNames[1].trim())
+      ? [customTeamNames[0].trim().toUpperCase(), customTeamNames[1].trim().toUpperCase()]
+      : [...TEAM_NAMES].sort(() => 0.5 - Math.random());
     const createTeam = (name: string, ps: Player[]): Team => ({
       name, players: sortPlayers(ps),
       totalRating: ps.reduce((s, p) => s + getEffectiveRating(p), 0),
@@ -710,7 +717,7 @@ export default function App({ userId, onSaveToCloud }: { userId: string | null, 
               </div>
               <div style={{ position: 'absolute', right: 0, bottom: 4 }}>
                 <button
-                  onClick={() => { setView(v => v === 'settings' ? 'squad' : 'settings'); setKitsView(false); setTransfersView(false); setTransferCandidate(null); setReorderView(false); }}
+                  onClick={() => { setView(v => v === 'settings' ? 'squad' : 'settings'); setKitsView(false); setTransfersView(false); setTransferCandidate(null); setReorderView(false); setTeamNamesView(false); }}
                   style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, display: 'block' }}
                 >
                   <svg width="24" height="24" viewBox="0 0 490 490" fill="var(--color-t-c4)" style={{ display: 'block' }}>
@@ -858,13 +865,32 @@ export default function App({ userId, onSaveToCloud }: { userId: string | null, 
                   {teams && (
                     <>
                       <div ref={teamsContainerRef} className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        {[
-                          { data: teams.team1, color: box1Color },
-                          { data: teams.team2, color: box2Color },
-                        ].map(t => (
-                          <div key={t.data.name} className="border-4 p-4" style={{ borderColor: t.color, color: t.color }}>
+                        {([
+                          { data: teams.team1, color: box1Color, key: 'team1' as const },
+                          { data: teams.team2, color: box2Color, key: 'team2' as const },
+                        ] as const).map(t => (
+                          <div key={t.key} className="border-4 p-4" style={{ borderColor: t.color, color: t.color }}>
                             <div className="flex items-end border-b-2 mb-4 pb-2" style={{ borderColor: t.color }}>
-                              <h3 className="flex-1 text-2xl font-bold truncate pr-2">{t.data.name}</h3>
+                              {editingTeamName === t.key ? (
+                                <input
+                                  autoFocus
+                                  defaultValue={t.data.name}
+                                  className="flex-1 text-2xl font-bold bg-transparent outline-none pr-2 uppercase"
+                                  style={{ color: t.color, borderBottom: `2px solid ${t.color}` }}
+                                  onBlur={e => {
+                                    const val = e.target.value.trim().toUpperCase() || t.data.name;
+                                    setTeams(prev => prev ? { ...prev, [t.key]: { ...prev[t.key], name: val } } : prev);
+                                    setEditingTeamName(null);
+                                  }}
+                                  onKeyDown={e => { if (e.key === 'Enter') (e.target as HTMLInputElement).blur(); }}
+                                />
+                              ) : (
+                                <h3
+                                  className="flex-1 text-2xl font-bold truncate pr-2 cursor-pointer"
+                                  title="Tap to rename"
+                                  onClick={() => setEditingTeamName(t.key)}
+                                >{t.data.name}</h3>
+                              )}
                               {showPlayerDetails && (
                                 <>
                                   <span className="w-16 font-bold" style={{ fontSize: 20 }}>RTG</span>
@@ -911,11 +937,12 @@ export default function App({ userId, onSaveToCloud }: { userId: string | null, 
               )}
 
               {/* ── SETTINGS VIEW ── */}
-              {view === 'settings' && !kitsView && !transfersView && !reorderView && (
+              {view === 'settings' && !kitsView && !transfersView && !reorderView && !teamNamesView && (
                 <div className="flex flex-col items-center gap-4 py-16">
                   <button onClick={() => setKitsView(true)} className="border-4 border-t-c1 py-2 text-xl font-bold" style={{ width: 'calc(50% - 8px)', background: 'var(--color-t-bg)', color: 'var(--color-t-c1)' }}>KITS</button>
                   <button onClick={() => setTransfersView(true)} className="border-4 border-t-c1 py-2 text-xl font-bold" style={{ width: 'calc(50% - 8px)', background: 'var(--color-t-bg)', color: 'var(--color-t-c1)' }}>TRANSFERS</button>
                   <button onClick={() => setReorderView(true)} className="border-4 border-t-c1 py-2 text-xl font-bold" style={{ width: 'calc(50% - 8px)', background: 'var(--color-t-bg)', color: 'var(--color-t-c1)' }}>REORDER</button>
+                  <button onClick={() => setTeamNamesView(true)} className="border-4 border-t-c1 py-2 text-xl font-bold" style={{ width: 'calc(50% - 8px)', background: 'var(--color-t-bg)', color: 'var(--color-t-c1)' }}>TEAM NAMES</button>
                   <button onClick={async () => {
                     const res = await fetch('/api/create-portal-session', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userId }) })
                     const { url, error } = await res.json()
@@ -1054,6 +1081,47 @@ export default function App({ userId, onSaveToCloud }: { userId: string | null, 
                   </div>
                 );
               })()}
+
+              {/* ── TEAM NAMES VIEW ── */}
+              {view === 'settings' && teamNamesView && (
+                <div className="flex flex-col items-center gap-6 py-16">
+                  <div className="text-t-c1 font-bold text-sm tracking-widest uppercase" style={{ fontFamily: '"Rajdhani", sans-serif' }}>
+                    Set custom team names — leave blank for random
+                  </div>
+                  {(['TEAM 1', 'TEAM 2'] as const).map((label, i) => (
+                    <div key={label} className="flex flex-col gap-2" style={{ width: 'calc(50% - 8px)' }}>
+                      <label className="text-t-c1 font-bold text-xs tracking-widest uppercase" style={{ fontFamily: '"Rajdhani", sans-serif' }}>{label}</label>
+                      <input
+                        className="border-4 border-t-c1 bg-transparent text-t-c1 font-bold text-xl p-2 uppercase outline-none w-full"
+                        style={{ fontFamily: '"Rajdhani", sans-serif', letterSpacing: 2 }}
+                        maxLength={20}
+                        value={customTeamNames[i]}
+                        onChange={e => {
+                          const updated: [string, string] = [...customTeamNames] as [string, string];
+                          updated[i] = e.target.value.toUpperCase();
+                          setCustomTeamNames(updated);
+                          localStorage.setItem('customTeamNames', JSON.stringify(updated));
+                        }}
+                        placeholder="RANDOM"
+                      />
+                    </div>
+                  ))}
+                  <button
+                    onClick={() => {
+                      const cleared: [string, string] = ['', ''];
+                      setCustomTeamNames(cleared);
+                      localStorage.setItem('customTeamNames', JSON.stringify(cleared));
+                    }}
+                    className="border-4 border-t-c1 py-2 text-xl font-bold"
+                    style={{ width: 'calc(50% - 8px)', background: 'var(--color-t-bg)', color: 'var(--color-t-c1)' }}
+                  >CLEAR</button>
+                  <button
+                    onClick={() => setTeamNamesView(false)}
+                    className="border-4 border-t-c1 py-2 text-xl font-bold"
+                    style={{ width: 'calc(50% - 8px)', background: 'var(--color-t-bg)', color: 'var(--color-t-c1)' }}
+                  >DONE</button>
+                </div>
+              )}
 
             </div>
           </div>{/* end scroll area */}
