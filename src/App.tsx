@@ -602,7 +602,7 @@ export default function App({ userId, onSaveToCloud }: { userId: string | null, 
       if (showPlayerDetails) text += `------------------------\nTOTAL RTG: ${fmt(team.totalRating)}\n`;
       return text;
     };
-    return `${formatTeam(teams.team1)}\n\n${formatTeam(teams.team2)}`;
+    return `${formatTeam(teams.team1)}\n\n${formatTeam(teams.team2)}`.toUpperCase();
   };
 
   const handleShareTeams = () => {
