@@ -122,7 +122,7 @@ export default function LoginScreen({ onCancel }: { onCancel?: () => void } = {}
         ) : (
           <>
             <div style={{ color: 'var(--color-t-c1)', fontSize: 14, letterSpacing: 1, marginBottom: 8, textTransform: 'uppercase' }}>
-              Enter the 8-digit code sent to
+              Enter the 6-digit code sent to
             </div>
             <div style={{ color: 'var(--color-t-c4)', fontSize: 16, fontWeight: 700, marginBottom: 24 }}>
               {email}
@@ -134,7 +134,7 @@ export default function LoginScreen({ onCancel }: { onCancel?: () => void } = {}
               value={code}
               onChange={e => setCode(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleVerifyCode()}
-              placeholder="00000000"
+              placeholder="000000"
               style={{ ...inputStyle, fontSize: 32, letterSpacing: 8 }}
             />
 
