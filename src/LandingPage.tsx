@@ -77,7 +77,7 @@ export default function LandingPage() {
                 fontSize: 16, letterSpacing: 2, color: kit.c4,
                 textTransform: 'uppercase', textAlign: 'center', marginBottom: 8,
               }}>
-                ENTER THE 6-DIGIT CODE SENT TO
+                ENTER THE 8-DIGIT CODE SENT TO
               </div>
               <div style={{
                 fontFamily: "'Rajdhani', sans-serif", fontWeight: 700,
@@ -92,7 +92,7 @@ export default function LandingPage() {
                   value={code}
                   onChange={e => setCode(e.target.value)}
                   onKeyDown={e => e.key === 'Enter' && handleVerifyCode()}
-                  placeholder="000000"
+                  placeholder="00000000"
                   autoCapitalize="off"
                   autoCorrect="off"
                   style={{
