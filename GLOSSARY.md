@@ -36,7 +36,7 @@
 
 **Stripe webhook** — A notification Stripe sends to your server when something happens (e.g. checkout completed, subscription cancelled). Your server listens at `/api/webhook` and updates the `is_licensed` flag in SQLite accordingly.
 
-**Stripe customer portal** — A Stripe-hosted page where users can manage their subscription (cancel, update card). Accessible via the SUBSCRIPTION button in app Settings.
+**Stripe customer portal** — A Stripe-hosted page where users can manage their subscription (cancel, update card). Accessible via the MY SUBSCRIPTION button in app Settings.
 
 **Stripe promo codes** — Discount codes entered on the Stripe checkout page. `CANTONA` = 100% off forever, 5 uses (for press/journalists). `payment_method_collection: 'if_required'` must be set on the checkout session so the "Start Trial" button stays active when a 100% promo is applied (no card needed).
 
@@ -59,8 +59,9 @@
 **LoginScreen.tsx** — iOS-only cloud-save login screen. Simple dark screen using the app's kit colours. Shows email input → 8-digit OTP code flow. Only appears when user taps AUTO SAVE SQUAD — never shown on app startup.
 
 **Supabase email templates** — In Supabase → Authentication → Email Templates. Two key templates:
-- **Magic Link**: used for existing users logging in — must use `{{ .ConfirmationURL }}` not `{{ .Token }}`
-- **Confirm signup**: used for brand new users — also must use `{{ .ConfirmationURL }}`
+- **Magic Link**: used for existing users logging in — subject: "Your Lazy Gaffer Sign-In", branded HTML template
+- **Confirm signup**: used for brand new users — subject: "Welcome to Lazy Gaffer", same branded HTML template
+- Both use `{{ .ConfirmationURL }}` for the button link. Preview at `TEAMPICKER/email-preview.html`
 
 **PKCE vs Implicit flow** — Two ways Supabase can handle magic link auth. PKCE (default) uses a code verifier stored in `sessionStorage` — this gets lost when a magic link opens in a new tab from an email client. Implicit flow uses a hash fragment in the URL, which works cross-tab. We use `flowType: 'implicit'` in `supabaseClient.ts`.
 

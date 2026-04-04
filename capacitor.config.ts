@@ -1,7 +1,7 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.garneill.lazygaffer',
+  appId: 'com.garyjosephneill.lazygaffer',
   appName: 'Lazy Gaffer',
   webDir: 'dist',
   ios: {
