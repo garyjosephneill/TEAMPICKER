@@ -221,11 +221,12 @@ export default function PaywallScreen({ userId, onLicensed }: { userId: string; 
             <div style={{ borderBottom: `4px solid ${kit.c1}`, marginBottom: 16 }} />
 
             <div style={{
-              color: kit.c1, fontSize: 16, fontWeight: 700,
+              color: kit.c4, fontSize: 16, fontWeight: 700,
               letterSpacing: 2, textTransform: 'uppercase',
               textAlign: 'center', lineHeight: 1.3,
+              transition: 'color 1.5s ease',
             }}>
-              RATE YOUR SQUAD, THEN LET<br />THE GAFFER PICK TWO TEAMS
+              RATE YOUR SQUAD, THEN LET<br />THE GAFFER PICK TWO FAIR TEAMS
             </div>
           </div>
 
@@ -247,19 +248,8 @@ export default function PaywallScreen({ userId, onLicensed }: { userId: string; 
             <div style={{ position: 'absolute', inset: 0, background: kit.bg, opacity: 0.80, transition: 'background-color 1.5s ease', pointerEvents: 'none' }} />
           </div>
 
-          {/* Bottom: price + button + restore + legal */}
+          {/* Subscribe button — own flex item so space-between centres it between tap zone and footer */}
           <div style={{ width: '100%', maxWidth: 320 }}>
-
-            {/* Price — dominant element per Apple guideline 3.1.2(c) */}
-            <div style={{
-              color: kit.c4, fontSize: 32, fontWeight: 700,
-              letterSpacing: 1, textTransform: 'uppercase',
-              textAlign: 'center', lineHeight: 1, marginBottom: 16,
-              transition: 'color 1.5s ease',
-            }}>
-              {annualPrice} A YEAR
-            </div>
-
             <button
               onClick={() => handleStoreKitPurchase(ANNUAL_ID)}
               disabled={loading !== null}
@@ -269,28 +259,39 @@ export default function PaywallScreen({ userId, onLicensed }: { userId: string; 
                 border: `4px solid ${kit.c1}`, borderRadius: 0,
                 transition: 'border-color 1.5s ease, color 1.5s ease',
                 WebkitTapHighlightColor: kit.c4,
-                padding: '14px 0', fontSize: 24, fontWeight: 700,
-                fontFamily: '"Rajdhani", sans-serif', letterSpacing: 2,
-                textTransform: 'uppercase',
+                padding: '8px 0', fontFamily: '"Rajdhani", sans-serif',
+                textTransform: 'uppercase', letterSpacing: 2,
                 cursor: loading ? 'default' : 'pointer',
                 opacity: loading ? 0.7 : 1,
-                marginBottom: 20,
+                display: 'flex', flexDirection: 'column',
+                alignItems: 'center', gap: 0,
               }}
             >
-              {loading === ANNUAL_ID ? 'LOADING…' : 'FREE 14-DAY TRIAL'}
+              {loading === ANNUAL_ID ? (
+                <span style={{ fontSize: 24, fontWeight: 700 }}>LOADING…</span>
+              ) : (
+                <>
+                  <span style={{ fontSize: 14, fontWeight: 700, lineHeight: 1, color: kit.c4, transition: 'color 1.5s ease' }}>FREE 14-DAY TRIAL THEN</span>
+                  <span style={{ fontSize: 42, fontWeight: 700, color: kit.c1, transition: 'color 1.5s ease', lineHeight: 1 }}>
+                    {annualPrice} A YEAR
+                  </span>
+                </>
+              )}
             </button>
-
             {error && (
-              <div style={{ color: '#ff6b6b', fontSize: 14, marginBottom: 12, textAlign: 'center' }}>{error}</div>
+              <div style={{ color: '#ff6b6b', fontSize: 14, marginTop: 8, textAlign: 'center' }}>{error}</div>
             )}
+          </div>
 
+          {/* Footer: restore + legal */}
+          <div style={{ width: '100%', maxWidth: 320 }}>
             <button
               onClick={handleRestore}
               disabled={loading !== null}
               style={{
                 display: 'block', width: '100%', textAlign: 'center',
                 background: 'transparent', color: kit.c4,
-                border: 'none', fontSize: 13, fontWeight: 700,
+                border: 'none', fontSize: 14, fontWeight: 700,
                 transition: 'color 1.5s ease',
                 fontFamily: '"Rajdhani", sans-serif', letterSpacing: 2,
                 textTransform: 'uppercase',
@@ -303,7 +304,7 @@ export default function PaywallScreen({ userId, onLicensed }: { userId: string; 
 
             <div style={{
               display: 'flex', justifyContent: 'center', gap: 16,
-              fontSize: 11, fontWeight: 700, letterSpacing: 1,
+              fontSize: 12, fontWeight: 700, letterSpacing: 1,
               fontFamily: '"Rajdhani", sans-serif', textTransform: 'uppercase',
             }}>
               <a

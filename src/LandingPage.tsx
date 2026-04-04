@@ -58,7 +58,7 @@ export default function LandingPage() {
           {sent ? (
             <div style={{
               fontFamily: "'Rajdhani', sans-serif", fontWeight: 700,
-              fontSize: 20, letterSpacing: 2, color: kit.c1,
+              fontSize: 20, letterSpacing: 2, color: kit.c4,
               textTransform: 'uppercase', textAlign: 'center', marginBottom: 20,
             }}>
               CHECK YOUR EMAIL AND CLICK THE LINK TO LOG IN

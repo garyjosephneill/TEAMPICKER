@@ -247,7 +247,7 @@ export default function App({ userId, onSaveToCloud }: { userId: string | null, 
   const [newPlayerName, setNewPlayerName] = useState('');
   const [splashDone, setSplashDone] = useState(false);
   const [splashKit, setSplashKit] = useState(0);
-  const [splashKits] = useState(() => [...SPLASH_KITS_DATA].sort(() => Math.random() - 0.5));
+  const [splashKits] = useState(() => [...SPLASH_KITS_DATA].sort(() => Math.random() - 0.5).slice(0, 10));
   const [editingPlayerId, setEditingPlayerId] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
@@ -340,7 +340,7 @@ export default function App({ userId, onSaveToCloud }: { userId: string | null, 
         clearInterval(interval);
         setTimeout(applyAppKit, 200);
       }
-    }, 200);
+    }, 400);
     return () => clearInterval(interval);
   }, []);
 
