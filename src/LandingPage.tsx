@@ -8,20 +8,35 @@ export default function LandingPage() {
   const [emailFocused, setEmailFocused] = useState(false)
   const [loading, setLoading]       = useState(false)
   const [error, setError]           = useState('')
-  const [sent, setSent]             = useState(false)
+  const [stage, setStage]           = useState<'email' | 'code'>('email')
+  const [code, setCode]             = useState('')
 
-  const handleSendLink = async () => {
+  const handleSendCode = async () => {
     const trimmed = email.trim().toLowerCase()
     if (!trimmed) return
     setLoading(true)
     setError('')
     const { error } = await supabase.auth.signInWithOtp({
       email: trimmed,
-      options: { shouldCreateUser: true, emailRedirectTo: 'https://lazygaffer.com' }
+      options: { shouldCreateUser: true }
     })
     setLoading(false)
     if (error) setError(error.message)
-    else setSent(true)
+    else setStage('code')
+  }
+
+  const handleVerifyCode = async () => {
+    const trimmed = code.trim()
+    if (!trimmed) return
+    setLoading(true)
+    setError('')
+    const { error } = await supabase.auth.verifyOtp({
+      email: email.trim().toLowerCase(),
+      token: trimmed,
+      type: 'email'
+    })
+    setLoading(false)
+    if (error) setError('Invalid code. Please try again.')
   }
 
   return (
@@ -55,14 +70,68 @@ export default function LandingPage() {
             lineHeight: 1.3, marginBottom: 32,
           }}>RATE YOUR SQUAD, THEN LET THE GAFFER<br />PICK TWO PERFECTLY BALANCED TEAMS</div>
 
-          {sent ? (
-            <div style={{
-              fontFamily: "'Rajdhani', sans-serif", fontWeight: 700,
-              fontSize: 20, letterSpacing: 2, color: kit.c4,
-              textTransform: 'uppercase', textAlign: 'center', marginBottom: 20,
-            }}>
-              CHECK YOUR EMAIL AND CLICK THE LINK TO LOG IN
-            </div>
+          {stage === 'code' ? (
+            <>
+              <div style={{
+                fontFamily: "'Rajdhani', sans-serif", fontWeight: 700,
+                fontSize: 16, letterSpacing: 2, color: kit.c4,
+                textTransform: 'uppercase', textAlign: 'center', marginBottom: 8,
+              }}>
+                ENTER THE 8-DIGIT CODE SENT TO
+              </div>
+              <div style={{
+                fontFamily: "'Rajdhani', sans-serif", fontWeight: 700,
+                fontSize: 18, color: kit.c1, marginBottom: 20,
+              }}>
+                {email}
+              </div>
+              <div style={{ marginBottom: 20 }}>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  value={code}
+                  onChange={e => setCode(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && handleVerifyCode()}
+                  placeholder="00000000"
+                  autoCapitalize="off"
+                  autoCorrect="off"
+                  style={{
+                    width: '100%', boxSizing: 'border-box',
+                    border: `4px solid ${kit.c4}`,
+                    padding: '10px',
+                    fontFamily: "'Rajdhani', sans-serif",
+                    fontWeight: 700, fontSize: 32, letterSpacing: 8,
+                    textAlign: 'center', outline: 'none',
+                    background: 'transparent',
+                    color: kit.c4,
+                    opacity: loading ? 0.6 : 1,
+                  }}
+                />
+              </div>
+              {error && (
+                <div style={{ color: '#ff6b6b', fontFamily: "'Rajdhani', sans-serif", fontSize: 14, marginBottom: 12 }}>{error}</div>
+              )}
+              <button
+                onClick={handleVerifyCode}
+                disabled={loading}
+                style={{
+                  width: '100%', background: 'none',
+                  border: `4px solid ${kit.c2}`, color: kit.c2,
+                  fontFamily: "'Rajdhani', sans-serif", fontWeight: 700,
+                  fontSize: 24, letterSpacing: 3, padding: '10px 0',
+                  cursor: loading ? 'default' : 'pointer', opacity: loading ? 0.6 : 1,
+                  marginBottom: 12,
+                }}
+              >
+                {loading ? 'VERIFYING...' : 'SIGN IN'}
+              </button>
+              <button
+                onClick={() => { setStage('email'); setError(''); setCode('') }}
+                style={{ background: 'none', border: 'none', color: kit.c1, fontFamily: "'Rajdhani', sans-serif", fontSize: 13, cursor: 'pointer', opacity: 0.6, padding: 0, textDecoration: 'underline' }}
+              >
+                Wrong email? Go back
+              </button>
+            </>
           ) : (
             <>
               {/* Email input */}
@@ -71,7 +140,7 @@ export default function LandingPage() {
                   type="email"
                   value={email}
                   onChange={e => setEmail(e.target.value)}
-                  onKeyDown={e => e.key === 'Enter' && handleSendLink()}
+                  onKeyDown={e => e.key === 'Enter' && handleSendCode()}
                   onFocus={() => setEmailFocused(true)}
                   onBlur={() => setEmailFocused(false)}
                   placeholder=">> YOUR EMAIL ADDRESS <<"
