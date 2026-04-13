@@ -169,6 +169,40 @@ export default function LandingPage() {
             </>
           )}
 
+          {/* Footer */}
+          <div style={{ marginTop: 80, textAlign: 'center' }}>
+            <p style={{
+              fontFamily: "'Rajdhani', sans-serif",
+              fontWeight: 700, fontSize: 12, letterSpacing: 2,
+              color: kit.c1, opacity: 0.5, textTransform: 'uppercase',
+              margin: '0 0 6px',
+            }}>
+              Gary Neill Limited &nbsp;|&nbsp; Company No. 4741682
+            </p>
+            <p style={{ margin: 0 }}>
+              <a href="/privacy" style={{
+                fontFamily: "'Rajdhani', sans-serif",
+                fontWeight: 700, fontSize: 12, letterSpacing: 2,
+                color: kit.c1, opacity: 0.5, textTransform: 'uppercase',
+                textDecoration: 'underline',
+              }}>
+                Privacy Policy
+              </a>
+              <span style={{
+                fontFamily: "'Rajdhani', sans-serif",
+                fontSize: 12, color: kit.c1, opacity: 0.3, margin: '0 8px',
+              }}>|</span>
+              <a href="/privacy#terms" style={{
+                fontFamily: "'Rajdhani', sans-serif",
+                fontWeight: 700, fontSize: 12, letterSpacing: 2,
+                color: kit.c1, opacity: 0.5, textTransform: 'uppercase',
+                textDecoration: 'underline',
+              }}>
+                Terms &amp; Conditions
+              </a>
+            </p>
+          </div>
+
           {/* Scrolling ticker */}
           <div style={{ overflow: 'hidden', width: '100%' }}>
             <style>{`

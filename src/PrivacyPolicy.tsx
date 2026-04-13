@@ -163,7 +163,7 @@ export default function PrivacyPolicy() {
           </Section>
 
           {/* ── Divider ── */}
-          <div style={{ borderTop: '2px solid var(--color-t-c2)', margin: '28px 0' }} />
+          <div id="terms" style={{ borderTop: '2px solid var(--color-t-c2)', margin: '28px 0' }} />
 
           {/* ── Terms & Conditions ── */}
           <div style={{
