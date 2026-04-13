@@ -788,13 +788,14 @@ export default function App({ userId, onSaveToCloud }: { userId: string | null, 
                           {/* Name row */}
                           <div ref={el => { playerCardRefs.current[p.id] = el; }} className="flex gap-2 items-center min-w-0">
                             <input
-                              value={p.name}
+                              value={p.name === 'EDIT PLAYERS HERE' ? '' : p.name}
+                              placeholder={p.name === 'EDIT PLAYERS HERE' ? 'EDIT PLAYERS HERE' : ''}
                               inputMode="text"
                               onFocus={() => setEditingPlayerId(p.id)}
-                              onBlur={() => setEditingPlayerId(null)}
+                              onBlur={e => { setEditingPlayerId(null); if (!e.target.value.trim()) setPlayers(prev => prev.map(x => x.id === p.id ? { ...x, name: 'EDIT PLAYERS HERE' } : x)); }}
                               onKeyDown={e => e.key === 'Enter' && (e.target as HTMLInputElement).blur()}
                               onChange={e => setPlayers(prev => prev.map(x => x.id === p.id ? { ...x, name: e.target.value } : x))}
-                              className="border-2 flex-1 min-w-0 bg-t-bg text-t-c1 uppercase outline-none font-bold h-[36px] p-2 cursor-text"
+                              className="border-2 flex-1 min-w-0 bg-t-bg text-t-c1 uppercase outline-none font-bold h-[36px] p-2 cursor-text lazy-placeholder"
                               style={{ fontSize: 18, letterSpacing: 2, borderColor: editingPlayerId === p.id ? 'var(--color-t-c4)' : box2Color, WebkitUserSelect: 'text' }}
                             />
                             <button
