@@ -194,7 +194,7 @@ export default function LandingPage() {
           </div>
 
           {/* Footer */}
-          <div style={{ marginTop: 48, textAlign: 'center' }}>
+          <div style={{ marginTop: 96, textAlign: 'center' }}>
             <p style={{
               fontFamily: "'Rajdhani', sans-serif",
               fontWeight: 700, fontSize: 8, letterSpacing: 2,
