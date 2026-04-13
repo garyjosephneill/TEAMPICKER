@@ -131,6 +131,7 @@ export default function LoginScreen({ onCancel }: { onCancel?: () => void } = {}
             <input
               type="text"
               inputMode="numeric"
+              autoComplete="one-time-code"
               value={code}
               onChange={e => setCode(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleVerifyCode()}
