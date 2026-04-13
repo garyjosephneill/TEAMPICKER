@@ -194,10 +194,10 @@ export default function LandingPage() {
           </div>
 
           {/* Footer */}
-          <div style={{ marginTop: 24, textAlign: 'center' }}>
+          <div style={{ marginTop: 48, textAlign: 'center' }}>
             <p style={{
               fontFamily: "'Rajdhani', sans-serif",
-              fontWeight: 700, fontSize: 10, letterSpacing: 2,
+              fontWeight: 700, fontSize: 8, letterSpacing: 2,
               color: kit.c1, opacity: 0.5, textTransform: 'uppercase',
               margin: '0 0 4px',
             }}>
@@ -206,7 +206,7 @@ export default function LandingPage() {
             <p style={{ margin: 0 }}>
               <a href="/privacy" style={{
                 fontFamily: "'Rajdhani', sans-serif",
-                fontWeight: 700, fontSize: 10, letterSpacing: 2,
+                fontWeight: 700, fontSize: 8, letterSpacing: 2,
                 color: kit.c1, opacity: 0.5, textTransform: 'uppercase',
                 textDecoration: 'underline',
               }}>
@@ -214,11 +214,11 @@ export default function LandingPage() {
               </a>
               <span style={{
                 fontFamily: "'Rajdhani', sans-serif",
-                fontSize: 10, color: kit.c1, opacity: 0.3, margin: '0 8px',
+                fontSize: 8, color: kit.c1, opacity: 0.3, margin: '0 8px',
               }}>|</span>
               <a href="/privacy#terms" style={{
                 fontFamily: "'Rajdhani', sans-serif",
-                fontWeight: 700, fontSize: 10, letterSpacing: 2,
+                fontWeight: 700, fontSize: 8, letterSpacing: 2,
                 color: kit.c1, opacity: 0.5, textTransform: 'uppercase',
                 textDecoration: 'underline',
               }}>
