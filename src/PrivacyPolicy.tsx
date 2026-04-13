@@ -121,6 +121,10 @@ export default function PrivacyPolicy() {
             Your squad and player data is stored securely and associated with your account for the duration of your licence. It is not shared with or accessible by other users.
           </Section>
 
+          <Section title="Cookies">
+            Lazy Gaffer uses only essential cookies necessary to operate the service. These include session cookies set by Supabase to keep you signed in, and cookies set by Stripe to process payments securely. No advertising, analytics, or tracking cookies are used.
+          </Section>
+
           <Section title="Third Party Services">
             Lazy Gaffer does not integrate with any third party analytics, advertising, or tracking services.
           </Section>
