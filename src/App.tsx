@@ -276,6 +276,7 @@ export default function App({ userId, onSaveToCloud }: { userId: string | null, 
   const lastInsertRef = useRef<{ pointerX: number; pointerY: number; index: number } | null>(null);
   const playersRef = useRef(players);
   const [placeholderText, setPlaceholderText] = useState('');
+  const [editPlaceholderText, setEditPlaceholderText] = useState('');
 
   const headerRef = useRef<HTMLElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -301,6 +302,27 @@ export default function App({ userId, onSaveToCloud }: { userId: string | null, 
       }
     };
     timeout = setTimeout(typeNext, 2000 / PLACEHOLDER_FULL.length);
+    return () => clearTimeout(timeout);
+  }, []);
+
+  // ── Animated placeholder for player name inputs ──
+  const EDIT_PLACEHOLDER_FULL = 'EDIT PLAYER NAMES . . .';
+  useEffect(() => {
+    let charIndex = 0;
+    let timeout: ReturnType<typeof setTimeout>;
+    const typeNext = () => {
+      charIndex++;
+      setEditPlaceholderText(EDIT_PLACEHOLDER_FULL.slice(0, charIndex));
+      if (charIndex < EDIT_PLACEHOLDER_FULL.length) {
+        timeout = setTimeout(typeNext, 2000 / EDIT_PLACEHOLDER_FULL.length);
+      } else {
+        timeout = setTimeout(() => {
+          setEditPlaceholderText('');
+          timeout = setTimeout(() => { charIndex = 0; typeNext(); }, 1000);
+        }, 2000);
+      }
+    };
+    timeout = setTimeout(typeNext, 2000 / EDIT_PLACEHOLDER_FULL.length);
     return () => clearTimeout(timeout);
   }, []);
 
@@ -789,7 +811,7 @@ export default function App({ userId, onSaveToCloud }: { userId: string | null, 
                           <div ref={el => { playerCardRefs.current[p.id] = el; }} className="flex gap-2 items-center min-w-0">
                             <input
                               value={p.name === 'EDIT PLAYERS HERE' ? '' : p.name}
-                              placeholder={p.name === 'EDIT PLAYERS HERE' ? 'EDIT PLAYERS HERE' : ''}
+                              placeholder={p.name === 'EDIT PLAYERS HERE' ? editPlaceholderText : ''}
                               inputMode="text"
                               onFocus={() => setEditingPlayerId(p.id)}
                               onBlur={e => { setEditingPlayerId(null); if (!e.target.value.trim()) setPlayers(prev => prev.map(x => x.id === p.id ? { ...x, name: 'EDIT PLAYERS HERE' } : x)); }}
