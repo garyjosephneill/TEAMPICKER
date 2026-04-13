@@ -154,8 +154,8 @@ const INTL_KITS = [
 ];
 
 // Kits shown to new users on first load (curated for readability)
-const DEFAULT_KITS = [...KITS, ...INTL_KITS].filter(k =>
-  ['ASTON VILLA', 'BRIGHTON', 'FULHAM', 'WEST HAM', 'AUSTRALIA', 'NETHERLANDS', 'PORTUGAL', 'SPAIN'].includes(k.name)
+const DEFAULT_KITS = KITS.filter(k =>
+  ['ASTON VILLA', 'BRIGHTON', 'FULHAM', 'MAN CITY'].includes(k.name)
 )
 
 const MM2_STATS: { key: StatKey; label: string; textColor: string; fillColor: string }[] = [
