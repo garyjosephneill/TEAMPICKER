@@ -159,12 +159,12 @@ const DEFAULT_KITS = KITS.filter(k =>
 )
 
 const MM2_STATS: { key: StatKey; label: string; textColor: string; fillColor: string }[] = [
-  { key: Position.GKP,      label: 'GKP', textColor: 'text-t-c3', fillColor: 't-c3' },
-  { key: Position.DEFENCE,  label: 'DEF', textColor: 'text-t-c1', fillColor: 't-c1' },
-  { key: Position.MIDFIELD, label: 'MID', textColor: 'text-t-c3', fillColor: 't-c3' },
-  { key: Position.ATTACK,   label: 'ATT', textColor: 'text-t-c1', fillColor: 't-c1' },
-  { key: 'SPD',             label: 'SPD', textColor: 'text-t-c3', fillColor: 't-c3' },
-  { key: 'NRG',             label: 'NRG', textColor: 'text-t-c1', fillColor: 't-c1' },
+  { key: Position.GKP,      label: 'CHEMISTRY',  textColor: 'text-t-c3', fillColor: 't-c3' },
+  { key: Position.DEFENCE,  label: 'COMPOSURE',  textColor: 'text-t-c1', fillColor: 't-c1' },
+  { key: Position.MIDFIELD, label: 'TECHNIQUE',  textColor: 'text-t-c3', fillColor: 't-c3' },
+  { key: Position.ATTACK,   label: 'STAMINA',    textColor: 'text-t-c1', fillColor: 't-c1' },
+  { key: 'SPD',             label: 'TACTICS',    textColor: 'text-t-c3', fillColor: 't-c3' },
+  { key: 'NRG',             label: 'TEAMWORK',   textColor: 'text-t-c1', fillColor: 't-c1' },
 ];
 
 // ── TAPZONE ─────────────────────────────────────────────────────────────────
@@ -222,7 +222,7 @@ function TapZone({ value, onChange, color }: { value: number; onChange: (v: numb
         <div
           key={i}
           style={{
-            width: cellSize, height: cellSize,
+            width: Math.floor(cellSize * 0.5), height: cellSize,
             flexShrink: 0, flexGrow: 0,
             cursor: 'pointer',
             backgroundColor: i < value ? `var(--color-${color})` : 'rgba(255,255,255,0.15)',
@@ -915,8 +915,8 @@ export default function App({ userId, onSaveToCloud }: { userId: string | null, 
                             <div className="mt-3 space-y-[6px]">
                               {MM2_STATS.map(stat => (
                                 <div key={stat.key} className="flex items-center gap-1">
-                                  <span className={`stat-label shrink-0 font-bold ${stat.textColor}`} style={{ width: 36, paddingLeft: 5 }}>{stat.label}</span>
-                                  <div style={{ flex: 1, minWidth: 0, marginLeft: -5 }}>
+                                  <span className={`stat-label shrink-0 font-bold ${stat.textColor}`} style={{ width: 90, fontSize: 11, paddingLeft: 2, letterSpacing: 0.5 }}>{stat.label}</span>
+                                  <div style={{ flex: 1, minWidth: 0 }}>
                                     <TapZone
                                       value={p.ratings[stat.key]}
                                       onChange={v => updateStat(p.id, stat.key, v)}
