@@ -298,18 +298,11 @@ function SquadAccordionItem({ title, body }: { title: string; body: string }) {
 function SquadDataView({ onDone }: { onDone: () => void }) {
   return (
     <div className="py-8 px-2">
-      <div style={{
-        fontFamily: '"Barlow Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
-        fontWeight: 700,
-        fontSize: 36,
-        color: 'var(--color-t-c4)',
-        letterSpacing: 1,
-        textTransform: 'uppercase',
-        marginBottom: 16,
-      }}>SQUAD DATA</div>
-      {SQUAD_DATA_SECTIONS.map(s => (
-        <SquadAccordionItem key={s.title} title={s.title} body={s.body} />
-      ))}
+      <div className="grid grid-cols-1 md:grid-cols-3" style={{ gap: '0 2rem' }}>
+        {SQUAD_DATA_SECTIONS.map(s => (
+          <SquadAccordionItem key={s.title} title={s.title} body={s.body} />
+        ))}
+      </div>
       <button
         onClick={onDone}
         className="border-4 border-t-c4 py-2 text-xl font-bold mt-6"
