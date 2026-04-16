@@ -244,7 +244,7 @@ const SQUAD_DATA_SECTIONS = [
     body: 'Because you signed in with your email, your squad is securely backed up to the cloud. Clearing your browser cache will not affect your squad data.',
   },
   {
-    title: 'Can I use it on another device?',
+    title: 'Is the data portable?',
     body: 'Yes. Sign in with the same email address on any device and your squad will be there waiting for you.',
   },
 ];
@@ -305,7 +305,7 @@ function SquadDataView({ onDone }: { onDone: () => void }) {
       <button
         onClick={onDone}
         className="border-4 border-t-c4 py-2 text-xl font-bold mt-6"
-        style={{ width: 'calc(50% - 8px)', background: 'var(--color-t-bg)', color: 'var(--color-t-c4)', display: 'block', marginLeft: 'auto', marginRight: 'auto' }}
+        style={{ width: 'calc((100% - 4rem) / 3)', background: 'var(--color-t-bg)', color: 'var(--color-t-c4)', display: 'block', marginLeft: 'auto', marginRight: 'auto' }}
       >DONE</button>
     </div>
   );
