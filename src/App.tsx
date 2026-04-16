@@ -268,11 +268,11 @@ function SquadAccordionItem({ title, body }: { title: string; body: string }) {
         }}
       >
         <span style={{
-          fontFamily: '"Barlow Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
+          fontFamily: '"Rajdhani", "Helvetica Neue", Helvetica, Arial, sans-serif',
           fontWeight: 700,
           fontSize: 20,
           color: 'var(--color-t-c4)',
-          letterSpacing: 1,
+          letterSpacing: 2,
           textTransform: 'uppercase',
         }}>{title}</span>
         <span style={{ color: 'var(--color-t-c1)', opacity: 0.5, fontSize: 12, marginLeft: 12 }}>
