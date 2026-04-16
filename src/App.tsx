@@ -233,6 +233,92 @@ function TapZone({ value, onChange, color }: { value: number; onChange: (v: numb
   );
 }
 
+// ── SQUAD DATA VIEW ──────────────────────────────────────────────────────────
+const SQUAD_DATA_SECTIONS = [
+  {
+    title: 'Is my squad saved?',
+    body: 'Your squad is saved automatically as you add and edit players. You never need to save manually.',
+  },
+  {
+    title: 'Will I lose my squad?',
+    body: 'Because you signed in with your email, your squad is securely backed up to the cloud. Clearing your browser cache will not affect your squad data.',
+  },
+  {
+    title: 'Can I use it on another device?',
+    body: 'Yes. Sign in with the same email address on any device and your squad will be there waiting for you.',
+  },
+];
+
+function SquadAccordionItem({ title, body }: { title: string; body: string }) {
+  const [open, setOpen] = React.useState(false);
+  return (
+    <div style={{ marginBottom: 8 }}>
+      <button
+        onClick={() => setOpen(v => !v)}
+        style={{
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          background: 'none',
+          border: '2px solid var(--color-t-c2)',
+          padding: '10px 14px',
+          cursor: 'pointer',
+          textAlign: 'left',
+        }}
+      >
+        <span style={{
+          fontFamily: '"Barlow Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
+          fontWeight: 700,
+          fontSize: 20,
+          color: 'var(--color-t-c4)',
+          letterSpacing: 1,
+          textTransform: 'uppercase',
+        }}>{title}</span>
+        <span style={{ color: 'var(--color-t-c1)', opacity: 0.5, fontSize: 12, marginLeft: 12 }}>
+          {open ? '▲' : '▼'}
+        </span>
+      </button>
+      {open && (
+        <div style={{
+          border: '2px solid var(--color-t-c2)',
+          borderTop: 'none',
+          padding: '14px',
+          fontFamily: '"Rajdhani", "Helvetica Neue", Helvetica, Arial, sans-serif',
+          fontWeight: 500,
+          fontSize: 16,
+          lineHeight: 1.7,
+          color: 'var(--color-t-c1)',
+        }}>{body}</div>
+      )}
+    </div>
+  );
+}
+
+function SquadDataView({ onDone }: { onDone: () => void }) {
+  return (
+    <div className="py-8 px-2">
+      <div style={{
+        fontFamily: '"Barlow Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
+        fontWeight: 700,
+        fontSize: 36,
+        color: 'var(--color-t-c4)',
+        letterSpacing: 1,
+        textTransform: 'uppercase',
+        marginBottom: 16,
+      }}>SQUAD DATA</div>
+      {SQUAD_DATA_SECTIONS.map(s => (
+        <SquadAccordionItem key={s.title} title={s.title} body={s.body} />
+      ))}
+      <button
+        onClick={onDone}
+        className="border-4 border-t-c4 py-2 text-xl font-bold mt-6"
+        style={{ width: 'calc(50% - 8px)', background: 'var(--color-t-bg)', color: 'var(--color-t-c4)', display: 'block', marginLeft: 'auto', marginRight: 'auto' }}
+      >DONE</button>
+    </div>
+  );
+}
+
 // ── APP ──────────────────────────────────────────────────────────────────────
 export default function App({ userId, onSaveToCloud }: { userId: string | null, onSaveToCloud?: () => void }) {
   const [players, setPlayers] = useState<Player[]>(() => {
@@ -262,6 +348,7 @@ export default function App({ userId, onSaveToCloud }: { userId: string | null, 
     try { const s = localStorage.getItem('customTeamNames'); return s ? JSON.parse(s) : ['', '']; } catch { return ['', '']; }
   });
   const [teamNamesView, setTeamNamesView] = useState(false);
+  const [squadDataView, setSquadDataView] = useState(false);
   const [showShareOverlay, setShowShareOverlay] = useState(false);
   const [showPlayerDetails, setShowPlayerDetails] = useState(true);
   const [activeKit, setActiveKit] = useState<typeof KITS[0] | null>(null);
@@ -747,7 +834,7 @@ export default function App({ userId, onSaveToCloud }: { userId: string | null, 
               </div>
               <div style={{ position: 'absolute', right: 0, bottom: 4 }}>
                 <button
-                  onClick={() => { setView(v => v === 'settings' ? 'squad' : 'settings'); setKitsView(false); setTransfersView(false); setTransferCandidate(null); setReorderView(false); setTeamNamesView(false); }}
+                  onClick={() => { setView(v => v === 'settings' ? 'squad' : 'settings'); setKitsView(false); setTransfersView(false); setTransferCandidate(null); setReorderView(false); setTeamNamesView(false); setSquadDataView(false); }}
                   style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, display: 'block' }}
                 >
                   <svg width="24" height="24" viewBox="0 0 490 490" fill="var(--color-t-c4)" style={{ display: 'block' }}>
@@ -967,7 +1054,7 @@ export default function App({ userId, onSaveToCloud }: { userId: string | null, 
               )}
 
               {/* ── SETTINGS VIEW ── */}
-              {view === 'settings' && !kitsView && !transfersView && !reorderView && !teamNamesView && (
+              {view === 'settings' && !kitsView && !transfersView && !reorderView && !teamNamesView && !squadDataView && (
                 <div className="flex flex-col items-center gap-4 py-16">
                   <button onClick={() => setKitsView(true)} className="border-4 border-t-c1 py-2 text-xl font-bold" style={{ width: 'calc(50% - 8px)', background: 'var(--color-t-bg)', color: 'var(--color-t-c1)' }}>CLUB COLOURS</button>
                   <button onClick={() => setTransfersView(true)} className="border-4 border-t-c1 py-2 text-xl font-bold" style={{ width: 'calc(50% - 8px)', background: 'var(--color-t-bg)', color: 'var(--color-t-c1)' }}>TRIM SQUAD</button>
@@ -979,6 +1066,9 @@ export default function App({ userId, onSaveToCloud }: { userId: string | null, 
                     if (url) window.location.href = url
                     else alert(error || 'Could not open subscription portal')
                   }} className="border-4 border-t-c1 py-2 text-xl font-bold" style={{ width: 'calc(50% - 8px)', background: 'var(--color-t-bg)', color: 'var(--color-t-c1)' }}>MY SUBSCRIPTION</button>
+                  {!Capacitor.isNativePlatform() && (
+                    <button onClick={() => setSquadDataView(true)} className="border-4 border-t-c1 py-2 text-xl font-bold" style={{ width: 'calc(50% - 8px)', background: 'var(--color-t-bg)', color: 'var(--color-t-c1)' }}>SQUAD DATA</button>
+                  )}
                   <button onClick={() => window.location.href = '/privacy'} className="border-4 border-t-c1 py-2 text-xl font-bold" style={{ width: 'calc(50% - 8px)', background: 'var(--color-t-bg)', color: 'var(--color-t-c1)' }}>PRIVACY</button>
                 </div>
               )}
@@ -1155,6 +1245,11 @@ export default function App({ userId, onSaveToCloud }: { userId: string | null, 
                     style={{ width: 'calc(50% - 8px)', background: 'var(--color-t-bg)', color: 'var(--color-t-c4)' }}
                   >DONE</button>
                 </div>
+              )}
+
+              {/* ── SQUAD DATA VIEW ── */}
+              {view === 'settings' && squadDataView && (
+                <SquadDataView onDone={() => setSquadDataView(false)} />
               )}
 
             </div>
