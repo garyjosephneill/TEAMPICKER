@@ -1097,13 +1097,20 @@ export default function App({ userId, onSaveToCloud }: { userId: string | null, 
                             fontSize: 18,
                             background: transferCandidate === p.id ? 'var(--color-t-c4)' : 'var(--color-t-bg)',
                             color: transferCandidate === p.id ? 'var(--color-t-bg)' : 'var(--color-t-c1)',
-                            borderColor: transferCandidate === p.id ? 'var(--color-t-c4)' : 'rgba(255,255,255,0.4)',
+                            borderColor: transferCandidate === p.id ? 'var(--color-t-c4)' : box2Color,
                           }}
                         >{p.name}</button>
                       ))}
                     </div>
                     {transferCandidate && <div className="absolute inset-0 pointer-events-none" style={{ backgroundColor: 'var(--color-t-bg)', opacity: 0.8 }} />}
                   </div>
+                  {!transferCandidate && (
+                    <button
+                      onClick={() => setTransfersView(false)}
+                      className="border-4 border-t-c4 py-2 text-xl font-bold mt-4"
+                      style={{ width: 'calc(50% - 8px)', background: 'var(--color-t-bg)', color: 'var(--color-t-c4)', display: 'block', marginLeft: 'auto', marginRight: 'auto' }}
+                    >DONE</button>
+                  )}
                   {transferCandidate && (() => {
                     const p = players.find(x => x.id === transferCandidate);
                     return p ? (
@@ -1152,7 +1159,7 @@ export default function App({ userId, onSaveToCloud }: { userId: string | null, 
                               touchAction: 'none',
                               background: 'var(--color-t-bg)',
                               color: 'var(--color-t-c1)',
-                              borderColor: 'rgba(255,255,255,0.4)',
+                              borderColor: box2Color,
                               userSelect: 'none',
                               WebkitUserSelect: 'none',
                               WebkitTouchCallout: 'none',
@@ -1190,6 +1197,13 @@ export default function App({ userId, onSaveToCloud }: { userId: string | null, 
                         </div>
                       ) : null;
                     })()}
+                    {!activeDrag && (
+                      <button
+                        onClick={() => setReorderView(false)}
+                        className="border-4 border-t-c4 py-2 text-xl font-bold mt-4"
+                        style={{ width: 'calc(50% - 8px)', background: 'var(--color-t-bg)', color: 'var(--color-t-c4)', display: 'block', marginLeft: 'auto', marginRight: 'auto' }}
+                      >DONE</button>
+                    )}
                   </div>
                 );
               })()}
