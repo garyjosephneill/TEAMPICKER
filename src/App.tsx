@@ -241,7 +241,7 @@ const SQUAD_DATA_SECTIONS = [
   },
   {
     title: 'Will I lose my squad?',
-    body: 'Because you signed in with your email, your squad is securely backed up to the cloud. Clearing your browser cache will not affect your squad data.',
+    body: 'Signed in means backed up. Your squad is stored in the cloud — clearing your browser cache won\'t affect it.',
   },
   {
     title: 'Is the data portable?',
