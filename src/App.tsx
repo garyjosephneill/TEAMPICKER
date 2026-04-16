@@ -237,15 +237,15 @@ function TapZone({ value, onChange, color }: { value: number; onChange: (v: numb
 const SQUAD_DATA_SECTIONS = [
   {
     title: 'Is my squad saved?',
-    body: 'Your squad is saved automatically as you add and edit players. You never need to save manually.',
+    body: 'Your squad is saved automatically as you add and edit players. Every change is stored in real time — you never need to save or back up manually.',
   },
   {
     title: 'Will I lose my squad?',
-    body: 'Signed in means backed up. Your squad is stored in the cloud — clearing your browser cache won\'t affect it.',
+    body: 'Signed in means backed up. Your squad is stored securely in the cloud — clearing your browser cache or switching computers won\'t affect it.',
   },
   {
     title: 'Is the data portable?',
-    body: 'Yes. Sign in with the same email address on any device and your squad will be there waiting for you.',
+    body: 'Yes. Sign in with the same email address on any browser or device and your squad will be right there waiting for you. Your ratings travel with you.',
   },
 ];
 
