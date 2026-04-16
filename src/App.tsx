@@ -237,15 +237,15 @@ function TapZone({ value, onChange, color }: { value: number; onChange: (v: numb
 const SQUAD_DATA_SECTIONS = [
   {
     title: 'Is my squad saved?',
-    body: 'Your squad is saved automatically as you add and edit players. Every change is stored in real time — you never need to save or back up manually.',
+    body: 'Your squad is saved automatically as you add and edit players. Every change is stored in real time.\n\nYou never need to save or back up manually.',
   },
   {
     title: 'Will I lose my squad?',
-    body: 'Signed in means backed up. Your squad is stored securely in the cloud — clearing your browser cache or switching computers won\'t affect it.',
+    body: 'Signed in means backed up. Your squad is stored securely in the cloud.\n\nClearing your browser cache or switching computers won\'t affect it.',
   },
   {
     title: 'Is the data portable?',
-    body: 'Yes. Sign in with the same email address on any browser or device and your squad will be right there waiting for you. Your ratings travel with you.',
+    body: 'Yes. Sign in with the same email address on any browser or device and your squad will be right there waiting for you.\n\nYour ratings travel with you.',
   },
 ];
 
@@ -288,6 +288,7 @@ function SquadAccordionItem({ title, body }: { title: string; body: string }) {
           fontSize: 16,
           lineHeight: 1.7,
           color: 'var(--color-t-c1)',
+          whiteSpace: 'pre-line',
         }}>{body}</div>
       )}
     </div>
