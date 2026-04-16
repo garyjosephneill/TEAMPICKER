@@ -19,11 +19,10 @@ function Section({ title, children }: { title: string; children: React.ReactNode
         }}
       >
         <span style={{
-          fontFamily: '"Barlow Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
+          fontFamily: '"Rajdhani", "Helvetica Neue", Helvetica, Arial, sans-serif',
           fontWeight: 700,
           fontSize: 20,
           color: 'var(--color-t-c4)',
-          letterSpacing: 1,
           textTransform: 'uppercase',
         }}>
           {title}
