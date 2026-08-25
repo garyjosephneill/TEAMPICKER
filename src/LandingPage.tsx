@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState, useEffect, useLayoutEffect } from 'react'
 import { BgScene, useRandomVariant } from './BgScene'
 
 export default function LandingPage() {
@@ -9,7 +9,7 @@ export default function LandingPage() {
   const videoRefs = [useRef<HTMLVideoElement>(null), useRef<HTMLVideoElement>(null), useRef<HTMLVideoElement>(null)]
   const videoGroupRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const el = videoGroupRef.current
     if (!el) return
     const ro = new ResizeObserver(entries => {
