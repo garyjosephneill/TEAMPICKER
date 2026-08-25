@@ -137,7 +137,7 @@ export default function LandingPage() {
               100% { transform: translateX(-50%); }
             }
           `}</style>
-          <div style={{ display: 'inline-flex', animation: 'ticker 8s linear infinite', whiteSpace: 'nowrap' }}>
+          <div style={{ display: 'inline-flex', animation: 'ticker 11.4s linear infinite', whiteSpace: 'nowrap' }}>
             {Array.from({ length: 6 }).map((_, i) => (
               <span key={i} style={{
                 fontFamily: "'Rajdhani', sans-serif",
