@@ -143,7 +143,7 @@ export default function LandingPage() {
                 fontFamily: "'Rajdhani', sans-serif",
                 fontWeight: 700, fontSize: 12, letterSpacing: 2,
                 color: kit.c1, textTransform: 'uppercase', paddingRight: 48,
-              }}>14-DAY FREE TRIAL &nbsp;·&nbsp; £3.99 A YEAR &nbsp;·&nbsp; iOS APP</span>
+              }}>NEW SEASON OFFER &nbsp;·&nbsp; £1.99 A YEAR &nbsp;·&nbsp; FREE 14 DAY TRIAL &nbsp;·&nbsp; NO ADS &nbsp;·&nbsp; OFFER ENDS JAN 2027</span>
             ))}
           </div>
         </div>
