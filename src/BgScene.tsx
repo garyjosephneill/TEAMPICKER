@@ -2,9 +2,9 @@ import React, { useMemo } from 'react'
 
 // ── Kit definitions ──────────────────────────────────────────────────────────
 export const LANDING_KITS = [
-  { name: 'AUSTRALIA',   bg: '#00843D', c1: '#ffffff', c2: '#FFD700', c3: '#FFD700', c4: '#FFD700' },
-  { name: 'URUGUAY',     bg: '#5EB6E4', c1: '#ffffff', c2: '#000000', c3: '#FFC905', c4: '#000000' },
-  { name: 'NETHERLANDS', bg: '#FF4F00', c1: '#ffffff', c2: '#003DA5', c3: '#003DA5', c4: '#003DA5' },
+  { name: 'RED',         bg: '#CC0000', c1: '#ffffff', c2: '#FFD700', c3: '#FFD700', c4: '#FFD700' },
+  { name: 'PURPLE',      bg: '#5B21B6', c1: '#ffffff', c2: '#FFD700', c3: '#FFD700', c4: '#FFD700' },
+  { name: 'FOREST',      bg: '#166534', c1: '#ffffff', c2: '#FFD700', c3: '#FFD700', c4: '#FFD700' },
 ] as const
 
 export type Kit = typeof LANDING_KITS[number]
@@ -274,7 +274,7 @@ export function BgScene({ kit, kitIndex, isGaffer }: { kit: Kit; kitIndex: numbe
       </div>
 
       {/* Layer 2: colour wash */}
-      <div style={{ position: 'absolute', inset: 0, background: kit.bg, opacity: 0.95, pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', inset: 0, background: kit.bg, opacity: 1, pointerEvents: 'none' }} />
     </>
   )
 }

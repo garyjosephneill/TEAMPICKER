@@ -6,7 +6,7 @@ import LoginScreen from './LoginScreen'
 import PaywallScreen from './PaywallScreen'
 import LandingPage from './LandingPage'
 import { supabase, saveSessionCookies, getSessionCookies, clearSessionCookies } from './supabaseClient'
-import { isNativeIOS, checkStoreKitEntitlements } from './storekit'
+import { isNativeIOS, checkStoreKitEntitlements, maybeRequestReview } from './storekit'
 import './index.css'
 
 const isPrivacyPage = window.location.pathname === '/privacy'
@@ -26,6 +26,7 @@ function IOSGate() {
 
   useEffect(() => {
     checkStoreKitEntitlements().then(setIsLicensed)
+    maybeRequestReview()
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) setUserId(session.user.id)
     })
@@ -135,6 +136,6 @@ function AuthGate() {
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    {isPrivacyPage ? <PrivacyPolicy /> : isLandingPage ? <LandingPage /> : isNativeIOS ? <IOSGate /> : <AuthGate />}
+    {isPrivacyPage ? <PrivacyPolicy /> : isNativeIOS ? <IOSGate /> : <LandingPage />}
   </React.StrictMode>,
 )
