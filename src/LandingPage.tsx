@@ -5,6 +5,7 @@ export default function LandingPage() {
   const { kitIndex, isGaffer, kit } = useRandomVariant()
   const [activeVideo, setActiveVideo] = useState<number | null>(null)
   const [groupWidth, setGroupWidth] = useState<number>(600)
+  const [measured, setMeasured] = useState(false)
   const videoRefs = [useRef<HTMLVideoElement>(null), useRef<HTMLVideoElement>(null), useRef<HTMLVideoElement>(null)]
   const videoGroupRef = useRef<HTMLDivElement>(null)
 
@@ -12,7 +13,10 @@ export default function LandingPage() {
     const el = videoGroupRef.current
     if (!el) return
     const ro = new ResizeObserver(entries => {
-      for (const entry of entries) setGroupWidth(entry.contentRect.width)
+      for (const entry of entries) {
+        setGroupWidth(entry.contentRect.width)
+        setMeasured(true)
+      }
     })
     ro.observe(el)
     return () => ro.disconnect()
@@ -59,7 +63,7 @@ export default function LandingPage() {
             fontWeight: 700, fontSize: 'clamp(48px, 8vw, 96px)', lineHeight: 1,
             color: kit.c1, letterSpacing: '0.02em', marginBottom: 8,
           }}>LAZY GAFFER</div>
-          <div style={{ width: lineWidth, margin: '0 auto' }}>
+          <div style={{ width: lineWidth, margin: '0 auto', opacity: measured ? 1 : 0 }}>
             <div style={{ borderBottom: `4px solid ${kit.c1}`, marginBottom: 10 }} />
             <div style={{
               fontFamily: "'Rajdhani', sans-serif",
@@ -130,20 +134,20 @@ export default function LandingPage() {
         </div>
 
         {/* Ticker */}
-        <div style={{ width: lineWidth, margin: '0 auto', overflow: 'hidden', flexShrink: 0, padding: '8px 0' }}>
+        <div style={{ width: lineWidth, margin: '0 auto', overflow: 'hidden', flexShrink: 0, padding: '8px 0', opacity: measured ? 1 : 0 }}>
           <style>{`
             @keyframes ticker {
               0%   { transform: translateX(0); }
               100% { transform: translateX(-50%); }
             }
           `}</style>
-          <div style={{ display: 'inline-flex', animation: 'ticker 11.4s linear infinite', whiteSpace: 'nowrap' }}>
+          <div style={{ display: 'inline-flex', animation: 'ticker 17.1s linear infinite', whiteSpace: 'nowrap' }}>
             {Array.from({ length: 6 }).map((_, i) => (
               <span key={i} style={{
                 fontFamily: "'Rajdhani', sans-serif",
                 fontWeight: 700, fontSize: 12, letterSpacing: 2,
                 color: kit.c1, textTransform: 'uppercase', paddingRight: 48,
-              }}>NEW SEASON OFFER &nbsp;·&nbsp; £1.99 A YEAR &nbsp;·&nbsp; FREE 14 DAY TRIAL &nbsp;·&nbsp; NO ADS &nbsp;·&nbsp; OFFER ENDS JAN 2027</span>
+              }}>NEW SEASON OFFER &nbsp;/&nbsp; £1.99 A YEAR &nbsp;/&nbsp; FREE 14 DAY TRIAL &nbsp;/&nbsp; NO ADS &nbsp;/&nbsp; OFFER ENDS JAN 2027</span>
             ))}
           </div>
         </div>
