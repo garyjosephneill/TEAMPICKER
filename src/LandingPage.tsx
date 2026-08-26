@@ -28,9 +28,8 @@ function MobileLayout() {
   const [prevSlide, setPrevSlide] = useState<number | null>(null)
   const [slideDir, setSlideDir] = useState<'left' | 'right'>('left')
   const transitioning = useRef(false)
-
-  const touchStartX = useRef(0)
-  const touchStartY = useRef(0)
+  const slideRef = useRef(0)
+  const carouselRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const fadeOut = setTimeout(() => setTitleOpacity(0), 2500)
@@ -51,22 +50,43 @@ function MobileLayout() {
   const goTo = (next: number) => {
     if (next < 0 || next >= CAROUSEL_COUNT || transitioning.current) return
     transitioning.current = true
-    setSlideDir(next > slide ? 'left' : 'right')
-    setPrevSlide(slide)
+    setSlideDir(next > slideRef.current ? 'left' : 'right')
+    setPrevSlide(slideRef.current)
+    slideRef.current = next
     setSlide(next)
     setTimeout(() => { setPrevSlide(null); transitioning.current = false }, 350)
   }
 
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX
-    touchStartY.current = e.touches[0].clientY
-  }
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    const dx = touchStartX.current - e.changedTouches[0].clientX
-    const dy = Math.abs(touchStartY.current - e.changedTouches[0].clientY)
-    if (Math.abs(dx) > 40 && Math.abs(dx) > dy) goTo(dx > 0 ? slide + 1 : slide - 1)
-  }
+  // Native touch handlers with passive:false so we can preventDefault on horizontal swipes
+  useEffect(() => {
+    const el = carouselRef.current
+    if (!el) return
+    let startX = 0, startY = 0, isH: boolean | null = null
+    const onStart = (e: TouchEvent) => {
+      startX = e.touches[0].clientX; startY = e.touches[0].clientY; isH = null
+    }
+    const onMove = (e: TouchEvent) => {
+      if (isH === null) {
+        const dx = Math.abs(e.touches[0].clientX - startX)
+        const dy = Math.abs(e.touches[0].clientY - startY)
+        if (dx > 4 || dy > 4) isH = dx > dy
+      }
+      if (isH) e.preventDefault()
+    }
+    const onEnd = (e: TouchEvent) => {
+      if (!isH) return
+      const dx = startX - e.changedTouches[0].clientX
+      if (Math.abs(dx) > 40) goTo(dx > 0 ? slideRef.current + 1 : slideRef.current - 1)
+    }
+    el.addEventListener('touchstart', onStart, { passive: true })
+    el.addEventListener('touchmove', onMove, { passive: false })
+    el.addEventListener('touchend', onEnd, { passive: true })
+    return () => {
+      el.removeEventListener('touchstart', onStart)
+      el.removeEventListener('touchmove', onMove)
+      el.removeEventListener('touchend', onEnd)
+    }
+  }, []) // runs once; goTo/slideRef are stable refs
 
   const bg = showCarousel ? slideBg(slide) : TITLE_BG[titleKey]
 
@@ -92,9 +112,8 @@ function MobileLayout() {
       {/* Carousel */}
       {showCarousel && (
         <div
+          ref={carouselRef}
           style={{ position: 'absolute', inset: 0, overflow: 'hidden', animation: 'fadeIn 0.5s ease forwards' }}
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
         >
           {/* Outgoing slide */}
           {prevSlide !== null && (
