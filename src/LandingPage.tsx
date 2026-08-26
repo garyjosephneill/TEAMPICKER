@@ -155,29 +155,14 @@ function MobileLayout() {
             ))}
           </div>
 
-          {/* Download CTA on last slide */}
+          {/* Last slide — whole image is tappable */}
           {slide === CAROUSEL_COUNT - 1 && (
-            <div style={{
-              position: 'absolute',
-              bottom: 'max(80px, calc(env(safe-area-inset-bottom) + 56px))',
-              left: 24, right: 24, zIndex: 5,
-              animation: 'fadeIn 0.5s ease forwards',
-            }}>
-              <a
-                href="https://apps.apple.com/gb/app/lazy-gaffer/id6760719368"
-                target="_blank" rel="noopener noreferrer"
-                style={{
-                  display: 'block', textAlign: 'center',
-                  background: '#CC0000', color: 'white', padding: '16px 24px',
-                  fontFamily: "'Rajdhani', sans-serif", fontWeight: 700,
-                  fontSize: 20, letterSpacing: 3,
-                  textTransform: 'uppercase', textDecoration: 'none',
-                  boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
-                }}
-              >
-                DOWNLOAD ON APP STORE
-              </a>
-            </div>
+            <a
+              href="https://apps.apple.com/gb/app/lazy-gaffer/id6760719368"
+              target="_blank" rel="noopener noreferrer"
+              style={{ position: 'absolute', inset: 0, zIndex: 5 }}
+              aria-label="Download on App Store"
+            />
           )}
         </div>
       )}
