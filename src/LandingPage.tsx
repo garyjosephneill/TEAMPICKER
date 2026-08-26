@@ -36,8 +36,8 @@ function MobileLayout() {
   const isHoriz = useRef<boolean | null>(null)
 
   useEffect(() => {
-    const fadeOut = setTimeout(() => setTitleOpacity(0), 2500)
-    const show = setTimeout(() => setShowCarousel(true), 3300)
+    const fadeOut = setTimeout(() => setTitleOpacity(0), 1250)
+    const show = setTimeout(() => setShowCarousel(true), 1750)
     return () => { clearTimeout(fadeOut); clearTimeout(show) }
   }, [])
 
@@ -105,7 +105,7 @@ function MobileLayout() {
       {/* Title screen */}
       <div style={{
         position: 'absolute', inset: 0, zIndex: 10,
-        opacity: titleOpacity, transition: 'opacity 0.8s ease',
+        opacity: titleOpacity, transition: 'opacity 0.5s ease',
         pointerEvents: titleOpacity === 0 ? 'none' : 'auto',
       }}>
         <img src={`/mobile/title/${titleKey}.jpg`} style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
