@@ -5,8 +5,6 @@ const VIDEOS = ['vid-a.mov', 'vid-b.mov', 'vid-c.mov']
 const TITLE_KEYS = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
 const CAROUSEL_COUNT = 10
 
-const slideBg = (i: number) => i < 4 ? '#F5C200' : '#8A8A8A'
-
 // ── Mobile: carousel experience ───────────────────────────────────────────────
 function MobileLayout() {
   const [titleKey] = useState(() => TITLE_KEYS[Math.floor(Math.random() * TITLE_KEYS.length)])
@@ -46,21 +44,8 @@ function MobileLayout() {
     if (Math.abs(dx) > 40 && Math.abs(dx) > dy) goTo(dx > 0 ? slide + 1 : slide - 1)
   }
 
-  // Keep body/html background in sync with carousel slide colour so the
-  // strips above/below the browser content area match the image seamlessly
-  useEffect(() => {
-    if (!showCarousel) return
-    const bg = slideBg(slide)
-    document.body.style.setProperty('background', bg, 'important')
-    document.documentElement.style.setProperty('background', bg, 'important')
-    return () => {
-      document.body.style.removeProperty('background')
-      document.documentElement.style.removeProperty('background')
-    }
-  }, [showCarousel, slide])
-
   return (
-    <div style={{ position: 'fixed', inset: 0, background: showCarousel ? slideBg(slide) : '#000' }}>
+    <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100vh', overflow: 'hidden', background: '#000' }}>
       <style>{`
         @keyframes slideInFromRight { from { transform: translateX(100%) } to { transform: translateX(0) } }
         @keyframes slideInFromLeft  { from { transform: translateX(-100%) } to { transform: translateX(0) } }
