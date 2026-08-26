@@ -64,7 +64,7 @@ export default function LandingPage() {
   }
 
   const handleMobilePlay = () => {
-    mobileVideoRef.current?.play()
+    mobileVideoRef.current?.play().catch(() => {})
     setMobilePlaying(true)
   }
 
@@ -158,14 +158,14 @@ export default function LandingPage() {
 
           {isMobile ? (
             // Mobile: single video with slide transition
-            <div style={{ position: 'relative', width: '100%', height: '100%', maxHeight: '100%', overflow: 'hidden', borderRadius: 16 }}>
+            <div style={{ position: 'relative', width: '100%', alignSelf: 'stretch', overflow: 'hidden', borderRadius: 16 }}>
               <div
                 key={mobileIndex}
                 style={{
                   position: 'absolute', inset: 0,
                   animation: sliding ? 'slideOut 0.4s ease forwards' : hasTransitioned ? 'slideIn 0.4s ease forwards' : undefined,
                 }}
-                onClick={!mobilePlaying ? handleMobilePlay : undefined}
+                onClick={mobilePlaying ? () => { mobileVideoRef.current?.pause(); setMobilePlaying(false) } : handleMobilePlay}
               >
                 <video
                   ref={mobileVideoRef}
@@ -173,9 +173,16 @@ export default function LandingPage() {
                   playsInline
                   preload="metadata"
                   onEnded={handleMobileEnded}
-                  style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 16, display: 'block' }}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 16, display: 'block' }}
                 />
-                {!mobilePlaying && <PlayButton />}
+                {!mobilePlaying ? <PlayButton /> : (
+                  <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 16 }}>
+                    <div style={{ width: 80, height: 80, borderRadius: '50%', background: 'rgba(0,0,0,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+                      <div style={{ width: 8, height: 28, background: 'white', borderRadius: 2 }} />
+                      <div style={{ width: 8, height: 28, background: 'white', borderRadius: 2 }} />
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           ) : (
