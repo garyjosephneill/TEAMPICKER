@@ -93,9 +93,11 @@ export default function LandingPage() {
   const lineWidth = Math.min(groupWidth + 150, maxWidth)
 
   // ── Mobile: full-screen video layout ──────────────────────────────────────
+  const POSTERS = ['/poster-a.jpg', '/poster-b.jpg', '/poster-c.jpg']
+
   if (isMobile) {
     return (
-      <div style={{ position: 'fixed', inset: 0 }}>
+      <div style={{ position: 'fixed', inset: 0, display: 'flex', flexDirection: 'column' }}>
         <BgScene kit={kit} kitIndex={kitIndex} isGaffer={isGaffer} />
         <style>{`
           @keyframes slideOut {
@@ -108,8 +110,8 @@ export default function LandingPage() {
           }
         `}</style>
 
-        {/* Full-screen video */}
-        <div style={{ position: 'absolute', inset: 0, overflow: 'hidden' }}>
+        {/* Video area — flex:1 so it fills space above the button */}
+        <div style={{ position: 'relative', flex: 1, overflow: 'hidden' }}>
           <div
             key={mobileIndex}
             style={{
@@ -120,17 +122,15 @@ export default function LandingPage() {
             <video
               ref={mobileVideoRef}
               src={`/videos/${VIDEOS[mobileIndex]}`}
+              poster={POSTERS[mobileIndex]}
               playsInline
-              preload="metadata"
+              preload="none"
               onEnded={handleMobileEnded}
               style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
             />
           </div>
-        </div>
 
-        {/* Overlay: play/pause in centre, download button at bottom */}
-        <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: '0 24px 48px' }}>
-          {/* Play/pause centred */}
+          {/* Play/pause centred over video */}
           <div
             onClick={mobilePlaying ? handleMobilePause : handleMobilePlay}
             style={{
@@ -139,7 +139,7 @@ export default function LandingPage() {
               width: 80, height: 80, borderRadius: '50%',
               background: 'rgba(0,0,0,0.6)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              cursor: 'pointer',
+              cursor: 'pointer', zIndex: 2,
             }}
           >
             {mobilePlaying ? (
@@ -151,8 +151,10 @@ export default function LandingPage() {
               <div style={{ width: 0, height: 0, borderTop: '18px solid transparent', borderBottom: '18px solid transparent', borderLeft: '30px solid white', marginLeft: 6 }} />
             )}
           </div>
+        </div>
 
-          {/* Download button */}
+        {/* Download button — below video, never overlapped */}
+        <div style={{ flexShrink: 0, padding: '16px 24px 48px', position: 'relative', zIndex: 2 }}>
           <a
             href="https://apps.apple.com/gb/app/lazy-gaffer/id6760719368"
             target="_blank"
@@ -161,12 +163,12 @@ export default function LandingPage() {
               display: 'block', textAlign: 'center',
               border: `4px solid ${kit.c1}`, padding: '12px 32px',
               fontFamily: "'Rajdhani', sans-serif", fontWeight: 700,
-              fontSize: 'clamp(14px, 4vw, 20px)', letterSpacing: 3, color: kit.c1,
+              fontSize: 'clamp(16px, 5vw, 22px)', letterSpacing: 3, color: kit.c1,
               textTransform: 'uppercase', textDecoration: 'none',
-              background: 'rgba(0,0,0,0.4)',
+              background: 'rgba(0,0,0,0.4)', whiteSpace: 'nowrap',
             }}
           >
-            DOWNLOAD ON THE APP STORE
+            DOWNLOAD ON APP STORE
           </a>
         </div>
       </div>
@@ -245,7 +247,7 @@ export default function LandingPage() {
               textTransform: 'uppercase', textDecoration: 'none',
             }}
           >
-            DOWNLOAD ON THE APP STORE
+            DOWNLOAD ON APP STORE
           </a>
         </div>
 
