@@ -3,14 +3,14 @@ import { BgScene, useRandomVariant } from './BgScene'
 
 const VIDEOS = ['vid-a.mov', 'vid-b.mov', 'vid-c.mov']
 const TITLE_KEYS = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
-const CAROUSEL_COUNT = 20
+const CAROUSEL_COUNT = 21
 
 // Sampled directly from the edge pixels of each image
 const TITLE_BG: Record<string, string> = {
   A: '#346E9A', B: '#420712', C: '#860A0F',
   D: '#036E2E', E: '#C74A04', F: '#D9DFE1', G: '#9C5604',
 }
-const SLIDE_BG = ['#FED500','#FED500','#FED500','#FED500','#5E1737','#5E1737','#5E1737','#5E1737','#5E1737','#CCCCCC','#1F2C59','#1F2C59','#12356D','#B5B5B5','#000000','#BDBEC0','#1F2C58','#1F2C58','#7EA9DE','#8C0B10']
+const SLIDE_BG = ['#FED500','#FED500','#FED500','#FED500','#5E1737','#5E1737','#5E1737','#5E1737','#5E1737','#5E1737','#CCCCCC','#1F2C59','#1F2C59','#12356D','#B5B5B5','#000000','#BDBEC0','#1F2C58','#1F2C58','#7EA9DE','#8C0B10']
 const slideBg = (i: number) => SLIDE_BG[i] ?? '#111111'
 
 function setBg(color: string) {
