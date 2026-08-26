@@ -139,18 +139,20 @@ function MobileLayout() {
             <img src={`/mobile/carousel/${slide + 1}.jpg`} style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
           </div>
 
-          {/* Progress dots */}
+          {/* Side dots — left edge, vertical */}
           <div style={{
-            position: 'absolute', bottom: 'max(24px, env(safe-area-inset-bottom))',
-            left: 0, right: 0,
-            display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 6, zIndex: 5,
+            position: 'absolute', left: 8, top: '50%', transform: 'translateY(-50%)',
+            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5, zIndex: 5,
           }}>
             {Array.from({ length: CAROUSEL_COUNT }).map((_, i) => (
               <div key={i} onClick={() => goTo(i)} style={{
-                width: i === slide ? 24 : 8, height: 8, borderRadius: 4,
-                background: i === slide ? 'white' : 'rgba(255,255,255,0.5)',
-                transition: 'width 0.3s, background 0.3s',
-                cursor: 'pointer', boxShadow: '0 1px 3px rgba(0,0,0,0.4)',
+                width: 5,
+                height: i === slide ? 16 : 5,
+                borderRadius: 3,
+                background: i === slide ? 'white' : 'rgba(255,255,255,0.4)',
+                transition: 'height 0.3s, background 0.3s',
+                cursor: 'pointer',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.3)',
               }} />
             ))}
           </div>
