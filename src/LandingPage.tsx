@@ -3,6 +3,117 @@ import { BgScene, useRandomVariant } from './BgScene'
 
 const VIDEOS = ['vid-a.mov', 'vid-b.mov', 'vid-c.mov']
 
+function MobileLayout({ kit, kitIndex, isGaffer, mobileIndex, mobilePlaying, sliding, hasTransitioned, mobileVideoRef, VIDEOS, POSTERS, handleMobilePlay, handleMobilePause, handleMobileEnded }: any) {
+  const [showControls, setShowControls] = useState(true)
+  const hideTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
+
+  const scheduleHide = () => {
+    clearTimeout(hideTimer.current)
+    hideTimer.current = setTimeout(() => setShowControls(false), 1000)
+  }
+
+  const handleVideoAreaTap = () => {
+    if (!mobilePlaying) return
+    if (!showControls) {
+      setShowControls(true)
+    } else {
+      handleMobilePause()
+      scheduleHide()
+    }
+  }
+
+  const handlePlayTap = () => {
+    handleMobilePlay()
+    scheduleHide()
+  }
+
+  return (
+    <div style={{ position: 'fixed', inset: 0, display: 'flex', flexDirection: 'column' }}>
+      <BgScene kit={kit} kitIndex={kitIndex} isGaffer={isGaffer} />
+      <style>{`
+        @keyframes slideOut {
+          from { transform: translateY(0); opacity: 1; }
+          to   { transform: translateY(-100%); opacity: 0; }
+        }
+        @keyframes slideIn {
+          from { transform: translateY(100%); opacity: 0; }
+          to   { transform: translateY(0); opacity: 1; }
+        }
+      `}</style>
+
+      {/* Spacer to push video down */}
+      <div style={{ height: '8%', flexShrink: 0 }} />
+
+      {/* Video area */}
+      <div
+        style={{ position: 'relative', flex: 1, overflow: 'hidden', margin: '0 5%' }}
+        onClick={handleVideoAreaTap}
+      >
+        <div
+          key={mobileIndex}
+          style={{
+            position: 'absolute', inset: 0,
+            animation: sliding ? 'slideOut 0.4s ease forwards' : hasTransitioned ? 'slideIn 0.4s ease forwards' : undefined,
+          }}
+        >
+          <video
+            ref={mobileVideoRef}
+            src={`/videos/${VIDEOS[mobileIndex]}`}
+            poster={POSTERS[mobileIndex]}
+            playsInline
+            preload="none"
+            onEnded={handleMobileEnded}
+            style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
+          />
+        </div>
+
+        {/* Controls overlay */}
+        {showControls && (
+          <div
+            style={{
+              position: 'absolute', top: '50%', left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: 80, height: 80, borderRadius: '50%',
+              background: 'rgba(0,0,0,0.6)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              cursor: 'pointer', zIndex: 2,
+            }}
+            onClick={e => { e.stopPropagation(); mobilePlaying ? (() => { handleMobilePause(); scheduleHide() })() : handlePlayTap() }}
+          >
+            {mobilePlaying ? (
+              <>
+                <div style={{ width: 8, height: 28, background: 'white', borderRadius: 2, marginRight: 6 }} />
+                <div style={{ width: 8, height: 28, background: 'white', borderRadius: 2 }} />
+              </>
+            ) : (
+              <div style={{ width: 0, height: 0, borderTop: '18px solid transparent', borderBottom: '18px solid transparent', borderLeft: '30px solid white', marginLeft: 6 }} />
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Download button */}
+      <div style={{ flexShrink: 0, padding: '16px 24px 48px', position: 'relative', zIndex: 2 }}>
+        <a
+          href="https://apps.apple.com/gb/app/lazy-gaffer/id6760719368"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: 'block', textAlign: 'center',
+            border: `4px solid ${kit.c1}`, padding: '12px 32px',
+            fontFamily: "'Rajdhani', sans-serif", fontWeight: 700,
+            fontSize: 'clamp(16px, 5vw, 22px)', letterSpacing: 3, color: kit.c1,
+            textTransform: 'uppercase', textDecoration: 'none',
+            background: 'rgba(0,0,0,0.4)', whiteSpace: 'nowrap',
+          }}
+        >
+          DOWNLOAD ON APP STORE
+        </a>
+      </div>
+    </div>
+  )
+}
+
 export default function LandingPage() {
   const { kitIndex, isGaffer, kit } = useRandomVariant()
 
@@ -97,81 +208,14 @@ export default function LandingPage() {
 
   if (isMobile) {
     return (
-      <div style={{ position: 'fixed', inset: 0, display: 'flex', flexDirection: 'column' }}>
-        <BgScene kit={kit} kitIndex={kitIndex} isGaffer={isGaffer} />
-        <style>{`
-          @keyframes slideOut {
-            from { transform: translateY(0); opacity: 1; }
-            to   { transform: translateY(-100%); opacity: 0; }
-          }
-          @keyframes slideIn {
-            from { transform: translateY(100%); opacity: 0; }
-            to   { transform: translateY(0); opacity: 1; }
-          }
-        `}</style>
-
-        {/* Video area — flex:1 so it fills space above the button */}
-        <div style={{ position: 'relative', flex: 1, overflow: 'hidden' }}>
-          <div
-            key={mobileIndex}
-            style={{
-              position: 'absolute', inset: 0,
-              animation: sliding ? 'slideOut 0.4s ease forwards' : hasTransitioned ? 'slideIn 0.4s ease forwards' : undefined,
-            }}
-          >
-            <video
-              ref={mobileVideoRef}
-              src={`/videos/${VIDEOS[mobileIndex]}`}
-              poster={POSTERS[mobileIndex]}
-              playsInline
-              preload="none"
-              onEnded={handleMobileEnded}
-              style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
-            />
-          </div>
-
-          {/* Play/pause centred over video */}
-          <div
-            onClick={mobilePlaying ? handleMobilePause : handleMobilePlay}
-            style={{
-              position: 'absolute', top: '50%', left: '50%',
-              transform: 'translate(-50%, -50%)',
-              width: 80, height: 80, borderRadius: '50%',
-              background: 'rgba(0,0,0,0.6)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              cursor: 'pointer', zIndex: 2,
-            }}
-          >
-            {mobilePlaying ? (
-              <>
-                <div style={{ width: 8, height: 28, background: 'white', borderRadius: 2, marginRight: 6 }} />
-                <div style={{ width: 8, height: 28, background: 'white', borderRadius: 2 }} />
-              </>
-            ) : (
-              <div style={{ width: 0, height: 0, borderTop: '18px solid transparent', borderBottom: '18px solid transparent', borderLeft: '30px solid white', marginLeft: 6 }} />
-            )}
-          </div>
-        </div>
-
-        {/* Download button — below video, never overlapped */}
-        <div style={{ flexShrink: 0, padding: '16px 24px 48px', position: 'relative', zIndex: 2 }}>
-          <a
-            href="https://apps.apple.com/gb/app/lazy-gaffer/id6760719368"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display: 'block', textAlign: 'center',
-              border: `4px solid ${kit.c1}`, padding: '12px 32px',
-              fontFamily: "'Rajdhani', sans-serif", fontWeight: 700,
-              fontSize: 'clamp(16px, 5vw, 22px)', letterSpacing: 3, color: kit.c1,
-              textTransform: 'uppercase', textDecoration: 'none',
-              background: 'rgba(0,0,0,0.4)', whiteSpace: 'nowrap',
-            }}
-          >
-            DOWNLOAD ON APP STORE
-          </a>
-        </div>
-      </div>
+      <MobileLayout
+        kit={kit} kitIndex={kitIndex} isGaffer={isGaffer}
+        mobileIndex={mobileIndex} mobilePlaying={mobilePlaying}
+        sliding={sliding} hasTransitioned={hasTransitioned}
+        mobileVideoRef={mobileVideoRef} VIDEOS={VIDEOS} POSTERS={POSTERS}
+        handleMobilePlay={handleMobilePlay} handleMobilePause={handleMobilePause}
+        handleMobileEnded={handleMobileEnded}
+      />
     )
   }
 
