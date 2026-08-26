@@ -5,28 +5,39 @@ const VIDEOS = ['vid-a.mov', 'vid-b.mov', 'vid-c.mov']
 const TITLE_KEYS = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
 const CAROUSEL_COUNT = 10
 
+// Background colours sampled from each image
+const TITLE_BG: Record<string, string> = {
+  A: '#5B9EC9', B: '#7B1A2E', C: '#C01800',
+  D: '#1E7427', E: '#D45800', F: '#E8E8E8', G: '#C47B00',
+}
+const slideBg = (i: number) => i < 4 ? '#F5C400' : '#8C8C8C'
+
 // ── Mobile: carousel experience ───────────────────────────────────────────────
 function MobileLayout() {
   const [titleKey] = useState(() => TITLE_KEYS[Math.floor(Math.random() * TITLE_KEYS.length)])
   const [titleOpacity, setTitleOpacity] = useState(1)
   const [showCarousel, setShowCarousel] = useState(false)
   const [slide, setSlide] = useState(0)
-  const [slideKey, setSlideKey] = useState(0)
+  const [prevSlide, setPrevSlide] = useState<number | null>(null)
+  const [slideDir, setSlideDir] = useState<'left' | 'right'>('left')
+  const transitioning = useRef(false)
 
   const touchStartX = useRef(0)
   const touchStartY = useRef(0)
 
   useEffect(() => {
-    // Hold title for 2.5s, fade over 0.8s, then show carousel
     const fadeOut = setTimeout(() => setTitleOpacity(0), 2500)
     const show = setTimeout(() => setShowCarousel(true), 3300)
     return () => { clearTimeout(fadeOut); clearTimeout(show) }
   }, [])
 
   const goTo = (next: number) => {
-    if (next < 0 || next >= CAROUSEL_COUNT) return
+    if (next < 0 || next >= CAROUSEL_COUNT || transitioning.current) return
+    transitioning.current = true
+    setSlideDir(next > slide ? 'left' : 'right')
+    setPrevSlide(slide)
     setSlide(next)
-    setSlideKey(k => k + 1)
+    setTimeout(() => { setPrevSlide(null); transitioning.current = false }, 350)
   }
 
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -37,15 +48,19 @@ function MobileLayout() {
   const handleTouchEnd = (e: React.TouchEvent) => {
     const dx = touchStartX.current - e.changedTouches[0].clientX
     const dy = Math.abs(touchStartY.current - e.changedTouches[0].clientY)
-    if (Math.abs(dx) > 40 && Math.abs(dx) > dy) {
-      goTo(dx > 0 ? slide + 1 : slide - 1)
-    }
+    if (Math.abs(dx) > 40 && Math.abs(dx) > dy) goTo(dx > 0 ? slide + 1 : slide - 1)
   }
 
+  const bg = showCarousel ? slideBg(slide) : TITLE_BG[titleKey]
+
   return (
-    <div style={{ position: 'fixed', inset: 0, background: '#000' }}>
+    <div style={{ position: 'fixed', inset: 0, background: bg, transition: 'background 0.35s ease' }}>
       <style>{`
-        @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+        @keyframes slideInFromRight { from { transform: translateX(100%) } to { transform: translateX(0) } }
+        @keyframes slideInFromLeft  { from { transform: translateX(-100%) } to { transform: translateX(0) } }
+        @keyframes slideOutToLeft   { from { transform: translateX(0) } to { transform: translateX(-100%) } }
+        @keyframes slideOutToRight  { from { transform: translateX(0) } to { transform: translateX(100%) } }
+        @keyframes fadeIn           { from { opacity: 0 } to { opacity: 1 } }
       `}</style>
 
       {/* Title screen */}
@@ -54,46 +69,49 @@ function MobileLayout() {
         opacity: titleOpacity, transition: 'opacity 0.8s ease',
         pointerEvents: titleOpacity === 0 ? 'none' : 'auto',
       }}>
-        <img
-          src={`/mobile/title/${titleKey}.jpg`}
-          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-        />
+        <img src={`/mobile/title/${titleKey}.jpg`} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
       </div>
 
       {/* Carousel */}
       {showCarousel && (
         <div
-          style={{ position: 'absolute', inset: 0, animation: 'fadeIn 0.6s ease forwards' }}
+          style={{ position: 'absolute', inset: 0, overflow: 'hidden', animation: 'fadeIn 0.5s ease forwards' }}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
-          <img
-            key={slideKey}
-            src={`/mobile/carousel/${slide + 1}.jpg`}
-            style={{
-              width: '100%', height: '100%', objectFit: 'cover', display: 'block',
-              animation: 'fadeIn 0.3s ease forwards',
-            }}
-          />
+          {/* Outgoing slide */}
+          {prevSlide !== null && (
+            <div style={{
+              position: 'absolute', inset: 0,
+              animation: `${slideDir === 'left' ? 'slideOutToLeft' : 'slideOutToRight'} 0.35s ease forwards`,
+            }}>
+              <img src={`/mobile/carousel/${prevSlide + 1}.jpg`} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+            </div>
+          )}
+
+          {/* Current slide */}
+          <div style={{
+            position: 'absolute', inset: 0,
+            animation: prevSlide !== null
+              ? `${slideDir === 'left' ? 'slideInFromRight' : 'slideInFromLeft'} 0.35s ease forwards`
+              : undefined,
+          }}>
+            <img src={`/mobile/carousel/${slide + 1}.jpg`} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+          </div>
 
           {/* Progress dots */}
           <div style={{
             position: 'absolute', bottom: 'max(24px, env(safe-area-inset-bottom))',
             left: 0, right: 0,
-            display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 6,
+            display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 6, zIndex: 5,
           }}>
             {Array.from({ length: CAROUSEL_COUNT }).map((_, i) => (
-              <div
-                key={i}
-                onClick={() => goTo(i)}
-                style={{
-                  width: i === slide ? 24 : 8, height: 8, borderRadius: 4,
-                  background: i === slide ? 'white' : 'rgba(255,255,255,0.45)',
-                  transition: 'width 0.3s, background 0.3s',
-                  cursor: 'pointer',
-                  boxShadow: '0 1px 3px rgba(0,0,0,0.4)',
-                }}
-              />
+              <div key={i} onClick={() => goTo(i)} style={{
+                width: i === slide ? 24 : 8, height: 8, borderRadius: 4,
+                background: i === slide ? 'white' : 'rgba(255,255,255,0.5)',
+                transition: 'width 0.3s, background 0.3s',
+                cursor: 'pointer', boxShadow: '0 1px 3px rgba(0,0,0,0.4)',
+              }} />
             ))}
           </div>
 
@@ -102,17 +120,15 @@ function MobileLayout() {
             <div style={{
               position: 'absolute',
               bottom: 'max(80px, calc(env(safe-area-inset-bottom) + 56px))',
-              left: 24, right: 24,
+              left: 24, right: 24, zIndex: 5,
               animation: 'fadeIn 0.5s ease forwards',
             }}>
               <a
                 href="https://apps.apple.com/gb/app/lazy-gaffer/id6760719368"
-                target="_blank"
-                rel="noopener noreferrer"
+                target="_blank" rel="noopener noreferrer"
                 style={{
                   display: 'block', textAlign: 'center',
-                  background: '#CC0000', color: 'white',
-                  padding: '16px 24px',
+                  background: '#CC0000', color: 'white', padding: '16px 24px',
                   fontFamily: "'Rajdhani', sans-serif", fontWeight: 700,
                   fontSize: 20, letterSpacing: 3,
                   textTransform: 'uppercase', textDecoration: 'none',
