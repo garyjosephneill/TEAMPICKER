@@ -53,6 +53,17 @@ function MobileLayout() {
 
   const bg = showCarousel ? slideBg(slide) : TITLE_BG[titleKey]
 
+  useEffect(() => {
+    document.body.style.background = bg
+    document.documentElement.style.background = bg
+    const meta = document.querySelector('meta[name="theme-color"]')
+    if (meta) meta.setAttribute('content', bg)
+    return () => {
+      document.body.style.background = ''
+      document.documentElement.style.background = ''
+    }
+  }, [bg])
+
   return (
     <div style={{ position: 'fixed', inset: 0, background: bg, transition: 'background 0.35s ease' }}>
       <style>{`
