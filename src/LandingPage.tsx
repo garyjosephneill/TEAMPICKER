@@ -7,10 +7,10 @@ const CAROUSEL_COUNT = 10
 
 // Background colours sampled from each image
 const TITLE_BG: Record<string, string> = {
-  A: '#5B9EC9', B: '#7B1A2E', C: '#C01800',
-  D: '#1E7427', E: '#D45800', F: '#E8E8E8', G: '#C47B00',
+  A: '#4A8FB5', B: '#7A1829', C: '#C01000',
+  D: '#1A7830', E: '#CC5200', F: '#DCDCDC', G: '#B87200',
 }
-const slideBg = (i: number) => i < 4 ? '#F5C400' : '#8C8C8C'
+const slideBg = (i: number) => i < 4 ? '#F5C200' : '#8A8A8A'
 
 // ── Mobile: carousel experience ───────────────────────────────────────────────
 function MobileLayout() {
@@ -54,18 +54,18 @@ function MobileLayout() {
   const bg = showCarousel ? slideBg(slide) : TITLE_BG[titleKey]
 
   useEffect(() => {
-    document.body.style.background = bg
-    document.documentElement.style.background = bg
+    document.body.style.setProperty('background', bg, 'important')
+    document.documentElement.style.setProperty('background', bg, 'important')
     const meta = document.querySelector('meta[name="theme-color"]')
     if (meta) meta.setAttribute('content', bg)
     return () => {
-      document.body.style.background = ''
-      document.documentElement.style.background = ''
+      document.body.style.removeProperty('background')
+      document.documentElement.style.removeProperty('background')
     }
   }, [bg])
 
   return (
-    <div style={{ position: 'fixed', inset: 0, background: bg, transition: 'background 0.35s ease' }}>
+    <div style={{ position: 'fixed', inset: 0, background: bg }}>
       <style>{`
         @keyframes slideInFromRight { from { transform: translateX(100%) } to { transform: translateX(0) } }
         @keyframes slideInFromLeft  { from { transform: translateX(-100%) } to { transform: translateX(0) } }
