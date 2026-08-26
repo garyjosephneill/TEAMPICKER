@@ -57,8 +57,9 @@ function MobileLayout() {
     setTimeout(() => { setPrevSlide(null); transitioning.current = false }, 350)
   }
 
-  // Native touch handlers with passive:false so we can preventDefault on horizontal swipes
+  // Native touch handlers — must run after carousel mounts (showCarousel:true)
   useEffect(() => {
+    if (!showCarousel) return
     const el = carouselRef.current
     if (!el) return
     let startX = 0, startY = 0, isH: boolean | null = null
@@ -86,7 +87,7 @@ function MobileLayout() {
       el.removeEventListener('touchmove', onMove)
       el.removeEventListener('touchend', onEnd)
     }
-  }, []) // runs once; goTo/slideRef are stable refs
+  }, [showCarousel])
 
   const bg = showCarousel ? slideBg(slide) : TITLE_BG[titleKey]
 
