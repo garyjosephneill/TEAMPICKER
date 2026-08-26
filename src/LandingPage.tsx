@@ -108,7 +108,7 @@ function MobileLayout() {
         opacity: titleOpacity, transition: 'opacity 0.8s ease',
         pointerEvents: titleOpacity === 0 ? 'none' : 'auto',
       }}>
-        <img src={`/mobile/title/${titleKey}.jpg`} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+        <img src={`/mobile/title/${titleKey}.jpg`} style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
       </div>
 
       {/* Carousel */}
@@ -125,7 +125,7 @@ function MobileLayout() {
               position: 'absolute', inset: 0,
               animation: `${slideDir === 'left' ? 'slideOutToLeft' : 'slideOutToRight'} 0.35s ease forwards`,
             }}>
-              <img src={`/mobile/carousel/${prevSlide + 1}.jpg`} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+              <img src={`/mobile/carousel/${prevSlide + 1}.jpg`} style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
             </div>
           )}
 
@@ -136,7 +136,7 @@ function MobileLayout() {
               ? `${slideDir === 'left' ? 'slideInFromRight' : 'slideInFromLeft'} 0.35s ease forwards`
               : undefined,
           }}>
-            <img src={`/mobile/carousel/${slide + 1}.jpg`} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+            <img src={`/mobile/carousel/${slide + 1}.jpg`} style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
           </div>
 
           {/* Progress dots */}
