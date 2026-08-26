@@ -46,51 +46,55 @@ function MobileLayout({ kit, kitIndex, isGaffer, mobileIndex, mobilePlaying, sli
       <div style={{ height: '8%', flexShrink: 0 }} />
 
       {/* Video area */}
-      <div
-        style={{ position: 'relative', flex: 1, overflow: 'hidden', margin: '0 5%' }}
-        onClick={handleVideoAreaTap}
-      >
+      {/* Outer wrapper fills remaining space and centres the video box */}
+      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', padding: '0 5%' }}>
+        {/* Inner box: exact video aspect ratio, no dead space */}
         <div
-          key={mobileIndex}
-          style={{
-            position: 'absolute', inset: 0,
-            animation: sliding ? 'slideOut 0.4s ease forwards' : hasTransitioned ? 'slideIn 0.4s ease forwards' : undefined,
-          }}
+          style={{ position: 'relative', width: '100%', aspectRatio: '886 / 1920', maxHeight: '100%' }}
+          onClick={handleVideoAreaTap}
         >
-          <video
-            ref={mobileVideoRef}
-            src={`/videos/${VIDEOS[mobileIndex]}`}
-            poster={POSTERS[mobileIndex]}
-            playsInline
-            preload="none"
-            onEnded={handleMobileEnded}
-            style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
-          />
-        </div>
-
-        {/* Controls overlay */}
-        {showControls && (
           <div
+            key={mobileIndex}
             style={{
-              position: 'absolute', top: '50%', left: '50%',
-              transform: 'translate(-50%, -50%)',
-              width: 80, height: 80, borderRadius: '50%',
-              background: 'rgba(0,0,0,0.6)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              cursor: 'pointer', zIndex: 2,
+              position: 'absolute', inset: 0,
+              animation: sliding ? 'slideOut 0.4s ease forwards' : hasTransitioned ? 'slideIn 0.4s ease forwards' : undefined,
             }}
-            onClick={e => { e.stopPropagation(); mobilePlaying ? (() => { handleMobilePause(); scheduleHide() })() : handlePlayTap() }}
           >
-            {mobilePlaying ? (
-              <>
-                <div style={{ width: 8, height: 28, background: 'white', borderRadius: 2, marginRight: 6 }} />
-                <div style={{ width: 8, height: 28, background: 'white', borderRadius: 2 }} />
-              </>
-            ) : (
-              <div style={{ width: 0, height: 0, borderTop: '18px solid transparent', borderBottom: '18px solid transparent', borderLeft: '30px solid white', marginLeft: 6 }} />
-            )}
+            <video
+              ref={mobileVideoRef}
+              src={`/videos/${VIDEOS[mobileIndex]}`}
+              poster={POSTERS[mobileIndex]}
+              playsInline
+              preload="none"
+              onEnded={handleMobileEnded}
+              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+            />
           </div>
-        )}
+
+          {/* Controls overlay */}
+          {showControls && (
+            <div
+              style={{
+                position: 'absolute', top: '50%', left: '50%',
+                transform: 'translate(-50%, -50%)',
+                width: 80, height: 80, borderRadius: '50%',
+                background: 'rgba(0,0,0,0.6)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                cursor: 'pointer', zIndex: 2,
+              }}
+              onClick={e => { e.stopPropagation(); mobilePlaying ? (() => { handleMobilePause(); scheduleHide() })() : handlePlayTap() }}
+            >
+              {mobilePlaying ? (
+                <>
+                  <div style={{ width: 8, height: 28, background: 'white', borderRadius: 2, marginRight: 6 }} />
+                  <div style={{ width: 8, height: 28, background: 'white', borderRadius: 2 }} />
+                </>
+              ) : (
+                <div style={{ width: 0, height: 0, borderTop: '18px solid transparent', borderBottom: '18px solid transparent', borderLeft: '30px solid white', marginLeft: 6 }} />
+              )}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Download button */}
