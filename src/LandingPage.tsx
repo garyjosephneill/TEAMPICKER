@@ -5,11 +5,6 @@ const VIDEOS = ['vid-a.mov', 'vid-b.mov', 'vid-c.mov']
 const TITLE_KEYS = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
 const CAROUSEL_COUNT = 10
 
-// Background colours sampled from each image
-const TITLE_BG: Record<string, string> = {
-  A: '#4A8FB5', B: '#7A1829', C: '#C01000',
-  D: '#1A7830', E: '#CC5200', F: '#DCDCDC', G: '#B87200',
-}
 const slideBg = (i: number) => i < 4 ? '#F5C200' : '#8A8A8A'
 
 // ── Mobile: carousel experience ───────────────────────────────────────────────
@@ -51,21 +46,21 @@ function MobileLayout() {
     if (Math.abs(dx) > 40 && Math.abs(dx) > dy) goTo(dx > 0 ? slide + 1 : slide - 1)
   }
 
-  const bg = showCarousel ? slideBg(slide) : TITLE_BG[titleKey]
-
+  // Keep body/html background in sync with carousel slide colour so the
+  // strips above/below the browser content area match the image seamlessly
   useEffect(() => {
+    if (!showCarousel) return
+    const bg = slideBg(slide)
     document.body.style.setProperty('background', bg, 'important')
     document.documentElement.style.setProperty('background', bg, 'important')
-    const meta = document.querySelector('meta[name="theme-color"]')
-    if (meta) meta.setAttribute('content', bg)
     return () => {
       document.body.style.removeProperty('background')
       document.documentElement.style.removeProperty('background')
     }
-  }, [bg])
+  }, [showCarousel, slide])
 
   return (
-    <div style={{ position: 'fixed', inset: 0, background: bg }}>
+    <div style={{ position: 'fixed', inset: 0, background: showCarousel ? slideBg(slide) : '#000' }}>
       <style>{`
         @keyframes slideInFromRight { from { transform: translateX(100%) } to { transform: translateX(0) } }
         @keyframes slideInFromLeft  { from { transform: translateX(-100%) } to { transform: translateX(0) } }
