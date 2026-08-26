@@ -1,15 +1,28 @@
 import React, { useRef, useState, useEffect, useLayoutEffect } from 'react'
 import { BgScene, useRandomVariant } from './BgScene'
 
+const VIDEOS = ['vid-a.mov', 'vid-b.mov', 'vid-c.mov']
+
 export default function LandingPage() {
   const { kitIndex, isGaffer, kit } = useRandomVariant()
+
+  // Desktop state
   const [activeVideo, setActiveVideo] = useState<number | null>(null)
-  const [groupWidth, setGroupWidth] = useState<number>(600)
-  const [measured, setMeasured] = useState(false)
   const videoRefs = [useRef<HTMLVideoElement>(null), useRef<HTMLVideoElement>(null), useRef<HTMLVideoElement>(null)]
   const videoGroupRef = useRef<HTMLDivElement>(null)
+  const [groupWidth, setGroupWidth] = useState<number>(600)
+  const [measured, setMeasured] = useState(false)
+
+  // Mobile state
+  const [isMobile] = useState(() => window.innerWidth < 768)
+  const [mobileIndex, setMobileIndex] = useState(0)
+  const [mobilePlaying, setMobilePlaying] = useState(false)
+  const [sliding, setSliding] = useState(false)
+  const [hasTransitioned, setHasTransitioned] = useState(false)
+  const mobileVideoRef = useRef<HTMLVideoElement>(null)
 
   useLayoutEffect(() => {
+    if (isMobile) return
     const el = videoGroupRef.current
     if (!el) return
     const ro = new ResizeObserver(entries => {
@@ -20,7 +33,12 @@ export default function LandingPage() {
     })
     ro.observe(el)
     return () => ro.disconnect()
-  }, [])
+  }, [isMobile])
+
+  // Mobile: always measured (full width)
+  useEffect(() => {
+    if (isMobile) setMeasured(true)
+  }, [isMobile])
 
   const toggleVideo = (index: number) => {
     const ref = videoRefs[index].current
@@ -35,7 +53,7 @@ export default function LandingPage() {
     }
   }
 
-  const handleEnded = (index: number) => {
+  const handleDesktopEnded = (index: number) => {
     const next = index + 1
     if (next < videoRefs.length) {
       videoRefs[next].current?.play()
@@ -45,13 +63,75 @@ export default function LandingPage() {
     }
   }
 
-  const lineWidth = groupWidth + 150
+  const handleMobilePlay = () => {
+    mobileVideoRef.current?.play()
+    setMobilePlaying(true)
+  }
+
+  const handleMobileEnded = () => {
+    setSliding(true)
+    setHasTransitioned(true)
+    setTimeout(() => {
+      const next = (mobileIndex + 1) % VIDEOS.length
+      setMobileIndex(next)
+      setMobilePlaying(false)
+      setSliding(false)
+      if (next !== 0) {
+        setTimeout(() => {
+          mobileVideoRef.current?.play()
+          setMobilePlaying(true)
+        }, 50)
+      }
+    }, 400)
+  }
+
+  const maxWidth = window.innerWidth - 48
+  const lineWidth = isMobile ? maxWidth : Math.min(groupWidth + 150, maxWidth)
+
+  const PlayButton = () => (
+    <div style={{
+      position: 'absolute', inset: 0,
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      borderRadius: 16,
+      background: 'rgba(0,0,0,0.35)',
+    }}>
+      <div style={{
+        width: 80, height: 80, borderRadius: '50%',
+        background: 'rgba(0,0,0,0.7)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+      }}>
+        <div style={{
+          width: 0, height: 0,
+          borderTop: '18px solid transparent',
+          borderBottom: '18px solid transparent',
+          borderLeft: '30px solid white',
+          marginLeft: 6,
+        }} />
+      </div>
+    </div>
+  )
 
   return (
     <div style={{ position: 'fixed', inset: 0, display: 'flex', flexDirection: 'column' }}>
 
       {/* Background */}
       <BgScene kit={kit} kitIndex={kitIndex} isGaffer={isGaffer} />
+
+      {/* Slide transition style */}
+      <style>{`
+        @keyframes ticker {
+          0%   { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        @keyframes slideOut {
+          from { transform: translateY(0); opacity: 1; }
+          to   { transform: translateY(-100%); opacity: 0; }
+        }
+        @keyframes slideIn {
+          from { transform: translateY(100%); opacity: 0; }
+          to   { transform: translateY(0); opacity: 1; }
+        }
+      `}</style>
 
       {/* Content */}
       <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', height: '100%', padding: '24px 24px 0' }}>
@@ -67,52 +147,75 @@ export default function LandingPage() {
             <div style={{ borderBottom: `4px solid ${kit.c1}`, marginBottom: 10 }} />
             <div style={{
               fontFamily: "'Rajdhani', sans-serif",
-              fontWeight: 700, fontSize: 'clamp(14px, 2vw, 20px)', letterSpacing: 2,
-              color: kit.c1, textTransform: 'uppercase', lineHeight: 1.3,
+              fontWeight: 700, fontSize: 'clamp(12px, 3.5vw, 20px)', letterSpacing: 2,
+              color: kit.c1, textTransform: 'uppercase', lineHeight: 1.3, textAlign: 'center',
             }}>RATE YOUR SQUAD, THEN LET THE GAFFER<br />PICK TWO PERFECTLY BALANCED TEAMS</div>
           </div>
         </div>
 
         {/* Videos */}
-        <div style={{
-          flex: 1, display: 'flex',
-          justifyContent: 'center', alignItems: 'center',
-          padding: '16px 0', minHeight: 0,
-        }}>
-          <div ref={videoGroupRef} style={{ display: 'flex', gap: 16, height: '100%', alignItems: 'center', width: 'fit-content' }}>
-            {['vid-a.mov', 'vid-b.mov', 'vid-c.mov'].map((src, i) => (
-              <div key={i} style={{ position: 'relative', cursor: 'pointer', height: '100%', display: 'flex', alignItems: 'center' }} onClick={() => toggleVideo(i)}>
+        <div style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '16px 0', minHeight: 0 }}>
+
+          {isMobile ? (
+            // Mobile: single video with slide transition
+            <div style={{ position: 'relative', width: '100%', height: '100%', maxHeight: '100%', overflow: 'hidden', borderRadius: 16 }}>
+              <div
+                key={mobileIndex}
+                style={{
+                  position: 'absolute', inset: 0,
+                  animation: sliding ? 'slideOut 0.4s ease forwards' : hasTransitioned ? 'slideIn 0.4s ease forwards' : undefined,
+                }}
+                onClick={!mobilePlaying ? handleMobilePlay : undefined}
+              >
                 <video
-                  ref={videoRefs[i]}
-                  src={`/videos/${src}`}
+                  ref={mobileVideoRef}
+                  src={`/videos/${VIDEOS[mobileIndex]}`}
                   playsInline
-                  onEnded={() => handleEnded(i)}
-                  style={{ height: '100%', maxHeight: '100%', width: 'auto', borderRadius: 16, display: 'block' }}
+                  preload="metadata"
+                  onEnded={handleMobileEnded}
+                  style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 16, display: 'block' }}
                 />
-                {activeVideo !== i && (
-                  <div style={{
-                    position: 'absolute', inset: 0,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    borderRadius: 16,
-                  }}>
+                {!mobilePlaying && <PlayButton />}
+              </div>
+            </div>
+          ) : (
+            // Desktop: 3 videos side by side
+            <div ref={videoGroupRef} style={{ display: 'flex', gap: 16, height: '100%', alignItems: 'center', width: 'fit-content' }}>
+              {VIDEOS.map((src, i) => (
+                <div key={i} style={{ position: 'relative', cursor: 'pointer', height: '100%', display: 'flex', alignItems: 'center' }} onClick={() => toggleVideo(i)}>
+                  <video
+                    ref={videoRefs[i]}
+                    src={`/videos/${src}`}
+                    playsInline
+                    preload="metadata"
+                    onEnded={() => handleDesktopEnded(i)}
+                    style={{ height: '100%', maxHeight: '100%', width: 'auto', borderRadius: 16, display: 'block' }}
+                  />
+                  {activeVideo !== i && (
                     <div style={{
-                      width: 56, height: 56, borderRadius: '50%',
-                      background: 'rgba(0,0,0,0.55)',
+                      position: 'absolute', inset: 0,
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      borderRadius: 16,
                     }}>
                       <div style={{
-                        width: 0, height: 0,
-                        borderTop: '12px solid transparent',
-                        borderBottom: '12px solid transparent',
-                        borderLeft: '20px solid white',
-                        marginLeft: 4,
-                      }} />
+                        width: 56, height: 56, borderRadius: '50%',
+                        background: 'rgba(0,0,0,0.55)',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      }}>
+                        <div style={{
+                          width: 0, height: 0,
+                          borderTop: '12px solid transparent',
+                          borderBottom: '12px solid transparent',
+                          borderLeft: '20px solid white',
+                          marginLeft: 4,
+                        }} />
+                      </div>
                     </div>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Button */}
@@ -125,7 +228,7 @@ export default function LandingPage() {
               display: 'inline-block',
               border: `4px solid ${kit.c1}`, padding: '10px 32px',
               fontFamily: "'Rajdhani', sans-serif", fontWeight: 700,
-              fontSize: 20, letterSpacing: 3, color: kit.c1,
+              fontSize: 'clamp(14px, 4vw, 20px)', letterSpacing: 3, color: kit.c1, whiteSpace: 'nowrap',
               textTransform: 'uppercase', textDecoration: 'none',
             }}
           >
@@ -135,12 +238,6 @@ export default function LandingPage() {
 
         {/* Ticker */}
         <div style={{ width: lineWidth, margin: '0 auto', overflow: 'hidden', flexShrink: 0, padding: '8px 0', opacity: measured ? 1 : 0 }}>
-          <style>{`
-            @keyframes ticker {
-              0%   { transform: translateX(0); }
-              100% { transform: translateX(-50%); }
-            }
-          `}</style>
           <div style={{ display: 'inline-flex', animation: 'ticker 17.1s linear infinite', whiteSpace: 'nowrap' }}>
             {Array.from({ length: 6 }).map((_, i) => (
               <span key={i} style={{
