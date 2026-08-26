@@ -5,6 +5,20 @@ const VIDEOS = ['vid-a.mov', 'vid-b.mov', 'vid-c.mov']
 const TITLE_KEYS = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
 const CAROUSEL_COUNT = 10
 
+// Sampled directly from the edge pixels of each image
+const TITLE_BG: Record<string, string> = {
+  A: '#346E9A', B: '#420712', C: '#860A0F',
+  D: '#036E2E', E: '#C74A04', F: '#D9DFE1', G: '#9C5604',
+}
+const slideBg = (i: number) => i < 4 ? '#FED500' : '#BDBEC0'
+
+function setBg(color: string) {
+  document.body.style.setProperty('background', color, 'important')
+  document.documentElement.style.setProperty('background', color, 'important')
+  const meta = document.querySelector('meta[name="theme-color"]')
+  if (meta) meta.setAttribute('content', color)
+}
+
 // ── Mobile: carousel experience ───────────────────────────────────────────────
 function MobileLayout() {
   const [titleKey] = useState(() => TITLE_KEYS[Math.floor(Math.random() * TITLE_KEYS.length)])
@@ -23,6 +37,16 @@ function MobileLayout() {
     const show = setTimeout(() => setShowCarousel(true), 3300)
     return () => { clearTimeout(fadeOut); clearTimeout(show) }
   }, [])
+
+  // Keep body/theme-color in sync so system UI strips blend with the image
+  useEffect(() => {
+    const bg = showCarousel ? slideBg(slide) : TITLE_BG[titleKey]
+    setBg(bg)
+    return () => {
+      document.body.style.removeProperty('background')
+      document.documentElement.style.removeProperty('background')
+    }
+  }, [showCarousel, slide, titleKey])
 
   const goTo = (next: number) => {
     if (next < 0 || next >= CAROUSEL_COUNT || transitioning.current) return
@@ -44,8 +68,10 @@ function MobileLayout() {
     if (Math.abs(dx) > 40 && Math.abs(dx) > dy) goTo(dx > 0 ? slide + 1 : slide - 1)
   }
 
+  const bg = showCarousel ? slideBg(slide) : TITLE_BG[titleKey]
+
   return (
-    <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100vh', overflow: 'hidden', background: '#000' }}>
+    <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100vh', overflow: 'hidden', background: bg }}>
       <style>{`
         @keyframes slideInFromRight { from { transform: translateX(100%) } to { transform: translateX(0) } }
         @keyframes slideInFromLeft  { from { transform: translateX(-100%) } to { transform: translateX(0) } }
