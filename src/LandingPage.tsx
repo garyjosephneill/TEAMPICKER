@@ -68,9 +68,9 @@ function MobileLayout() {
   }
 
   const handleTouchEnd = (e: React.TouchEvent) => {
-    const dx = touchStartX.current - e.changedTouches[0].clientX
-    const dy = Math.abs(touchStartY.current - e.changedTouches[0].clientY)
-    if (Math.abs(dx) > 40 && Math.abs(dx) > dy) goTo(dx > 0 ? slide + 1 : slide - 1)
+    const dy = touchStartY.current - e.changedTouches[0].clientY
+    const dx = Math.abs(touchStartX.current - e.changedTouches[0].clientX)
+    if (Math.abs(dy) > 40 && Math.abs(dy) > dx) goTo(dy > 0 ? slide + 1 : slide - 1)
   }
 
   // Native touchmove only — needed for passive:false so we can call preventDefault
@@ -84,7 +84,7 @@ function MobileLayout() {
         const dy = Math.abs(e.touches[0].clientY - touchStartY.current)
         if (dx > 4 || dy > 4) isHoriz.current = dx > dy
       }
-      if (isHoriz.current) e.preventDefault()
+      if (!isHoriz.current) e.preventDefault()
     }
     el.addEventListener('touchmove', onMove, { passive: false })
     return () => el.removeEventListener('touchmove', onMove)
@@ -95,10 +95,10 @@ function MobileLayout() {
   return (
     <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100vh', overflow: 'hidden', background: bg }}>
       <style>{`
-        @keyframes slideInFromRight { from { transform: translateX(100%) } to { transform: translateX(0) } }
-        @keyframes slideInFromLeft  { from { transform: translateX(-100%) } to { transform: translateX(0) } }
-        @keyframes slideOutToLeft   { from { transform: translateX(0) } to { transform: translateX(-100%) } }
-        @keyframes slideOutToRight  { from { transform: translateX(0) } to { transform: translateX(100%) } }
+        @keyframes slideInFromRight { from { transform: translateY(100%) } to { transform: translateY(0) } }
+        @keyframes slideInFromLeft  { from { transform: translateY(-100%) } to { transform: translateY(0) } }
+        @keyframes slideOutToLeft   { from { transform: translateY(0) } to { transform: translateY(-100%) } }
+        @keyframes slideOutToRight  { from { transform: translateY(0) } to { transform: translateY(100%) } }
         @keyframes fadeIn           { from { opacity: 0 } to { opacity: 1 } }
       `}</style>
 
