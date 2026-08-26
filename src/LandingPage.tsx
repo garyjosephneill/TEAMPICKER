@@ -35,7 +35,6 @@ export default function LandingPage() {
     return () => ro.disconnect()
   }, [isMobile])
 
-  // Mobile: always measured (full width)
   useEffect(() => {
     if (isMobile) setMeasured(true)
   }, [isMobile])
@@ -68,6 +67,11 @@ export default function LandingPage() {
     setMobilePlaying(true)
   }
 
+  const handleMobilePause = () => {
+    mobileVideoRef.current?.pause()
+    setMobilePlaying(false)
+  }
+
   const handleMobileEnded = () => {
     setSliding(true)
     setHasTransitioned(true)
@@ -78,7 +82,7 @@ export default function LandingPage() {
       setSliding(false)
       if (next !== 0) {
         setTimeout(() => {
-          mobileVideoRef.current?.play()
+          mobileVideoRef.current?.play().catch(() => {})
           setMobilePlaying(true)
         }, 50)
       }
@@ -86,54 +90,102 @@ export default function LandingPage() {
   }
 
   const maxWidth = window.innerWidth - 48
-  const lineWidth = isMobile ? maxWidth : Math.min(groupWidth + 150, maxWidth)
+  const lineWidth = Math.min(groupWidth + 150, maxWidth)
 
-  const PlayButton = () => (
-    <div style={{
-      position: 'absolute', inset: 0,
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      borderRadius: 16,
-      background: 'rgba(0,0,0,0.35)',
-    }}>
-      <div style={{
-        width: 80, height: 80, borderRadius: '50%',
-        background: 'rgba(0,0,0,0.7)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-      }}>
-        <div style={{
-          width: 0, height: 0,
-          borderTop: '18px solid transparent',
-          borderBottom: '18px solid transparent',
-          borderLeft: '30px solid white',
-          marginLeft: 6,
-        }} />
+  // ── Mobile: full-screen video layout ──────────────────────────────────────
+  if (isMobile) {
+    return (
+      <div style={{ position: 'fixed', inset: 0 }}>
+        <BgScene kit={kit} kitIndex={kitIndex} isGaffer={isGaffer} />
+        <style>{`
+          @keyframes slideOut {
+            from { transform: translateY(0); opacity: 1; }
+            to   { transform: translateY(-100%); opacity: 0; }
+          }
+          @keyframes slideIn {
+            from { transform: translateY(100%); opacity: 0; }
+            to   { transform: translateY(0); opacity: 1; }
+          }
+        `}</style>
+
+        {/* Full-screen video */}
+        <div style={{ position: 'absolute', inset: 0, overflow: 'hidden' }}>
+          <div
+            key={mobileIndex}
+            style={{
+              position: 'absolute', inset: 0,
+              animation: sliding ? 'slideOut 0.4s ease forwards' : hasTransitioned ? 'slideIn 0.4s ease forwards' : undefined,
+            }}
+          >
+            <video
+              ref={mobileVideoRef}
+              src={`/videos/${VIDEOS[mobileIndex]}`}
+              playsInline
+              preload="metadata"
+              onEnded={handleMobileEnded}
+              style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
+            />
+          </div>
+        </div>
+
+        {/* Overlay: play/pause in centre, download button at bottom */}
+        <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: '0 24px 48px' }}>
+          {/* Play/pause centred */}
+          <div
+            onClick={mobilePlaying ? handleMobilePause : handleMobilePlay}
+            style={{
+              position: 'absolute', top: '50%', left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: 80, height: 80, borderRadius: '50%',
+              background: 'rgba(0,0,0,0.6)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              cursor: 'pointer',
+            }}
+          >
+            {mobilePlaying ? (
+              <>
+                <div style={{ width: 8, height: 28, background: 'white', borderRadius: 2, marginRight: 6 }} />
+                <div style={{ width: 8, height: 28, background: 'white', borderRadius: 2 }} />
+              </>
+            ) : (
+              <div style={{ width: 0, height: 0, borderTop: '18px solid transparent', borderBottom: '18px solid transparent', borderLeft: '30px solid white', marginLeft: 6 }} />
+            )}
+          </div>
+
+          {/* Download button */}
+          <a
+            href="https://apps.apple.com/gb/app/lazy-gaffer/id6760719368"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'block', textAlign: 'center',
+              border: `4px solid ${kit.c1}`, padding: '12px 32px',
+              fontFamily: "'Rajdhani', sans-serif", fontWeight: 700,
+              fontSize: 'clamp(14px, 4vw, 20px)', letterSpacing: 3, color: kit.c1,
+              textTransform: 'uppercase', textDecoration: 'none',
+              background: 'rgba(0,0,0,0.4)',
+            }}
+          >
+            DOWNLOAD ON THE APP STORE
+          </a>
+        </div>
       </div>
-    </div>
-  )
+    )
+  }
 
+  // ── Desktop layout ─────────────────────────────────────────────────────────
   return (
     <div style={{ position: 'fixed', inset: 0, display: 'flex', flexDirection: 'column' }}>
 
-      {/* Background */}
       <BgScene kit={kit} kitIndex={kitIndex} isGaffer={isGaffer} />
 
-      {/* Slide transition style */}
       <style>{`
         @keyframes ticker {
           0%   { transform: translateX(0); }
           100% { transform: translateX(-50%); }
         }
-        @keyframes slideOut {
-          from { transform: translateY(0); opacity: 1; }
-          to   { transform: translateY(-100%); opacity: 0; }
-        }
-        @keyframes slideIn {
-          from { transform: translateY(100%); opacity: 0; }
-          to   { transform: translateY(0); opacity: 1; }
-        }
       `}</style>
 
-      {/* Content */}
       <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', height: '100%', padding: '24px 24px 0' }}>
 
         {/* Title */}
@@ -155,74 +207,28 @@ export default function LandingPage() {
 
         {/* Videos */}
         <div style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '16px 0', minHeight: 0 }}>
-
-          {isMobile ? (
-            // Mobile: single video with slide transition
-            <div style={{ position: 'relative', width: '100%', alignSelf: 'stretch', overflow: 'hidden', borderRadius: 16 }}>
-              <div
-                key={mobileIndex}
-                style={{
-                  position: 'absolute', inset: 0,
-                  animation: sliding ? 'slideOut 0.4s ease forwards' : hasTransitioned ? 'slideIn 0.4s ease forwards' : undefined,
-                }}
-                onClick={mobilePlaying ? () => { mobileVideoRef.current?.pause(); setMobilePlaying(false) } : handleMobilePlay}
-              >
+          <div ref={videoGroupRef} style={{ display: 'flex', gap: 16, height: '100%', alignItems: 'center', width: 'fit-content' }}>
+            {VIDEOS.map((src, i) => (
+              <div key={i} style={{ position: 'relative', cursor: 'pointer', height: '100%', display: 'flex', alignItems: 'center' }} onClick={() => toggleVideo(i)}>
                 <video
-                  ref={mobileVideoRef}
-                  src={`/videos/${VIDEOS[mobileIndex]}`}
+                  ref={videoRefs[i]}
+                  src={`/videos/${src}`}
                   playsInline
                   preload="metadata"
-                  onEnded={handleMobileEnded}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 16, display: 'block' }}
+                  onLoadedMetadata={e => { e.currentTarget.currentTime = 0.001 }}
+                  onEnded={() => handleDesktopEnded(i)}
+                  style={{ height: '100%', maxHeight: '100%', width: 'auto', borderRadius: 16, display: 'block' }}
                 />
-                {!mobilePlaying ? <PlayButton /> : (
+                {activeVideo !== i && (
                   <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 16 }}>
-                    <div style={{ width: 80, height: 80, borderRadius: '50%', background: 'rgba(0,0,0,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-                      <div style={{ width: 8, height: 28, background: 'white', borderRadius: 2 }} />
-                      <div style={{ width: 8, height: 28, background: 'white', borderRadius: 2 }} />
+                    <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'rgba(0,0,0,0.55)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <div style={{ width: 0, height: 0, borderTop: '12px solid transparent', borderBottom: '12px solid transparent', borderLeft: '20px solid white', marginLeft: 4 }} />
                     </div>
                   </div>
                 )}
               </div>
-            </div>
-          ) : (
-            // Desktop: 3 videos side by side
-            <div ref={videoGroupRef} style={{ display: 'flex', gap: 16, height: '100%', alignItems: 'center', width: 'fit-content' }}>
-              {VIDEOS.map((src, i) => (
-                <div key={i} style={{ position: 'relative', cursor: 'pointer', height: '100%', display: 'flex', alignItems: 'center' }} onClick={() => toggleVideo(i)}>
-                  <video
-                    ref={videoRefs[i]}
-                    src={`/videos/${src}`}
-                    playsInline
-                    preload="metadata"
-                    onEnded={() => handleDesktopEnded(i)}
-                    style={{ height: '100%', maxHeight: '100%', width: 'auto', borderRadius: 16, display: 'block' }}
-                  />
-                  {activeVideo !== i && (
-                    <div style={{
-                      position: 'absolute', inset: 0,
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      borderRadius: 16,
-                    }}>
-                      <div style={{
-                        width: 56, height: 56, borderRadius: '50%',
-                        background: 'rgba(0,0,0,0.55)',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      }}>
-                        <div style={{
-                          width: 0, height: 0,
-                          borderTop: '12px solid transparent',
-                          borderBottom: '12px solid transparent',
-                          borderLeft: '20px solid white',
-                          marginLeft: 4,
-                        }} />
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
+            ))}
+          </div>
         </div>
 
         {/* Button */}
@@ -258,25 +264,13 @@ export default function LandingPage() {
 
         {/* Footer */}
         <div style={{ textAlign: 'center', flexShrink: 0, padding: '10px 0 16px' }}>
-          <p style={{
-            fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 8,
-            letterSpacing: 1, color: kit.c1, opacity: 0.5,
-            textTransform: 'uppercase', margin: '0 0 4px',
-          }}>
+          <p style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 8, letterSpacing: 1, color: kit.c1, opacity: 0.5, textTransform: 'uppercase', margin: '0 0 4px' }}>
             Gary Neill Limited &nbsp;|&nbsp; Company No. 4741682
           </p>
           <p style={{ margin: 0 }}>
-            <a href="/privacy" style={{
-              fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 8,
-              letterSpacing: 1, color: kit.c1, opacity: 0.5,
-              textTransform: 'uppercase', textDecoration: 'underline',
-            }}>Privacy Policy</a>
+            <a href="/privacy" style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 8, letterSpacing: 1, color: kit.c1, opacity: 0.5, textTransform: 'uppercase', textDecoration: 'underline' }}>Privacy Policy</a>
             <span style={{ fontFamily: "'Rajdhani', sans-serif", fontSize: 8, color: kit.c1, opacity: 0.3, margin: '0 6px' }}>|</span>
-            <a href="/privacy#terms" style={{
-              fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 8,
-              letterSpacing: 1, color: kit.c1, opacity: 0.5,
-              textTransform: 'uppercase', textDecoration: 'underline',
-            }}>Terms &amp; Conditions</a>
+            <a href="/privacy#terms" style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 8, letterSpacing: 1, color: kit.c1, opacity: 0.5, textTransform: 'uppercase', textDecoration: 'underline' }}>Terms &amp; Conditions</a>
           </p>
         </div>
 
