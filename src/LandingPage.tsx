@@ -2,125 +2,138 @@ import React, { useRef, useState, useEffect, useLayoutEffect } from 'react'
 import { BgScene, useRandomVariant } from './BgScene'
 
 const VIDEOS = ['vid-a.mov', 'vid-b.mov', 'vid-c.mov']
+const TITLE_KEYS = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
+const CAROUSEL_COUNT = 10
 
-function MobileLayout({ kit, kitIndex, isGaffer, mobileIndex, mobilePlaying, sliding, hasTransitioned, mobileVideoRef, VIDEOS, POSTERS, handleMobilePlay, handleMobilePause, handleMobileEnded }: any) {
-  const [showControls, setShowControls] = useState(true)
-  const hideTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
+// ── Mobile: carousel experience ───────────────────────────────────────────────
+function MobileLayout() {
+  const [titleKey] = useState(() => TITLE_KEYS[Math.floor(Math.random() * TITLE_KEYS.length)])
+  const [titleOpacity, setTitleOpacity] = useState(1)
+  const [showCarousel, setShowCarousel] = useState(false)
+  const [slide, setSlide] = useState(0)
+  const [slideKey, setSlideKey] = useState(0)
 
-  const scheduleHide = () => {
-    clearTimeout(hideTimer.current)
-    hideTimer.current = setTimeout(() => setShowControls(false), 1000)
+  const touchStartX = useRef(0)
+  const touchStartY = useRef(0)
+
+  useEffect(() => {
+    // Hold title for 2.5s, fade over 0.8s, then show carousel
+    const fadeOut = setTimeout(() => setTitleOpacity(0), 2500)
+    const show = setTimeout(() => setShowCarousel(true), 3300)
+    return () => { clearTimeout(fadeOut); clearTimeout(show) }
+  }, [])
+
+  const goTo = (next: number) => {
+    if (next < 0 || next >= CAROUSEL_COUNT) return
+    setSlide(next)
+    setSlideKey(k => k + 1)
   }
 
-  const handleVideoAreaTap = () => {
-    if (!showControls) {
-      setShowControls(true)
-      // don't auto-hide — user needs to tap button to act
-    } else if (mobilePlaying) {
-      handleMobilePause()
-      scheduleHide()
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX
+    touchStartY.current = e.touches[0].clientY
+  }
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const dx = touchStartX.current - e.changedTouches[0].clientX
+    const dy = Math.abs(touchStartY.current - e.changedTouches[0].clientY)
+    if (Math.abs(dx) > 40 && Math.abs(dx) > dy) {
+      goTo(dx > 0 ? slide + 1 : slide - 1)
     }
-    // if paused and controls visible, the button itself handles play
-  }
-
-  const handlePlayTap = () => {
-    handleMobilePlay()
-    scheduleHide()
   }
 
   return (
-    <div style={{ position: 'fixed', inset: 0, display: 'flex', flexDirection: 'column' }}>
-      <BgScene kit={kit} kitIndex={kitIndex} isGaffer={isGaffer} />
+    <div style={{ position: 'fixed', inset: 0, background: '#000' }}>
       <style>{`
-        @keyframes slideOut {
-          from { transform: translateY(0); opacity: 1; }
-          to   { transform: translateY(-100%); opacity: 0; }
-        }
-        @keyframes slideIn {
-          from { transform: translateY(100%); opacity: 0; }
-          to   { transform: translateY(0); opacity: 1; }
-        }
+        @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
       `}</style>
 
-      {/* Spacer to push video down */}
-      <div style={{ height: '8%', flexShrink: 0 }} />
+      {/* Title screen */}
+      <div style={{
+        position: 'absolute', inset: 0, zIndex: 10,
+        opacity: titleOpacity, transition: 'opacity 0.8s ease',
+        pointerEvents: titleOpacity === 0 ? 'none' : 'auto',
+      }}>
+        <img
+          src={`/mobile/title/${titleKey}.jpg`}
+          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+        />
+      </div>
 
-      {/* Video area */}
-      {/* Outer wrapper fills remaining space and centres the video box */}
-      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', padding: '0 5%' }}>
-        {/* Inner box: exact video aspect ratio, no dead space */}
+      {/* Carousel */}
+      {showCarousel && (
         <div
-          style={{ position: 'relative', width: '100%', aspectRatio: '886 / 1920', maxHeight: '100%' }}
-          onClick={handleVideoAreaTap}
+          style={{ position: 'absolute', inset: 0, animation: 'fadeIn 0.6s ease forwards' }}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
         >
-          <div
-            key={mobileIndex}
+          <img
+            key={slideKey}
+            src={`/mobile/carousel/${slide + 1}.jpg`}
             style={{
-              position: 'absolute', inset: 0,
-              animation: sliding ? 'slideOut 0.4s ease forwards' : hasTransitioned ? 'slideIn 0.4s ease forwards' : undefined,
+              width: '100%', height: '100%', objectFit: 'cover', display: 'block',
+              animation: 'fadeIn 0.3s ease forwards',
             }}
-          >
-            <video
-              ref={mobileVideoRef}
-              src={`/videos/${VIDEOS[mobileIndex]}`}
-              poster={POSTERS[mobileIndex]}
-              playsInline
-              preload="none"
-              onEnded={handleMobileEnded}
-              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-            />
+          />
+
+          {/* Progress dots */}
+          <div style={{
+            position: 'absolute', bottom: 'max(24px, env(safe-area-inset-bottom))',
+            left: 0, right: 0,
+            display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 6,
+          }}>
+            {Array.from({ length: CAROUSEL_COUNT }).map((_, i) => (
+              <div
+                key={i}
+                onClick={() => goTo(i)}
+                style={{
+                  width: i === slide ? 24 : 8, height: 8, borderRadius: 4,
+                  background: i === slide ? 'white' : 'rgba(255,255,255,0.45)',
+                  transition: 'width 0.3s, background 0.3s',
+                  cursor: 'pointer',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.4)',
+                }}
+              />
+            ))}
           </div>
 
-          {/* Controls overlay */}
-          {showControls && (
-            <div
-              style={{
-                position: 'absolute', top: '50%', left: '50%',
-                transform: 'translate(-50%, -50%)',
-                width: 80, height: 80, borderRadius: '50%',
-                background: 'rgba(0,0,0,0.6)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                cursor: 'pointer', zIndex: 2,
-              }}
-              onClick={e => { e.stopPropagation(); mobilePlaying ? (() => { handleMobilePause(); scheduleHide() })() : handlePlayTap() }}
-            >
-              {mobilePlaying ? (
-                <>
-                  <div style={{ width: 8, height: 28, background: 'white', borderRadius: 2, marginRight: 6 }} />
-                  <div style={{ width: 8, height: 28, background: 'white', borderRadius: 2 }} />
-                </>
-              ) : (
-                <div style={{ width: 0, height: 0, borderTop: '18px solid transparent', borderBottom: '18px solid transparent', borderLeft: '30px solid white', marginLeft: 6 }} />
-              )}
+          {/* Download CTA on last slide */}
+          {slide === CAROUSEL_COUNT - 1 && (
+            <div style={{
+              position: 'absolute',
+              bottom: 'max(80px, calc(env(safe-area-inset-bottom) + 56px))',
+              left: 24, right: 24,
+              animation: 'fadeIn 0.5s ease forwards',
+            }}>
+              <a
+                href="https://apps.apple.com/gb/app/lazy-gaffer/id6760719368"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'block', textAlign: 'center',
+                  background: '#CC0000', color: 'white',
+                  padding: '16px 24px',
+                  fontFamily: "'Rajdhani', sans-serif", fontWeight: 700,
+                  fontSize: 20, letterSpacing: 3,
+                  textTransform: 'uppercase', textDecoration: 'none',
+                  boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
+                }}
+              >
+                DOWNLOAD ON APP STORE
+              </a>
             </div>
           )}
         </div>
-      </div>
-
-      {/* Download button */}
-      <div style={{ flexShrink: 0, padding: '16px 24px', paddingBottom: 'max(25px, env(safe-area-inset-bottom))', position: 'relative', zIndex: 2 }}>
-        <a
-          href="https://apps.apple.com/gb/app/lazy-gaffer/id6760719368"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            display: 'block', textAlign: 'center',
-            border: `4px solid ${kit.c1}`, padding: '12px 32px',
-            fontFamily: "'Rajdhani', sans-serif", fontWeight: 700,
-            fontSize: 'clamp(16px, 5vw, 22px)', letterSpacing: 3, color: kit.c1,
-            textTransform: 'uppercase', textDecoration: 'none',
-            background: 'rgba(0,0,0,0.4)', whiteSpace: 'nowrap',
-          }}
-        >
-          DOWNLOAD ON APP STORE
-        </a>
-      </div>
+      )}
     </div>
   )
 }
 
+// ── Main page ─────────────────────────────────────────────────────────────────
 export default function LandingPage() {
   const { kitIndex, isGaffer, kit } = useRandomVariant()
+
+  const [isMobile] = useState(() => window.innerWidth < 768)
 
   // Desktop state
   const [activeVideo, setActiveVideo] = useState<number | null>(null)
@@ -128,14 +141,6 @@ export default function LandingPage() {
   const videoGroupRef = useRef<HTMLDivElement>(null)
   const [groupWidth, setGroupWidth] = useState<number>(600)
   const [measured, setMeasured] = useState(false)
-
-  // Mobile state
-  const [isMobile] = useState(() => window.innerWidth < 768)
-  const [mobileIndex, setMobileIndex] = useState(0)
-  const [mobilePlaying, setMobilePlaying] = useState(false)
-  const [sliding, setSliding] = useState(false)
-  const [hasTransitioned, setHasTransitioned] = useState(false)
-  const mobileVideoRef = useRef<HTMLVideoElement>(null)
 
   useLayoutEffect(() => {
     if (isMobile) return
@@ -151,85 +156,31 @@ export default function LandingPage() {
     return () => ro.disconnect()
   }, [isMobile])
 
-  useEffect(() => {
-    if (isMobile) setMeasured(true)
-  }, [isMobile])
-
   const toggleVideo = (index: number) => {
     const ref = videoRefs[index].current
     if (!ref) return
     if (activeVideo === index && !ref.paused) {
-      ref.pause()
-      setActiveVideo(null)
+      ref.pause(); setActiveVideo(null)
     } else {
       videoRefs.forEach((r, i) => { if (i !== index && r.current) { r.current.pause(); r.current.currentTime = 0 } })
-      ref.play()
-      setActiveVideo(index)
+      ref.play(); setActiveVideo(index)
     }
   }
 
   const handleDesktopEnded = (index: number) => {
     const next = index + 1
-    if (next < videoRefs.length) {
-      videoRefs[next].current?.play()
-      setActiveVideo(next)
-    } else {
-      setActiveVideo(null)
-    }
+    if (next < videoRefs.length) { videoRefs[next].current?.play(); setActiveVideo(next) }
+    else setActiveVideo(null)
   }
 
-  const handleMobilePlay = () => {
-    mobileVideoRef.current?.play().catch(() => {})
-    setMobilePlaying(true)
-  }
+  if (isMobile) return <MobileLayout />
 
-  const handleMobilePause = () => {
-    mobileVideoRef.current?.pause()
-    setMobilePlaying(false)
-  }
+  // ── Desktop layout ──────────────────────────────────────────────────────────
+  const lineWidth = Math.min(groupWidth + 150, window.innerWidth - 48)
 
-  const handleMobileEnded = () => {
-    setSliding(true)
-    setHasTransitioned(true)
-    setTimeout(() => {
-      const next = (mobileIndex + 1) % VIDEOS.length
-      setMobileIndex(next)
-      setMobilePlaying(false)
-      setSliding(false)
-      if (next !== 0) {
-        setTimeout(() => {
-          mobileVideoRef.current?.play().catch(() => {})
-          setMobilePlaying(true)
-        }, 50)
-      }
-    }, 400)
-  }
-
-  const maxWidth = window.innerWidth - 48
-  const lineWidth = Math.min(groupWidth + 150, maxWidth)
-
-  // ── Mobile: full-screen video layout ──────────────────────────────────────
-  const POSTERS = ['/poster-a.jpg', '/poster-b.jpg', '/poster-c.jpg']
-
-  if (isMobile) {
-    return (
-      <MobileLayout
-        kit={kit} kitIndex={kitIndex} isGaffer={isGaffer}
-        mobileIndex={mobileIndex} mobilePlaying={mobilePlaying}
-        sliding={sliding} hasTransitioned={hasTransitioned}
-        mobileVideoRef={mobileVideoRef} VIDEOS={VIDEOS} POSTERS={POSTERS}
-        handleMobilePlay={handleMobilePlay} handleMobilePause={handleMobilePause}
-        handleMobileEnded={handleMobileEnded}
-      />
-    )
-  }
-
-  // ── Desktop layout ─────────────────────────────────────────────────────────
   return (
     <div style={{ position: 'fixed', inset: 0, display: 'flex', flexDirection: 'column' }}>
-
       <BgScene kit={kit} kitIndex={kitIndex} isGaffer={isGaffer} />
-
       <style>{`
         @keyframes ticker {
           0%   { transform: translateX(0); }
