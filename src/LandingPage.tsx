@@ -13,13 +13,14 @@ function MobileLayout({ kit, kitIndex, isGaffer, mobileIndex, mobilePlaying, sli
   }
 
   const handleVideoAreaTap = () => {
-    if (!mobilePlaying) return
     if (!showControls) {
       setShowControls(true)
-    } else {
+      // don't auto-hide — user needs to tap button to act
+    } else if (mobilePlaying) {
       handleMobilePause()
       scheduleHide()
     }
+    // if paused and controls visible, the button itself handles play
   }
 
   const handlePlayTap = () => {
@@ -93,7 +94,7 @@ function MobileLayout({ kit, kitIndex, isGaffer, mobileIndex, mobilePlaying, sli
       </div>
 
       {/* Download button */}
-      <div style={{ flexShrink: 0, padding: '16px 24px 48px', position: 'relative', zIndex: 2 }}>
+      <div style={{ flexShrink: 0, padding: '16px 24px', paddingBottom: 'max(25px, env(safe-area-inset-bottom))', position: 'relative', zIndex: 2 }}>
         <a
           href="https://apps.apple.com/gb/app/lazy-gaffer/id6760719368"
           target="_blank"
