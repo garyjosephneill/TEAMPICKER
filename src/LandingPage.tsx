@@ -173,10 +173,15 @@ function MobileLayout() {
 }
 
 // ── Desktop: carousel experience ──────────────────────────────────────────────
-const DESKTOP_TITLE_BG = '#F6CF46'
-const DESKTOP_TITLE_COLOR = '#1F2C59'
+const DESKTOP_TITLE_COMBOS = [
+  { bg: '#0A8A37', type: '#F8DD08' },
+  { bg: '#75ADDE', type: '#7A1428' },
+  { bg: '#DC862F', type: '#000000' },
+  { bg: '#DB2F23', type: '#091F44' },
+]
 
 function DesktopCarousel() {
+  const [titleCombo] = useState(() => DESKTOP_TITLE_COMBOS[Math.floor(Math.random() * DESKTOP_TITLE_COMBOS.length)])
   const [titleOpacity, setTitleOpacity] = useState(1)
   const [showCarousel, setShowCarousel] = useState(false)
   const [slide, setSlide] = useState(0)
@@ -200,7 +205,7 @@ function DesktopCarousel() {
   }, [])
 
   useEffect(() => {
-    const bg = showCarousel ? slideBg(slide) : DESKTOP_TITLE_BG
+    const bg = showCarousel ? slideBg(slide) : titleCombo.bg
     setBg(bg)
     return () => {
       document.body.style.removeProperty('background')
@@ -266,7 +271,7 @@ function DesktopCarousel() {
         onClick={skipTitle}
         style={{
           position: 'absolute', inset: 0, zIndex: 20,
-          background: DESKTOP_TITLE_BG,
+          background: titleCombo.bg,
           display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
           padding: '0 10vw',
           opacity: titleOpacity, transition: 'opacity 0.5s ease',
@@ -278,23 +283,23 @@ function DesktopCarousel() {
           fontFamily: "'Barlow Condensed', sans-serif",
           fontWeight: 900,
           fontSize: 'clamp(72px, 14vw, 160px)',
-          color: DESKTOP_TITLE_COLOR,
+          color: titleCombo.type,
           letterSpacing: '0.02em',
           lineHeight: 1,
           textAlign: 'center',
         }}>LAZY GAFFER</div>
 
+        <div style={{ width: '100%', height: 4, background: 'white', margin: '0.3em 0 0.6em' }} />
+
         <div style={{
           fontFamily: "'Rajdhani', sans-serif",
           fontWeight: 700,
           fontSize: 28,
-          color: DESKTOP_TITLE_COLOR,
+          color: titleCombo.type,
           textAlign: 'center',
-          marginTop: '0.75em',
           lineHeight: 1.5,
           letterSpacing: '0.06em',
           textTransform: 'uppercase',
-          opacity: 0.85,
         }}>
           FAIR TEAMS WITHOUT THE FAFF
         </div>
