@@ -173,20 +173,33 @@ function MobileLayout() {
 }
 
 // ── Desktop: carousel experience ──────────────────────────────────────────────
+const DESKTOP_TITLE_BG = '#F6CF46'
+const DESKTOP_TITLE_COLOR = '#1F2C59'
+
 function DesktopCarousel() {
+  const [titleOpacity, setTitleOpacity] = useState(1)
+  const [showCarousel, setShowCarousel] = useState(false)
   const [slide, setSlide] = useState(0)
   const [prevSlide, setPrevSlide] = useState<number | null>(null)
   const [slideDir, setSlideDir] = useState<'left' | 'right'>('left')
   const transitioning = useRef(false)
   const slideRef = useRef(0)
 
+  // Title screen: hold 5s, fade 0.5s, then show carousel
   useEffect(() => {
-    setBg(slideBg(slide))
+    const fadeOut = setTimeout(() => setTitleOpacity(0), 5000)
+    const show    = setTimeout(() => setShowCarousel(true), 5500)
+    return () => { clearTimeout(fadeOut); clearTimeout(show) }
+  }, [])
+
+  useEffect(() => {
+    const bg = showCarousel ? slideBg(slide) : DESKTOP_TITLE_BG
+    setBg(bg)
     return () => {
       document.body.style.removeProperty('background')
       document.documentElement.style.removeProperty('background')
     }
-  }, [slide])
+  }, [showCarousel, slide])
 
   const goTo = (next: number) => {
     const cur = slideRef.current
@@ -242,6 +255,43 @@ function DesktopCarousel() {
         @keyframes deskSlideOutL { from { transform: translateX(0) } to { transform: translateX(-100%) } }
         @keyframes deskSlideOutR { from { transform: translateX(0) } to { transform: translateX(100%)  } }
       `}</style>
+
+      {/* Title screen */}
+      <div style={{
+        position: 'absolute', inset: 0, zIndex: 20,
+        background: DESKTOP_TITLE_BG,
+        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+        padding: '0 10vw',
+        opacity: titleOpacity, transition: 'opacity 0.5s ease',
+        pointerEvents: titleOpacity === 0 ? 'none' : 'auto',
+      }}>
+        <div style={{
+          fontFamily: "'Barlow Condensed', sans-serif",
+          fontWeight: 900,
+          fontSize: 'clamp(72px, 14vw, 160px)',
+          color: DESKTOP_TITLE_COLOR,
+          letterSpacing: '0.02em',
+          lineHeight: 1,
+          textAlign: 'center',
+        }}>LAZY GAFFER</div>
+
+        <div style={{
+          fontFamily: "'Rajdhani', sans-serif",
+          fontWeight: 700,
+          fontSize: 'clamp(14px, 2.8vw, 36px)',
+          color: DESKTOP_TITLE_COLOR,
+          textAlign: 'center',
+          marginTop: '0.75em',
+          lineHeight: 1.5,
+          letterSpacing: '0.06em',
+          textTransform: 'uppercase',
+          opacity: 0.85,
+        }}>
+          Rate your squad once, select who's playing that week, tap generate teams, that's it.<br />
+          The Gaffer will then pick two fair, perfectly balanced teams, no arguments, no moaning.<br />
+          Free 14-day trial, no ads, download on the App Store or go to lazygaffer.com
+        </div>
+      </div>
 
       {/* Outgoing slide */}
       {prevSlide !== null && (
