@@ -172,6 +172,120 @@ function MobileLayout() {
   )
 }
 
+// ── Desktop: carousel experience ──────────────────────────────────────────────
+function DesktopCarousel() {
+  const [slide, setSlide] = useState(0)
+  const [prevSlide, setPrevSlide] = useState<number | null>(null)
+  const [slideDir, setSlideDir] = useState<'left' | 'right'>('left')
+  const transitioning = useRef(false)
+  const slideRef = useRef(0)
+
+  useEffect(() => {
+    setBg(slideBg(slide))
+    return () => {
+      document.body.style.removeProperty('background')
+      document.documentElement.style.removeProperty('background')
+    }
+  }, [slide])
+
+  const goTo = (next: number) => {
+    const cur = slideRef.current
+    if (next < 0 || next >= CAROUSEL_COUNT || transitioning.current) return
+    transitioning.current = true
+    setSlideDir(next > cur ? 'left' : 'right')
+    setPrevSlide(cur)
+    slideRef.current = next
+    setSlide(next)
+    setTimeout(() => { setPrevSlide(null); transitioning.current = false }, 350)
+  }
+
+  // Keyboard left/right navigation — uses refs so the stale closure is safe
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight') goTo(slideRef.current + 1)
+      if (e.key === 'ArrowLeft')  goTo(slideRef.current - 1)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const inAnim  = `${slideDir === 'left' ? 'deskSlideInR' : 'deskSlideInL'} 0.35s ease forwards`
+  const outAnim = `${slideDir === 'left' ? 'deskSlideOutL' : 'deskSlideOutR'} 0.35s ease forwards`
+
+  const arrowStyle = (side: 'left' | 'right'): React.CSSProperties => ({
+    position: 'absolute',
+    [side]: 24,
+    top: '50%',
+    transform: 'translateY(-50%)',
+    zIndex: 10,
+    background: 'rgba(0,0,0,0.35)',
+    backdropFilter: 'blur(4px)',
+    border: 'none',
+    color: 'white',
+    fontSize: 32,
+    width: 48,
+    height: 48,
+    borderRadius: '50%',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    lineHeight: 1,
+    userSelect: 'none',
+  })
+
+  return (
+    <div style={{ position: 'fixed', inset: 0, overflow: 'hidden' }}>
+      <style>{`
+        @keyframes deskSlideInR  { from { transform: translateX(100%)  } to { transform: translateX(0) } }
+        @keyframes deskSlideInL  { from { transform: translateX(-100%) } to { transform: translateX(0) } }
+        @keyframes deskSlideOutL { from { transform: translateX(0) } to { transform: translateX(-100%) } }
+        @keyframes deskSlideOutR { from { transform: translateX(0) } to { transform: translateX(100%)  } }
+      `}</style>
+
+      {/* Outgoing slide */}
+      {prevSlide !== null && (
+        <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', animation: outAnim }}>
+          <img
+            src={`/mobile/carousel/${prevSlide + 1}.jpg`}
+            alt=""
+            style={{ maxHeight: '100vh', maxWidth: '100%', width: 'auto', height: 'auto', display: 'block', userSelect: 'none', pointerEvents: 'none' }}
+          />
+        </div>
+      )}
+
+      {/* Current slide */}
+      <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', animation: prevSlide !== null ? inAnim : undefined }}>
+        <img
+          src={`/mobile/carousel/${slide + 1}.jpg`}
+          alt={`Slide ${slide + 1}`}
+          style={{ maxHeight: '100vh', maxWidth: '100%', width: 'auto', height: 'auto', display: 'block', userSelect: 'none', pointerEvents: 'none' }}
+        />
+      </div>
+
+      {/* Left arrow */}
+      {slide > 0 && (
+        <button onClick={() => goTo(slideRef.current - 1)} style={arrowStyle('left')} aria-label="Previous slide">‹</button>
+      )}
+
+      {/* Right arrow */}
+      {slide < CAROUSEL_COUNT - 1 && (
+        <button onClick={() => goTo(slideRef.current + 1)} style={arrowStyle('right')} aria-label="Next slide">›</button>
+      )}
+
+      {/* Last slide — whole screen links to App Store */}
+      {slide === CAROUSEL_COUNT - 1 && (
+        <a
+          href="https://apps.apple.com/gb/app/lazy-gaffer/id6760719368"
+          target="_blank" rel="noopener noreferrer"
+          style={{ position: 'absolute', inset: 0, zIndex: 5 }}
+          aria-label="Download on App Store"
+        />
+      )}
+    </div>
+  )
+}
+
 // ── Main page ─────────────────────────────────────────────────────────────────
 export default function LandingPage() {
   const { kitIndex, isGaffer, kit } = useRandomVariant()
@@ -217,10 +331,11 @@ export default function LandingPage() {
   }
 
   if (isMobile) return <MobileLayout />
+  return <DesktopCarousel />
 
-  // ── Desktop layout ──────────────────────────────────────────────────────────
+  // ── Desktop layout (original — kept for easy revert) ────────────────────────
+  // eslint-disable-next-line no-unreachable
   const lineWidth = Math.min(groupWidth + 150, window.innerWidth - 48)
-
   return (
     <div style={{ position: 'fixed', inset: 0, display: 'flex', flexDirection: 'column' }}>
       <BgScene kit={kit} kitIndex={kitIndex} isGaffer={isGaffer} />
