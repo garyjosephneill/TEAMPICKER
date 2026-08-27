@@ -185,10 +185,17 @@ function DesktopCarousel() {
   const transitioning = useRef(false)
   const slideRef = useRef(0)
 
-  // Title screen: hold 5s, fade 0.5s, then show carousel
+  // Title screen: hold 10s, fade 0.5s, then show carousel
+  const titleTimers = useRef<ReturnType<typeof setTimeout>[]>([])
+  const skipTitle = () => {
+    titleTimers.current.forEach(clearTimeout)
+    setTitleOpacity(0)
+    setTimeout(() => setShowCarousel(true), 500)
+  }
   useEffect(() => {
-    const fadeOut = setTimeout(() => setTitleOpacity(0), 5000)
-    const show    = setTimeout(() => setShowCarousel(true), 5500)
+    const fadeOut = setTimeout(() => setTitleOpacity(0), 10000)
+    const show    = setTimeout(() => setShowCarousel(true), 10500)
+    titleTimers.current = [fadeOut, show]
     return () => { clearTimeout(fadeOut); clearTimeout(show) }
   }, [])
 
@@ -256,15 +263,19 @@ function DesktopCarousel() {
         @keyframes deskSlideOutR { from { transform: translateX(0) } to { transform: translateX(100%)  } }
       `}</style>
 
-      {/* Title screen */}
-      <div style={{
-        position: 'absolute', inset: 0, zIndex: 20,
-        background: DESKTOP_TITLE_BG,
-        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-        padding: '0 10vw',
-        opacity: titleOpacity, transition: 'opacity 0.5s ease',
-        pointerEvents: titleOpacity === 0 ? 'none' : 'auto',
-      }}>
+      {/* Title screen — click anywhere to skip */}
+      <div
+        onClick={skipTitle}
+        style={{
+          position: 'absolute', inset: 0, zIndex: 20,
+          background: DESKTOP_TITLE_BG,
+          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+          padding: '0 10vw',
+          opacity: titleOpacity, transition: 'opacity 0.5s ease',
+          pointerEvents: titleOpacity === 0 ? 'none' : 'auto',
+          cursor: 'pointer',
+        }}
+      >
         <div style={{
           fontFamily: "'Barlow Condensed', sans-serif",
           fontWeight: 900,
