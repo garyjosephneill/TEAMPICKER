@@ -412,6 +412,11 @@ function DesktopCarousel() {
       {slide > 0 && (
         <button onClick={() => goTo(slideRef.current - 1)} style={arrowStyle('left')} aria-label="Previous slide">‹</button>
       )}
+
+      {/* Right arrow */}
+      {slide < DESK_COUNT - 1 && (
+        <button onClick={() => goTo(slideRef.current + 1)} style={arrowStyle('right')} aria-label="Next slide">›</button>
+      )}
     </div>
   )
 }
