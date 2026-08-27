@@ -110,7 +110,7 @@ function MobileLayout() {
         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0 15px',
       }}>
         <div style={{ display: 'inline-block', textAlign: 'center', padding: '0 10px' }}>
-          <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 'clamp(56px, 19vw, 160px)', color: titleCombo.type, letterSpacing: '0.02em', lineHeight: 1 }}>LAZY GAFFER</div>
+          <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: '11.5vw', whiteSpace: 'nowrap', color: titleCombo.type, letterSpacing: '0.02em', lineHeight: 1 }}>LAZY GAFFER</div>
           <div style={{ width: '100%', height: 8, background: titleCombo.type === '#000000' ? '#000' : 'white', margin: '0.3em 0 0.6em' }} />
         </div>
         <div style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 'clamp(14px, 4vw, 28px)', color: titleCombo.type, textAlign: 'center', lineHeight: 1.5, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
@@ -178,14 +178,14 @@ function MobileLayout() {
 // ── Desktop: end slide ────────────────────────────────────────────────────────
 function EndPanel({ combo, compact }: { combo: { bg: string; type: string }, compact?: boolean }) {
   const ruleColor = combo.type === '#000000' ? '#000000' : 'white'
-  const titleSize = compact ? 'clamp(56px, 19vw, 160px)' : 'clamp(72px, 14vw, 160px)'
+  const titleSize = compact ? '11.5vw' : 'clamp(72px, 14vw, 160px)'
   const tagSize = compact ? 'clamp(14px, 4vw, 28px)' : 28
   const tagSpacing = compact ? '0.04em' : '0.06em'
   const padding = compact ? '0 15px' : '0 10vw'
   return (
     <div style={{ position: 'absolute', inset: 0, background: combo.bg, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding }}>
       <div style={{ display: 'inline-block', textAlign: 'center', padding: '0 10px' }}>
-        <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: titleSize, color: combo.type, letterSpacing: '0.02em', lineHeight: 1 }}>LAZY GAFFER</div>
+        <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: titleSize, whiteSpace: 'nowrap', color: combo.type, letterSpacing: '0.02em', lineHeight: 1 }}>LAZY GAFFER</div>
         <div style={{ width: '100%', height: 8, background: ruleColor, margin: '0.3em 0 0.6em' }} />
       </div>
       <div style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: tagSize, color: combo.type, textAlign: 'center', lineHeight: 1.5, letterSpacing: tagSpacing, textTransform: 'uppercase' }}>
