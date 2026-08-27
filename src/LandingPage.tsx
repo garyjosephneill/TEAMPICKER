@@ -110,10 +110,10 @@ function MobileLayout() {
         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0 15px',
       }}>
         <div style={{ display: 'inline-block', textAlign: 'center', padding: '0 10px' }}>
-          <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: '13vw', whiteSpace: 'nowrap', color: titleCombo.type, letterSpacing: '0.02em', lineHeight: 1 }}>LAZY GAFFER</div>
-          <div style={{ width: '100%', height: 3, background: titleCombo.type === '#000000' ? '#000' : 'white', margin: '0.3em 0 0.6em' }} />
+          <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 70, whiteSpace: 'nowrap', color: titleCombo.type, letterSpacing: '0.02em', lineHeight: 1 }}>LAZY GAFFER</div>
+          <div style={{ width: '100%', height: 6, background: titleCombo.type === '#000000' ? '#000' : 'white', margin: '0.3em 0 0.6em' }} />
         </div>
-        <div style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 15, color: titleCombo.type, textAlign: 'center', lineHeight: 1.5, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+        <div style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 17, color: titleCombo.type, textAlign: 'center', lineHeight: 1.5, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
           FAIR TEAMS WITHOUT THE FAFF
         </div>
       </div>
@@ -178,9 +178,9 @@ function MobileLayout() {
 // ── Desktop: end slide ────────────────────────────────────────────────────────
 function EndPanel({ combo, compact }: { combo: { bg: string; type: string }, compact?: boolean }) {
   const ruleColor = combo.type === '#000000' ? '#000000' : 'white'
-  const titleSize = compact ? '13vw' : 'clamp(72px, 14vw, 160px)'
-  const ruleHeight = compact ? 3 : 8
-  const tagSize = compact ? 18 : 28
+  const titleSize = compact ? '70px' : 'clamp(72px, 14vw, 160px)'
+  const ruleHeight = compact ? 6 : 8
+  const tagSize = compact ? 17 : 28
   const tagSpacing = compact ? '0.05em' : '0.06em'
   const padding = compact ? '0 15px' : '0 10vw'
   return (
