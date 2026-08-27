@@ -224,7 +224,7 @@ function VideoPanel() {
 const DESKTOP_TITLE_COMBOS = [
   { bg: '#0A8A37', type: '#F8DD08' },
   { bg: '#75ADDE', type: '#7A1428' },
-  { bg: '#DC862F', type: '#000000' },
+  { bg: '#F99D1C', type: '#000000' },
   { bg: '#DB2F23', type: '#091F44' },
 ]
 
