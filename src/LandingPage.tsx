@@ -110,7 +110,7 @@ function MobileLayout() {
         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0 15px',
       }}>
         <div style={{ display: 'inline-block', textAlign: 'center', padding: '0 10px' }}>
-          <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 85, whiteSpace: 'nowrap', color: titleCombo.type, letterSpacing: '0.02em', lineHeight: 1 }}>LAZY GAFFER</div>
+          <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: '18vw', whiteSpace: 'nowrap', color: titleCombo.type, letterSpacing: '0.02em', lineHeight: 1 }}>LAZY GAFFER</div>
           <div style={{ width: '100%', height: 3, background: titleCombo.type === '#000000' ? '#000' : 'white', margin: '0.3em 0 0.6em' }} />
         </div>
         <div style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 15, color: titleCombo.type, textAlign: 'center', lineHeight: 1.5, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
@@ -178,7 +178,7 @@ function MobileLayout() {
 // ── Desktop: end slide ────────────────────────────────────────────────────────
 function EndPanel({ combo, compact }: { combo: { bg: string; type: string }, compact?: boolean }) {
   const ruleColor = combo.type === '#000000' ? '#000000' : 'white'
-  const titleSize = compact ? '85px' : 'clamp(72px, 14vw, 160px)'
+  const titleSize = compact ? '18vw' : 'clamp(72px, 14vw, 160px)'
   const ruleHeight = compact ? 3 : 8
   const tagSize = compact ? 18 : 28
   const tagSpacing = compact ? '0.05em' : '0.06em'
