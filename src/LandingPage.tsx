@@ -255,12 +255,10 @@ function DesktopCarousel() {
   })
 
   return (
-    <div style={{ position: 'fixed', inset: 0, overflow: 'hidden' }}>
+    <div style={{ position: 'fixed', inset: 0, overflow: 'hidden', background: slideBg(slide), transition: 'background 0.4s ease' }}>
       <style>{`
-        @keyframes deskSlideInR  { from { transform: translateX(100%)  } to { transform: translateX(0) } }
-        @keyframes deskSlideInL  { from { transform: translateX(-100%) } to { transform: translateX(0) } }
-        @keyframes deskSlideOutL { from { transform: translateX(0) } to { transform: translateX(-100%) } }
-        @keyframes deskSlideOutR { from { transform: translateX(0) } to { transform: translateX(100%)  } }
+        @keyframes deskFadeIn  { from { opacity: 0 } to { opacity: 1 } }
+        @keyframes deskFadeOut { from { opacity: 1 } to { opacity: 0 } }
       `}</style>
 
       {/* Title screen — click anywhere to skip */}
@@ -289,7 +287,7 @@ function DesktopCarousel() {
         <div style={{
           fontFamily: "'Rajdhani', sans-serif",
           fontWeight: 700,
-          fontSize: 18,
+          fontSize: 28,
           color: DESKTOP_TITLE_COLOR,
           textAlign: 'center',
           marginTop: '0.75em',
@@ -298,15 +296,13 @@ function DesktopCarousel() {
           textTransform: 'uppercase',
           opacity: 0.85,
         }}>
-          Rate your squad once, select who's playing that week, tap generate teams, that's it.<br />
-          The Gaffer will then pick two fair, perfectly balanced teams, no arguments, no moaning.<br />
-          Free 14-day trial, no ads, download on the App Store or go to lazygaffer.com
+          FAIR TEAMS WITHOUT THE FAFF
         </div>
       </div>
 
       {/* Outgoing slide */}
       {prevSlide !== null && (
-        <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', animation: outAnim }}>
+        <div style={{ position: 'absolute', inset: 0, animation: 'deskFadeOut 0.4s ease forwards' }}>
           <img
             src={`/desktop/carousel/${prevSlide + 1}.jpg`}
             alt=""
@@ -316,7 +312,7 @@ function DesktopCarousel() {
       )}
 
       {/* Current slide */}
-      <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', animation: prevSlide !== null ? inAnim : undefined }}>
+      <div style={{ position: 'absolute', inset: 0, animation: prevSlide !== null ? 'deskFadeIn 0.4s ease forwards' : undefined }}>
         <img
           src={`/desktop/carousel/${slide + 1}.jpg`}
           alt={`Slide ${slide + 1}`}
