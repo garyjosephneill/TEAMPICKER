@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect, useLayoutEffect } from 'react'
 import { BgScene, useRandomVariant } from './BgScene'
 
-const VIDEOS = ['vid-a.mov', 'vid-b.mov', 'vid-c.mov']
+const VIDEOS = ['vid-a.mp4', 'vid-b.mp4', 'vid-c.mp4']
 const TITLE_KEYS = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
 const CAROUSEL_COUNT = 21
 
