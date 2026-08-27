@@ -172,6 +172,54 @@ function MobileLayout() {
   )
 }
 
+// ── Desktop: video panel slide ────────────────────────────────────────────────
+function VideoPanel() {
+  const [activeVideo, setActiveVideo] = useState<number | null>(null)
+  const refs = [useRef<HTMLVideoElement>(null), useRef<HTMLVideoElement>(null), useRef<HTMLVideoElement>(null)]
+
+  const toggle = (i: number) => {
+    const ref = refs[i].current
+    if (!ref) return
+    if (activeVideo === i && !ref.paused) {
+      ref.pause(); setActiveVideo(null)
+    } else {
+      refs.forEach((r, j) => { if (j !== i && r.current) { r.current.pause(); r.current.currentTime = 0 } })
+      ref.play(); setActiveVideo(i)
+    }
+  }
+
+  const handleEnded = (i: number) => {
+    const next = i + 1
+    if (next < refs.length) { refs[next].current?.play(); setActiveVideo(next) }
+    else setActiveVideo(null)
+  }
+
+  return (
+    <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, padding: '0 48px' }}>
+      {VIDEOS.map((src, i) => (
+        <div key={i} onClick={() => toggle(i)} style={{ position: 'relative', flex: 1, height: '84%', cursor: 'pointer', maxWidth: 340 }}>
+          <video
+            ref={refs[i]}
+            src={`/videos/${src}`}
+            playsInline
+            preload="metadata"
+            onLoadedMetadata={e => { e.currentTarget.currentTime = 0.001 }}
+            onEnded={() => handleEnded(i)}
+            style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 14, display: 'block' }}
+          />
+          {activeVideo !== i && (
+            <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 14 }}>
+              <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'rgba(0,0,0,0.55)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ width: 0, height: 0, borderTop: '11px solid transparent', borderBottom: '11px solid transparent', borderLeft: '20px solid white', marginLeft: 4 }} />
+              </div>
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  )
+}
+
 // ── Desktop: carousel experience ──────────────────────────────────────────────
 const DESKTOP_TITLE_COMBOS = [
   { bg: '#0A8A37', type: '#F8DD08' },
@@ -198,14 +246,24 @@ function DesktopCarousel() {
     setTimeout(() => setShowCarousel(true), 500)
   }
   useEffect(() => {
-    const fadeOut = setTimeout(() => setTitleOpacity(0), 10000)
-    const show    = setTimeout(() => setShowCarousel(true), 10500)
+    const fadeOut = setTimeout(() => setTitleOpacity(0), 3000)
+    const show    = setTimeout(() => setShowCarousel(true), 3500)
     titleTimers.current = [fadeOut, show]
     return () => { clearTimeout(fadeOut); clearTimeout(show) }
   }, [])
 
+  // Desktop has 22 slides: 1–20 images, index 20 = video panel, index 21 = slide 21 image
+  const DESK_COUNT = CAROUSEL_COUNT + 1 // 22
+  const DESK_VIDEO_IDX = CAROUSEL_COUNT - 1 // 20
+  const deskSlideBg = (i: number) => {
+    if (i < DESK_VIDEO_IDX) return slideBg(i)
+    if (i === DESK_VIDEO_IDX) return '#111111'
+    return slideBg(i - 1) // index 21 → SLIDE_BG[20]
+  }
+  const deskImgNum = (i: number) => i < DESK_VIDEO_IDX ? i + 1 : i // 0–19→1–20, 21→21
+
   useEffect(() => {
-    const bg = showCarousel ? slideBg(slide) : titleCombo.bg
+    const bg = showCarousel ? deskSlideBg(slide) : titleCombo.bg
     setBg(bg)
     return () => {
       document.body.style.removeProperty('background')
@@ -215,7 +273,7 @@ function DesktopCarousel() {
 
   const goTo = (next: number) => {
     const cur = slideRef.current
-    if (next < 0 || next >= CAROUSEL_COUNT || transitioning.current) return
+    if (next < 0 || next >= DESK_COUNT || transitioning.current) return
     transitioning.current = true
     setSlideDir(next > cur ? 'left' : 'right')
     setPrevSlide(cur)
@@ -260,7 +318,7 @@ function DesktopCarousel() {
   })
 
   return (
-    <div style={{ position: 'fixed', inset: 0, overflow: 'hidden', background: slideBg(slide), transition: 'background 0.4s ease' }}>
+    <div style={{ position: 'fixed', inset: 0, overflow: 'hidden', background: deskSlideBg(slide), transition: 'background 0.4s ease' }}>
       <style>{`
         @keyframes deskFadeIn  { from { opacity: 0 } to { opacity: 1 } }
         @keyframes deskFadeOut { from { opacity: 1 } to { opacity: 0 } }
@@ -309,21 +367,17 @@ function DesktopCarousel() {
       {/* Outgoing slide */}
       {prevSlide !== null && (
         <div style={{ position: 'absolute', inset: 0, animation: 'deskFadeOut 0.4s ease forwards' }}>
-          <img
-            src={`/desktop/carousel/${prevSlide + 1}.jpg`}
-            alt=""
-            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', userSelect: 'none', pointerEvents: 'none' }}
-          />
+          {prevSlide === DESK_VIDEO_IDX ? <VideoPanel /> : (
+            <img src={`/desktop/carousel/${deskImgNum(prevSlide)}.jpg`} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', userSelect: 'none', pointerEvents: 'none' }} />
+          )}
         </div>
       )}
 
       {/* Current slide */}
       <div style={{ position: 'absolute', inset: 0, animation: prevSlide !== null ? 'deskFadeIn 0.4s ease forwards' : undefined }}>
-        <img
-          src={`/desktop/carousel/${slide + 1}.jpg`}
-          alt={`Slide ${slide + 1}`}
-          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', userSelect: 'none', pointerEvents: 'none' }}
-        />
+        {slide === DESK_VIDEO_IDX ? <VideoPanel /> : (
+          <img src={`/desktop/carousel/${deskImgNum(slide)}.jpg`} alt={`Slide ${slide + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', userSelect: 'none', pointerEvents: 'none' }} />
+        )}
       </div>
 
       {/* Left arrow */}
@@ -332,12 +386,12 @@ function DesktopCarousel() {
       )}
 
       {/* Right arrow */}
-      {slide < CAROUSEL_COUNT - 1 && (
+      {slide < DESK_COUNT - 1 && (
         <button onClick={() => goTo(slideRef.current + 1)} style={arrowStyle('right')} aria-label="Next slide">›</button>
       )}
 
       {/* Last slide — whole screen links to App Store */}
-      {slide === CAROUSEL_COUNT - 1 && (
+      {slide === DESK_COUNT - 1 && (
         <a
           href="https://apps.apple.com/gb/app/lazy-gaffer/id6760719368"
           target="_blank" rel="noopener noreferrer"
