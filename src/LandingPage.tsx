@@ -2,14 +2,14 @@ import React, { useRef, useState, useEffect, useLayoutEffect } from 'react'
 import { BgScene, useRandomVariant } from './BgScene'
 
 const VIDEOS = ['vid-a.mp4', 'vid-b.mp4', 'vid-c.mp4']
-const TITLE_KEYS = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
 const CAROUSEL_COUNT = 21
 
-// Sampled directly from the edge pixels of each image
-const TITLE_BG: Record<string, string> = {
-  A: '#346E9A', B: '#420712', C: '#860A0F',
-  D: '#036E2E', E: '#C74A04', F: '#D9DFE1', G: '#9C5604',
-}
+const TITLE_COMBOS = [
+  { bg: '#0A8A37', type: '#F8DD08' },
+  { bg: '#75ADDE', type: '#7A1428' },
+  { bg: '#F99D1C', type: '#000000' },
+  { bg: '#DB2F23', type: '#091F44' },
+]
 const SLIDE_BG = ['#F6CF46','#F6CF46','#F6CF46','#F6CF46','#5E1737','#5E1737','#5E1737','#5E1737','#5E1737','#5E1737','#CCCCCC','#1F2C58','#1F2C58','#12356D','#B5B5B5','#000000','#FFFFFF','#1F2C58','#1F2C58','#7EA9DE','#7F060A']
 const slideBg = (i: number) => SLIDE_BG[i] ?? '#111111'
 
@@ -22,7 +22,7 @@ function setBg(color: string) {
 
 // ── Mobile: carousel experience ───────────────────────────────────────────────
 function MobileLayout() {
-  const [titleKey] = useState(() => TITLE_KEYS[Math.floor(Math.random() * TITLE_KEYS.length)])
+  const [titleCombo] = useState(() => TITLE_COMBOS[Math.floor(Math.random() * TITLE_COMBOS.length)])
   const [titleOpacity, setTitleOpacity] = useState(1)
   const [showCarousel, setShowCarousel] = useState(false)
   const [slide, setSlide] = useState(0)
@@ -36,20 +36,20 @@ function MobileLayout() {
   const isHoriz = useRef<boolean | null>(null)
 
   useEffect(() => {
-    const fadeOut = setTimeout(() => setTitleOpacity(0), 1250)
-    const show = setTimeout(() => setShowCarousel(true), 1750)
+    const fadeOut = setTimeout(() => setTitleOpacity(0), 3000)
+    const show = setTimeout(() => setShowCarousel(true), 3500)
     return () => { clearTimeout(fadeOut); clearTimeout(show) }
   }, [])
 
   // Keep body/theme-color in sync so system UI strips blend with the image
   useEffect(() => {
-    const bg = showCarousel ? slideBg(slide) : TITLE_BG[titleKey]
+    const bg = showCarousel ? slideBg(slide) : titleCombo.bg
     setBg(bg)
     return () => {
       document.body.style.removeProperty('background')
       document.documentElement.style.removeProperty('background')
     }
-  }, [showCarousel, slide, titleKey])
+  }, [showCarousel, slide])
 
   const goTo = (next: number) => {
     if (next < 0 || next >= CAROUSEL_COUNT || transitioning.current) return
@@ -90,7 +90,7 @@ function MobileLayout() {
     return () => el.removeEventListener('touchmove', onMove)
   }, [showCarousel])
 
-  const bg = showCarousel ? slideBg(slide) : TITLE_BG[titleKey]
+  const bg = !showCarousel ? titleCombo.bg : slide === CAROUSEL_COUNT - 1 ? titleCombo.bg : slideBg(slide)
 
   return (
     <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100vh', overflow: 'hidden', background: bg }}>
@@ -104,11 +104,18 @@ function MobileLayout() {
 
       {/* Title screen */}
       <div style={{
-        position: 'absolute', inset: 0, zIndex: 10,
+        position: 'absolute', inset: 0, zIndex: 10, background: titleCombo.bg,
         opacity: titleOpacity, transition: 'opacity 0.5s ease',
         pointerEvents: titleOpacity === 0 ? 'none' : 'auto',
+        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0 10vw',
       }}>
-        <img src={`/mobile/title/${titleKey}.jpg`} style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
+        <div style={{ display: 'inline-block', textAlign: 'center', padding: '0 10px' }}>
+          <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 'clamp(72px, 20vw, 160px)', color: titleCombo.type, letterSpacing: '0.02em', lineHeight: 1 }}>LAZY GAFFER</div>
+          <div style={{ width: '100%', height: 8, background: titleCombo.type === '#000000' ? '#000' : 'white', margin: '0.3em 0 0.6em' }} />
+        </div>
+        <div style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 'clamp(16px, 5vw, 28px)', color: titleCombo.type, textAlign: 'center', lineHeight: 1.5, letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+          FAIR TEAMS WITHOUT THE FAFF
+        </div>
       </div>
 
       {/* Carousel */}
@@ -125,7 +132,10 @@ function MobileLayout() {
               position: 'absolute', inset: 0,
               animation: `${slideDir === 'left' ? 'slideOutToLeft' : 'slideOutToRight'} 0.35s ease forwards`,
             }}>
-              <img src={`/mobile/carousel/${prevSlide + 1}.jpg`} style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
+              {prevSlide === CAROUSEL_COUNT - 1
+                ? <EndPanel combo={titleCombo} />
+                : <img src={`/mobile/carousel/${prevSlide + 1}.jpg`} style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
+              }
             </div>
           )}
 
@@ -136,7 +146,10 @@ function MobileLayout() {
               ? `${slideDir === 'left' ? 'slideInFromRight' : 'slideInFromLeft'} 0.35s ease forwards`
               : undefined,
           }}>
-            <img src={`/mobile/carousel/${slide + 1}.jpg`} style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
+            {slide === CAROUSEL_COUNT - 1
+              ? <EndPanel combo={titleCombo} />
+              : <img src={`/mobile/carousel/${slide + 1}.jpg`} style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
+            }
           </div>
 
           {/* Side dots — left edge, vertical */}
@@ -156,16 +169,6 @@ function MobileLayout() {
               }} />
             ))}
           </div>
-
-          {/* Last slide — whole image is tappable */}
-          {slide === CAROUSEL_COUNT - 1 && (
-            <a
-              href="https://apps.apple.com/gb/app/lazy-gaffer/id6760719368"
-              target="_blank" rel="noopener noreferrer"
-              style={{ position: 'absolute', inset: 0, zIndex: 5 }}
-              aria-label="Download on App Store"
-            />
-          )}
         </div>
       )}
     </div>
@@ -247,15 +250,8 @@ function VideoPanel() {
 }
 
 // ── Desktop: carousel experience ──────────────────────────────────────────────
-const DESKTOP_TITLE_COMBOS = [
-  { bg: '#0A8A37', type: '#F8DD08' },
-  { bg: '#75ADDE', type: '#7A1428' },
-  { bg: '#F99D1C', type: '#000000' },
-  { bg: '#DB2F23', type: '#091F44' },
-]
-
 function DesktopCarousel() {
-  const [titleCombo] = useState(() => DESKTOP_TITLE_COMBOS[Math.floor(Math.random() * DESKTOP_TITLE_COMBOS.length)])
+  const [titleCombo] = useState(() => TITLE_COMBOS[Math.floor(Math.random() * TITLE_COMBOS.length)])
   const [titleOpacity, setTitleOpacity] = useState(1)
   const [showCarousel, setShowCarousel] = useState(false)
   const [slide, setSlide] = useState(0)
