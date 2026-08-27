@@ -172,6 +172,32 @@ function MobileLayout() {
   )
 }
 
+// ── Desktop: end slide ────────────────────────────────────────────────────────
+function EndPanel({ combo }: { combo: { bg: string; type: string } }) {
+  const ruleColor = combo.type === '#000000' ? '#000000' : 'white'
+  return (
+    <div style={{ position: 'absolute', inset: 0, background: combo.bg, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0 10vw' }}>
+      <div style={{ display: 'inline-block', textAlign: 'center', padding: '0 10px' }}>
+        <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 'clamp(72px, 14vw, 160px)', color: combo.type, letterSpacing: '0.02em', lineHeight: 1 }}>LAZY GAFFER</div>
+        <div style={{ width: '100%', height: 8, background: ruleColor, margin: '0.3em 0 0.6em' }} />
+      </div>
+      <div style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 28, color: combo.type, textAlign: 'center', lineHeight: 1.5, letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+        FAIR TEAMS WITHOUT THE FAFF
+      </div>
+      <a href="https://apps.apple.com/gb/app/lazy-gaffer/id6760719368" target="_blank" rel="noopener noreferrer" style={{ marginTop: '2em', display: 'block' }}>
+        <svg xmlns="http://www.w3.org/2000/svg" width="180" height="60" viewBox="0 0 180 60">
+          <rect width="180" height="60" rx="10" fill="#000"/>
+          <rect x="0.75" y="0.75" width="178.5" height="58.5" rx="9.25" fill="none" stroke="#A6A6A6" strokeWidth="1.5"/>
+          <path d="M37.3 30.2c0-4.1 3.3-6 3.5-6.1-1.9-2.8-4.9-3.2-5.9-3.2-2.5-.3-4.9 1.5-6.2 1.5-1.3 0-3.2-1.4-5.3-1.4-2.7.1-5.3 1.6-6.7 4-2.9 5-.7 12.3 2 16.3 1.4 2 3 4.2 5.1 4.1 2.1-.1 2.8-1.3 5.3-1.3 2.4 0 3.1 1.3 5.3 1.3 2.2 0 3.6-2 5-4 1.6-2.3 2.2-4.5 2.2-4.6-.1 0-4.3-1.7-4.3-6.6z" fill="white"/>
+          <path d="M33.2 18.5c1.1-1.4 1.9-3.3 1.7-5.2-1.6.1-3.6 1.1-4.8 2.4-1 1.2-2 3.2-1.7 5 1.8.1 3.7-.9 4.8-2.2z" fill="white"/>
+          <text x="52" y="22" fontFamily="-apple-system, 'Helvetica Neue', sans-serif" fontSize="11" fill="white" letterSpacing="0.3">Download on the</text>
+          <text x="52" y="43" fontFamily="-apple-system, 'Helvetica Neue', sans-serif" fontSize="22" fontWeight="600" fill="white" letterSpacing="-0.3">App Store</text>
+        </svg>
+      </a>
+    </div>
+  )
+}
+
 // ── Desktop: video panel slide ────────────────────────────────────────────────
 function VideoPanel() {
   const [activeVideo, setActiveVideo] = useState<number | null>(null)
@@ -252,13 +278,15 @@ function DesktopCarousel() {
     return () => { clearTimeout(fadeOut); clearTimeout(show) }
   }, [])
 
-  // Desktop has 22 slides: 1–20 images, index 20 = video panel, index 21 = slide 21 image
+  // Desktop has 22 slides: 1–20 images, index 20 = video panel, index 21 = end panel
   const DESK_COUNT = CAROUSEL_COUNT + 1 // 22
   const DESK_VIDEO_IDX = CAROUSEL_COUNT - 1 // 20
+  const DESK_END_IDX = CAROUSEL_COUNT // 21
   const deskSlideBg = (i: number) => {
-    if (i < DESK_VIDEO_IDX) return slideBg(i)
     if (i === DESK_VIDEO_IDX) return '#F6CF46'
-    return slideBg(i - 1) // index 21 → SLIDE_BG[20]
+    if (i === DESK_END_IDX) return titleCombo.bg
+    if (i < DESK_VIDEO_IDX) return slideBg(i)
+    return slideBg(i - 1)
   }
   const deskImgNum = (i: number) => i < DESK_VIDEO_IDX ? i + 1 : i // 0–19→1–20, 21→21
 
@@ -367,7 +395,7 @@ function DesktopCarousel() {
       {/* Outgoing slide */}
       {prevSlide !== null && (
         <div style={{ position: 'absolute', inset: 0, animation: 'deskFadeOut 0.4s ease forwards' }}>
-          {prevSlide === DESK_VIDEO_IDX ? <VideoPanel /> : (
+          {prevSlide === DESK_VIDEO_IDX ? <VideoPanel /> : prevSlide === DESK_END_IDX ? <EndPanel combo={titleCombo} /> : (
             <img src={`/desktop/carousel/${deskImgNum(prevSlide)}.jpg`} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', userSelect: 'none', pointerEvents: 'none' }} />
           )}
         </div>
@@ -375,7 +403,7 @@ function DesktopCarousel() {
 
       {/* Current slide */}
       <div style={{ position: 'absolute', inset: 0, animation: prevSlide !== null ? 'deskFadeIn 0.4s ease forwards' : undefined }}>
-        {slide === DESK_VIDEO_IDX ? <VideoPanel /> : (
+        {slide === DESK_VIDEO_IDX ? <VideoPanel /> : slide === DESK_END_IDX ? <EndPanel combo={titleCombo} /> : (
           <img src={`/desktop/carousel/${deskImgNum(slide)}.jpg`} alt={`Slide ${slide + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', userSelect: 'none', pointerEvents: 'none' }} />
         )}
       </div>
@@ -383,21 +411,6 @@ function DesktopCarousel() {
       {/* Left arrow */}
       {slide > 0 && (
         <button onClick={() => goTo(slideRef.current - 1)} style={arrowStyle('left')} aria-label="Previous slide">‹</button>
-      )}
-
-      {/* Right arrow */}
-      {slide < DESK_COUNT - 1 && (
-        <button onClick={() => goTo(slideRef.current + 1)} style={arrowStyle('right')} aria-label="Next slide">›</button>
-      )}
-
-      {/* Last slide — whole screen links to App Store */}
-      {slide === DESK_COUNT - 1 && (
-        <a
-          href="https://apps.apple.com/gb/app/lazy-gaffer/id6760719368"
-          target="_blank" rel="noopener noreferrer"
-          style={{ position: 'absolute', inset: 0, zIndex: 5 }}
-          aria-label="Download on App Store"
-        />
       )}
     </div>
   )
