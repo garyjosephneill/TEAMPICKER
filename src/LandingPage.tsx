@@ -279,17 +279,18 @@ function DesktopCarousel() {
           cursor: 'pointer',
         }}
       >
-        <div style={{
-          fontFamily: "'Barlow Condensed', sans-serif",
-          fontWeight: 900,
-          fontSize: 'clamp(72px, 14vw, 160px)',
-          color: titleCombo.type,
-          letterSpacing: '0.02em',
-          lineHeight: 1,
-          textAlign: 'center',
-        }}>LAZY GAFFER</div>
+        <div style={{ display: 'inline-block', textAlign: 'center', padding: '0 10px' }}>
+          <div style={{
+            fontFamily: "'Barlow Condensed', sans-serif",
+            fontWeight: 900,
+            fontSize: 'clamp(72px, 14vw, 160px)',
+            color: titleCombo.type,
+            letterSpacing: '0.02em',
+            lineHeight: 1,
+          }}>LAZY GAFFER</div>
 
-        <div style={{ width: '100%', height: 4, background: 'white', margin: '0.3em 0 0.6em' }} />
+          <div style={{ width: '100%', height: 4, background: 'white', margin: '0.3em 0 0.6em' }} />
+        </div>
 
         <div style={{
           fontFamily: "'Rajdhani', sans-serif",
