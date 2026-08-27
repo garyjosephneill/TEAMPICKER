@@ -125,7 +125,7 @@ function MobileLayout() {
               position: 'absolute', inset: 0,
               animation: `${slideDir === 'left' ? 'slideOutToLeft' : 'slideOutToRight'} 0.35s ease forwards`,
             }}>
-              <img src={`/desktop/carousel/${prevSlide + 1}.jpg`} style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
+              <img src={`/mobile/carousel/${prevSlide + 1}.jpg`} style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
             </div>
           )}
 
@@ -136,7 +136,7 @@ function MobileLayout() {
               ? `${slideDir === 'left' ? 'slideInFromRight' : 'slideInFromLeft'} 0.35s ease forwards`
               : undefined,
           }}>
-            <img src={`/desktop/carousel/${slide + 1}.jpg`} style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
+            <img src={`/mobile/carousel/${slide + 1}.jpg`} style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
           </div>
 
           {/* Side dots — left edge, vertical */}
