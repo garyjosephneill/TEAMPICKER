@@ -110,8 +110,8 @@ function MobileLayout() {
         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0 15px',
       }}>
         <div style={{ display: 'inline-block', textAlign: 'center', padding: '0 10px' }}>
-          <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 65, whiteSpace: 'nowrap', color: titleCombo.type, letterSpacing: '0.02em', lineHeight: 1 }}>LAZY GAFFER</div>
-          <div style={{ width: '100%', height: 8, background: titleCombo.type === '#000000' ? '#000' : 'white', margin: '0.3em 0 0.6em' }} />
+          <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 85, whiteSpace: 'nowrap', color: titleCombo.type, letterSpacing: '0.02em', lineHeight: 1 }}>LAZY GAFFER</div>
+          <div style={{ width: '100%', height: 5, background: titleCombo.type === '#000000' ? '#000' : 'white', margin: '0.3em 0 0.6em' }} />
         </div>
         <div style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 15, color: titleCombo.type, textAlign: 'center', lineHeight: 1.5, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
           FAIR TEAMS WITHOUT THE FAFF
@@ -178,7 +178,8 @@ function MobileLayout() {
 // ── Desktop: end slide ────────────────────────────────────────────────────────
 function EndPanel({ combo, compact }: { combo: { bg: string; type: string }, compact?: boolean }) {
   const ruleColor = combo.type === '#000000' ? '#000000' : 'white'
-  const titleSize = compact ? '65px' : 'clamp(72px, 14vw, 160px)'
+  const titleSize = compact ? '85px' : 'clamp(72px, 14vw, 160px)'
+  const ruleHeight = compact ? 5 : 8
   const tagSize = compact ? 15 : 28
   const tagSpacing = compact ? '0.05em' : '0.06em'
   const padding = compact ? '0 15px' : '0 10vw'
@@ -186,7 +187,7 @@ function EndPanel({ combo, compact }: { combo: { bg: string; type: string }, com
     <div style={{ position: 'absolute', inset: 0, background: combo.bg, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding }}>
       <div style={{ display: 'inline-block', textAlign: 'center', padding: '0 10px' }}>
         <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: titleSize, whiteSpace: 'nowrap', color: combo.type, letterSpacing: '0.02em', lineHeight: 1 }}>LAZY GAFFER</div>
-        <div style={{ width: '100%', height: 8, background: ruleColor, margin: '0.3em 0 0.6em' }} />
+        <div style={{ width: '100%', height: ruleHeight, background: ruleColor, margin: '0.3em 0 0.6em' }} />
       </div>
       <div style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: tagSize, color: combo.type, textAlign: 'center', lineHeight: 1.5, letterSpacing: tagSpacing, textTransform: 'uppercase' }}>
         FAIR TEAMS WITHOUT THE FAFF
