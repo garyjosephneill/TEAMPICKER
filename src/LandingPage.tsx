@@ -195,7 +195,7 @@ function VideoPanel() {
   }
 
   return (
-    <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, padding: '0 48px' }}>
+    <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 32, padding: '0 48px' }}>
       {VIDEOS.map((src, i) => (
         <div key={i} onClick={() => toggle(i)} style={{ position: 'relative', flex: 1, height: '84%', cursor: 'pointer', maxWidth: 340 }}>
           <video
@@ -257,7 +257,7 @@ function DesktopCarousel() {
   const DESK_VIDEO_IDX = CAROUSEL_COUNT - 1 // 20
   const deskSlideBg = (i: number) => {
     if (i < DESK_VIDEO_IDX) return slideBg(i)
-    if (i === DESK_VIDEO_IDX) return '#111111'
+    if (i === DESK_VIDEO_IDX) return '#F6CF46'
     return slideBg(i - 1) // index 21 → SLIDE_BG[20]
   }
   const deskImgNum = (i: number) => i < DESK_VIDEO_IDX ? i + 1 : i // 0–19→1–20, 21→21
