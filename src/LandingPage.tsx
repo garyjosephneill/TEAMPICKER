@@ -125,7 +125,7 @@ function MobileLayout() {
               position: 'absolute', inset: 0,
               animation: `${slideDir === 'left' ? 'slideOutToLeft' : 'slideOutToRight'} 0.35s ease forwards`,
             }}>
-              <img src={`/mobile/carousel/${prevSlide + 1}.jpg`} style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
+              <img src={`/desktop/carousel/${prevSlide + 1}.jpg`} style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
             </div>
           )}
 
@@ -136,7 +136,7 @@ function MobileLayout() {
               ? `${slideDir === 'left' ? 'slideInFromRight' : 'slideInFromLeft'} 0.35s ease forwards`
               : undefined,
           }}>
-            <img src={`/mobile/carousel/${slide + 1}.jpg`} style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
+            <img src={`/desktop/carousel/${slide + 1}.jpg`} style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
           </div>
 
           {/* Side dots — left edge, vertical */}
@@ -308,9 +308,9 @@ function DesktopCarousel() {
       {prevSlide !== null && (
         <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', animation: outAnim }}>
           <img
-            src={`/mobile/carousel/${prevSlide + 1}.jpg`}
+            src={`/desktop/carousel/${prevSlide + 1}.jpg`}
             alt=""
-            style={{ maxHeight: '100vh', maxWidth: '100%', width: 'auto', height: 'auto', display: 'block', userSelect: 'none', pointerEvents: 'none' }}
+            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', userSelect: 'none', pointerEvents: 'none' }}
           />
         </div>
       )}
@@ -318,9 +318,9 @@ function DesktopCarousel() {
       {/* Current slide */}
       <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', animation: prevSlide !== null ? inAnim : undefined }}>
         <img
-          src={`/mobile/carousel/${slide + 1}.jpg`}
+          src={`/desktop/carousel/${slide + 1}.jpg`}
           alt={`Slide ${slide + 1}`}
-          style={{ maxHeight: '100vh', maxWidth: '100%', width: 'auto', height: 'auto', display: 'block', userSelect: 'none', pointerEvents: 'none' }}
+          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', userSelect: 'none', pointerEvents: 'none' }}
         />
       </div>
 
