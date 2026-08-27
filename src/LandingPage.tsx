@@ -278,7 +278,7 @@ function DesktopCarousel() {
         <div style={{
           fontFamily: "'Rajdhani', sans-serif",
           fontWeight: 700,
-          fontSize: 'clamp(14px, 2.8vw, 36px)',
+          fontSize: 18,
           color: DESKTOP_TITLE_COLOR,
           textAlign: 'center',
           marginTop: '0.75em',
