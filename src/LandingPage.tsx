@@ -205,7 +205,7 @@ function VideoPanel() {
             preload="metadata"
             onLoadedMetadata={e => { e.currentTarget.currentTime = 0.001 }}
             onEnded={() => handleEnded(i)}
-            style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 14, display: 'block' }}
+            style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 14, display: 'block' }}
           />
           {activeVideo !== i && (
             <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 14 }}>
