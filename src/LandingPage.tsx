@@ -289,7 +289,7 @@ function DesktopCarousel() {
             lineHeight: 1,
           }}>LAZY GAFFER</div>
 
-          <div style={{ width: '100%', height: 4, background: 'white', margin: '0.3em 0 0.6em' }} />
+          <div style={{ width: '100%', height: 8, background: 'white', margin: '0.3em 0 0.6em' }} />
         </div>
 
         <div style={{
