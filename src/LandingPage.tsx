@@ -43,7 +43,7 @@ function MobileLayout() {
 
   // Keep body/theme-color in sync so system UI strips blend with the image
   useEffect(() => {
-    const bg = showCarousel ? slideBg(slide) : titleCombo.bg
+    const bg = !showCarousel ? titleCombo.bg : slide === CAROUSEL_COUNT - 1 ? titleCombo.bg : slideBg(slide)
     setBg(bg)
     return () => {
       document.body.style.removeProperty('background')
@@ -110,10 +110,10 @@ function MobileLayout() {
         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0 10vw',
       }}>
         <div style={{ display: 'inline-block', textAlign: 'center', padding: '0 10px' }}>
-          <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 'clamp(72px, 20vw, 160px)', color: titleCombo.type, letterSpacing: '0.02em', lineHeight: 1 }}>LAZY GAFFER</div>
+          <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 'clamp(40px, 11vw, 160px)', color: titleCombo.type, letterSpacing: '0.02em', lineHeight: 1 }}>LAZY GAFFER</div>
           <div style={{ width: '100%', height: 8, background: titleCombo.type === '#000000' ? '#000' : 'white', margin: '0.3em 0 0.6em' }} />
         </div>
-        <div style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 'clamp(16px, 5vw, 28px)', color: titleCombo.type, textAlign: 'center', lineHeight: 1.5, letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+        <div style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 'clamp(12px, 3.2vw, 28px)', color: titleCombo.type, textAlign: 'center', lineHeight: 1.5, letterSpacing: '0.03em', textTransform: 'uppercase' }}>
           FAIR TEAMS WITHOUT THE FAFF
         </div>
       </div>
@@ -133,7 +133,7 @@ function MobileLayout() {
               animation: `${slideDir === 'left' ? 'slideOutToLeft' : 'slideOutToRight'} 0.35s ease forwards`,
             }}>
               {prevSlide === CAROUSEL_COUNT - 1
-                ? <EndPanel combo={titleCombo} />
+                ? <EndPanel combo={titleCombo} compact />
                 : <img src={`/mobile/carousel/${prevSlide + 1}.jpg`} style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
               }
             </div>
@@ -147,7 +147,7 @@ function MobileLayout() {
               : undefined,
           }}>
             {slide === CAROUSEL_COUNT - 1
-              ? <EndPanel combo={titleCombo} />
+              ? <EndPanel combo={titleCombo} compact />
               : <img src={`/mobile/carousel/${slide + 1}.jpg`} style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
             }
           </div>
@@ -176,15 +176,18 @@ function MobileLayout() {
 }
 
 // ── Desktop: end slide ────────────────────────────────────────────────────────
-function EndPanel({ combo }: { combo: { bg: string; type: string } }) {
+function EndPanel({ combo, compact }: { combo: { bg: string; type: string }, compact?: boolean }) {
   const ruleColor = combo.type === '#000000' ? '#000000' : 'white'
+  const titleSize = compact ? 'clamp(40px, 11vw, 160px)' : 'clamp(72px, 14vw, 160px)'
+  const tagSize = compact ? 'clamp(12px, 3.2vw, 28px)' : 28
+  const tagSpacing = compact ? '0.03em' : '0.06em'
   return (
     <div style={{ position: 'absolute', inset: 0, background: combo.bg, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0 10vw' }}>
       <div style={{ display: 'inline-block', textAlign: 'center', padding: '0 10px' }}>
-        <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 'clamp(72px, 14vw, 160px)', color: combo.type, letterSpacing: '0.02em', lineHeight: 1 }}>LAZY GAFFER</div>
+        <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: titleSize, color: combo.type, letterSpacing: '0.02em', lineHeight: 1 }}>LAZY GAFFER</div>
         <div style={{ width: '100%', height: 8, background: ruleColor, margin: '0.3em 0 0.6em' }} />
       </div>
-      <div style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 28, color: combo.type, textAlign: 'center', lineHeight: 1.5, letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+      <div style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: tagSize, color: combo.type, textAlign: 'center', lineHeight: 1.5, letterSpacing: tagSpacing, textTransform: 'uppercase' }}>
         FAIR TEAMS WITHOUT THE FAFF
       </div>
       <a href="https://apps.apple.com/gb/app/lazy-gaffer/id6760719368" target="_blank" rel="noopener noreferrer" style={{ marginTop: '2em', display: 'block' }}>
