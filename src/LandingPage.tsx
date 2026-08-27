@@ -192,7 +192,7 @@ function EndPanel({ combo, compact }: { combo: { bg: string; type: string }, com
       <div style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: tagSize, color: combo.type, textAlign: 'center', lineHeight: 1.5, letterSpacing: tagSpacing, textTransform: 'uppercase' }}>
         FAIR TEAMS WITHOUT THE FAFF
       </div>
-      <a href="https://apps.apple.com/gb/app/lazy-gaffer/id6760719368" target="_blank" rel="noopener noreferrer" style={{ marginTop: '2em', display: 'block' }}>
+      <a href="https://apps.apple.com/gb/app/lazy-gaffer/id6760719368" target="_blank" rel="noopener noreferrer" style={{ position: compact ? 'absolute' : 'relative', bottom: compact ? '12%' : 'auto', marginTop: compact ? 0 : '2em', display: 'block' }}>
         <svg xmlns="http://www.w3.org/2000/svg" width="180" height="60" viewBox="0 0 180 60">
           <rect width="180" height="60" rx="10" fill="#000"/>
           <rect x="0.75" y="0.75" width="178.5" height="58.5" rx="9.25" fill="none" stroke="#A6A6A6" strokeWidth="1.5"/>
