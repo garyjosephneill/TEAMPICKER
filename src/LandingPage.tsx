@@ -308,7 +308,7 @@ function DesktopCarousel() {
     setPrevSlide(cur)
     slideRef.current = next
     setSlide(next)
-    setTimeout(() => { setPrevSlide(null); transitioning.current = false }, 350)
+    setTimeout(() => { setPrevSlide(null); transitioning.current = false }, 600)
   }
 
   // Keyboard left/right navigation — uses refs so the stale closure is safe
@@ -321,8 +321,8 @@ function DesktopCarousel() {
     return () => window.removeEventListener('keydown', onKey)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const inAnim  = `${slideDir === 'left' ? 'deskSlideInR' : 'deskSlideInL'} 0.35s ease forwards`
-  const outAnim = `${slideDir === 'left' ? 'deskSlideOutL' : 'deskSlideOutR'} 0.35s ease forwards`
+  const inAnim  = `${slideDir === 'left' ? 'deskSlideInR' : 'deskSlideInL'} 0.6s ease forwards`
+  const outAnim = `${slideDir === 'left' ? 'deskSlideOutL' : 'deskSlideOutR'} 0.6s ease forwards`
 
   const arrowStyle = (side: 'left' | 'right'): React.CSSProperties => ({
     position: 'absolute',
@@ -347,7 +347,7 @@ function DesktopCarousel() {
   })
 
   return (
-    <div style={{ position: 'fixed', inset: 0, overflow: 'hidden', background: deskSlideBg(slide), transition: 'background 0.4s ease' }}>
+    <div style={{ position: 'fixed', inset: 0, overflow: 'hidden', background: deskSlideBg(slide), transition: 'background 0.6s ease' }}>
       <style>{`
         @keyframes deskFadeIn  { from { opacity: 0 } to { opacity: 1 } }
         @keyframes deskFadeOut { from { opacity: 1 } to { opacity: 0 } }
